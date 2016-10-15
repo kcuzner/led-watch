@@ -1,0 +1,185 @@
+EESchema Schematic File Version 2
+LIBS:power
+LIBS:device
+LIBS:transistors
+LIBS:conn
+LIBS:linear
+LIBS:regul
+LIBS:74xx
+LIBS:cmos4000
+LIBS:adc-dac
+LIBS:memory
+LIBS:xilinx
+LIBS:microcontrollers
+LIBS:dsp
+LIBS:microchip
+LIBS:analog_switches
+LIBS:motorola
+LIBS:texas
+LIBS:intel
+LIBS:audio
+LIBS:interface
+LIBS:digital-audio
+LIBS:philips
+LIBS:display
+LIBS:cypress
+LIBS:siliconi
+LIBS:opto
+LIBS:atmel
+LIBS:contrib
+LIBS:valves
+LIBS:simple-led-watch
+LIBS:simple-led-watch-cache
+EELAYER 25 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 5 6
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L USB_OTG P3
+U 1 1 57FA80BD
+P 3750 3300
+F 0 "P3" H 4075 3175 50  0000 C CNN
+F 1 "USB_OTG" H 3750 3500 50  0000 C CNN
+F 2 "" V 3700 3200 50  0000 C CNN
+F 3 "" V 3700 3200 50  0000 C CNN
+	1    3750 3300
+	0    -1   1    0   
+$EndComp
+NoConn ~ 3650 3700
+$Comp
+L GND #PWR38
+U 1 1 57FA8252
+P 4200 3650
+F 0 "#PWR38" H 4200 3400 50  0001 C CNN
+F 1 "GND" H 4200 3500 50  0000 C CNN
+F 2 "" H 4200 3650 50  0000 C CNN
+F 3 "" H 4200 3650 50  0000 C CNN
+	1    4200 3650
+	1    0    0    -1  
+$EndComp
+NoConn ~ 4050 3400
+Text HLabel 9300 3100 2    60   Input ~ 0
+VUSB
+$Comp
+L USBLC6-2 U5
+U 1 1 57FA840B
+P 6300 3900
+F 0 "U5" H 6300 3450 60  0000 C CNN
+F 1 "USBLC6-2" H 6300 4350 60  0000 C CNN
+F 2 "" H 6300 3900 60  0001 C CNN
+F 3 "" H 6300 3900 60  0001 C CNN
+F 4 "497-5026-1-ND" H 6300 3900 60  0001 C CNN "Part No."
+	1    6300 3900
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #PWR39
+U 1 1 57FA84E6
+P 5700 4400
+F 0 "#PWR39" H 5700 4150 50  0001 C CNN
+F 1 "GND" H 5700 4250 50  0000 C CNN
+F 2 "" H 5700 4400 50  0000 C CNN
+F 3 "" H 5700 4400 50  0000 C CNN
+	1    5700 4400
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4050 3500 4200 3500
+Wire Wire Line
+	4200 3500 4200 3650
+Wire Wire Line
+	4050 3100 9300 3100
+Wire Wire Line
+	5800 3600 5700 3600
+Wire Wire Line
+	5700 3600 5700 3100
+Connection ~ 5700 3100
+Wire Wire Line
+	5700 4400 5700 4200
+Wire Wire Line
+	5700 4200 5800 4200
+Wire Wire Line
+	4050 3200 5600 3200
+Wire Wire Line
+	5600 3200 5600 3800
+Wire Wire Line
+	5600 3800 5800 3800
+Wire Wire Line
+	4050 3300 5500 3300
+Wire Wire Line
+	5500 3300 5500 4000
+Wire Wire Line
+	5500 4000 5800 4000
+Text HLabel 8000 4000 2    60   Input ~ 0
+USB_D+
+Text HLabel 8000 3800 2    60   Input ~ 0
+USB_D-
+Wire Wire Line
+	6800 3800 8000 3800
+Wire Wire Line
+	8000 4000 6800 4000
+$Comp
+L C C23
+U 1 1 57FA8DB8
+P 8700 3350
+F 0 "C23" H 8725 3450 50  0000 L CNN
+F 1 "0.1u" H 8725 3250 50  0000 L CNN
+F 2 "" H 8738 3200 50  0000 C CNN
+F 3 "" H 8700 3350 50  0000 C CNN
+	1    8700 3350
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #PWR36
+U 1 1 57FA8E78
+P 8700 3600
+F 0 "#PWR36" H 8700 3350 50  0001 C CNN
+F 1 "GND" H 8700 3450 50  0000 C CNN
+F 2 "" H 8700 3600 50  0000 C CNN
+F 3 "" H 8700 3600 50  0000 C CNN
+	1    8700 3600
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8700 3600 8700 3500
+Wire Wire Line
+	8700 3200 8700 3100
+Connection ~ 8700 3100
+$Comp
+L C C24
+U 1 1 57FA8ED8
+P 9000 3350
+F 0 "C24" H 9025 3450 50  0000 L CNN
+F 1 "1u" H 9025 3250 50  0000 L CNN
+F 2 "" H 9038 3200 50  0000 C CNN
+F 3 "" H 9000 3350 50  0000 C CNN
+	1    9000 3350
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9000 3200 9000 3100
+Connection ~ 9000 3100
+$Comp
+L GND #PWR37
+U 1 1 57FA8F18
+P 9000 3600
+F 0 "#PWR37" H 9000 3350 50  0001 C CNN
+F 1 "GND" H 9000 3450 50  0000 C CNN
+F 2 "" H 9000 3600 50  0000 C CNN
+F 3 "" H 9000 3600 50  0000 C CNN
+	1    9000 3600
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9000 3600 9000 3500
+$EndSCHEMATC

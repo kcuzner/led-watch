@@ -1,0 +1,30 @@
+# kicad
+
+*.bak
+*.bck
+*.net
+*.kicad_pcb-bak
+kicad/$*
+kicad/gerber
+battery-test/gerber
+dev/gerber
+kicad/*.lst
+kicad/*.csv
+*_autosave-*
+
+#libreoffice
+*.~lock*
+
+# gedit
+*~
+
+# blender
+*.blend1
+
+# firmware
+bin
+obj
+
+# git
+*.orig
+

@@ -1,0 +1,34 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP 74HC154
+D 4-to-16 line decoder/demultiplexer
+$ENDCMP
+#
+$CMP MCP73832
+D Single Cell Li-Ion/Li-Poly Charge Management Controller
+F ../ref/7383x.pdf
+$ENDCMP
+#
+$CMP MIC2090
+D Current limiting power distribution switch
+$ENDCMP
+#
+$CMP MMA8652FC
+D 3-Axis, 12-bit, Digital Accelerometer
+$ENDCMP
+#
+$CMP STM32L052CxTx
+D STM32L052CxTx 48-LQFP 32-bit ARM Cortex-M0+ Microcontroller
+$ENDCMP
+#
+$CMP TPS62736
+D Ultra-Low Power Buck Converter
+F ../ref/tps62736.pdf
+$ENDCMP
+#
+$CMP USBLC6-2
+D Very low capacitance ESD protection
+F ../ref/USBLC6-2.pdf
+$ENDCMP
+#
+#End Doc Library
