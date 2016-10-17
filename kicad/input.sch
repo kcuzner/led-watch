@@ -93,10 +93,10 @@ F 4 "P16849CT-ND" H 4000 4400 60  0001 C CNN "Part No."
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR033
+L GND #PWR032
 U 1 1 58018B80
 P 3400 4600
-F 0 "#PWR033" H 3400 4350 50  0001 C CNN
+F 0 "#PWR032" H 3400 4350 50  0001 C CNN
 F 1 "GND" H 3400 4450 50  0000 C CNN
 F 2 "" H 3400 4600 50  0000 C CNN
 F 3 "" H 3400 4600 50  0000 C CNN
@@ -189,94 +189,6 @@ BTN[0..3]
 Text HLabel 9200 2400 2    50   Input ~ 0
 BTN[0..3]
 $Comp
-L R R19
-U 1 1 58019398
-P 4800 2250
-F 0 "R19" V 4880 2250 50  0000 C CNN
-F 1 "R" V 4800 2250 50  0000 C CNN
-F 2 "Resistors_SMD:R_0402" V 4730 2250 50  0001 C CNN
-F 3 "" H 4800 2250 50  0000 C CNN
-	1    4800 2250
-	1    0    0    -1  
-$EndComp
-$Comp
-L R R21
-U 1 1 580193DC
-P 4800 2850
-F 0 "R21" V 4880 2850 50  0000 C CNN
-F 1 "R" V 4800 2850 50  0000 C CNN
-F 2 "Resistors_SMD:R_0402" V 4730 2850 50  0001 C CNN
-F 3 "" H 4800 2850 50  0000 C CNN
-	1    4800 2850
-	1    0    0    -1  
-$EndComp
-$Comp
-L R R23
-U 1 1 5801943C
-P 4800 3450
-F 0 "R23" V 4880 3450 50  0000 C CNN
-F 1 "R" V 4800 3450 50  0000 C CNN
-F 2 "Resistors_SMD:R_0402" V 4730 3450 50  0001 C CNN
-F 3 "" H 4800 3450 50  0000 C CNN
-	1    4800 3450
-	1    0    0    -1  
-$EndComp
-$Comp
-L R R25
-U 1 1 58019477
-P 4800 4050
-F 0 "R25" V 4880 4050 50  0000 C CNN
-F 1 "R" V 4800 4050 50  0000 C CNN
-F 2 "Resistors_SMD:R_0402" V 4730 4050 50  0001 C CNN
-F 3 "" H 4800 4050 50  0000 C CNN
-	1    4800 4050
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	4800 3100 4800 3000
-Connection ~ 4800 3100
-Wire Wire Line
-	4800 2500 4800 2400
-Connection ~ 4800 2500
-Wire Wire Line
-	4800 3700 4800 3600
-Connection ~ 4800 3700
-Wire Wire Line
-	4800 4300 4800 4200
-Connection ~ 4800 4300
-$Comp
-L +3.3V #PWR034
-U 1 1 58019588
-P 5000 1900
-F 0 "#PWR034" H 5000 1750 50  0001 C CNN
-F 1 "+3.3V" H 5000 2040 50  0000 C CNN
-F 2 "" H 5000 1900 50  0000 C CNN
-F 3 "" H 5000 1900 50  0000 C CNN
-	1    5000 1900
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	5000 1900 5000 3800
-Wire Wire Line
-	5000 2000 4800 2000
-Wire Wire Line
-	4800 2000 4800 2100
-Wire Wire Line
-	5000 2600 4800 2600
-Wire Wire Line
-	4800 2600 4800 2700
-Connection ~ 5000 2000
-Wire Wire Line
-	5000 3200 4800 3200
-Wire Wire Line
-	4800 3200 4800 3300
-Connection ~ 5000 2600
-Wire Wire Line
-	5000 3800 4800 3800
-Wire Wire Line
-	4800 3800 4800 3900
-Connection ~ 5000 3200
-$Comp
 L C C19
 U 1 1 580197EE
 P 6700 2750
@@ -333,10 +245,10 @@ Wire Wire Line
 	6700 4300 6700 4400
 Connection ~ 6700 4300
 $Comp
-L GND #PWR035
+L GND #PWR033
 U 1 1 58019B2C
 P 6500 4900
-F 0 "#PWR035" H 6500 4650 50  0001 C CNN
+F 0 "#PWR033" H 6500 4650 50  0001 C CNN
 F 1 "GND" H 6500 4750 50  0000 C CNN
 F 2 "" H 6500 4900 50  0000 C CNN
 F 3 "" H 6500 4900 50  0000 C CNN
@@ -369,7 +281,7 @@ L R R20
 U 1 1 5801F429
 P 5850 2500
 F 0 "R20" V 5930 2500 50  0000 C CNN
-F 1 "R" V 5850 2500 50  0000 C CNN
+F 1 "0" V 5850 2500 50  0000 C CNN
 F 2 "Resistors_SMD:R_0402" V 5780 2500 50  0001 C CNN
 F 3 "" H 5850 2500 50  0000 C CNN
 	1    5850 2500
@@ -380,7 +292,7 @@ L R R22
 U 1 1 5801F49B
 P 5850 3100
 F 0 "R22" V 5930 3100 50  0000 C CNN
-F 1 "R" V 5850 3100 50  0000 C CNN
+F 1 "0" V 5850 3100 50  0000 C CNN
 F 2 "Resistors_SMD:R_0402" V 5780 3100 50  0001 C CNN
 F 3 "" H 5850 3100 50  0000 C CNN
 	1    5850 3100
@@ -391,7 +303,7 @@ L R R24
 U 1 1 5801F4F3
 P 5850 3700
 F 0 "R24" V 5930 3700 50  0000 C CNN
-F 1 "R" V 5850 3700 50  0000 C CNN
+F 1 "0" V 5850 3700 50  0000 C CNN
 F 2 "Resistors_SMD:R_0402" V 5780 3700 50  0001 C CNN
 F 3 "" H 5850 3700 50  0000 C CNN
 	1    5850 3700
@@ -402,14 +314,14 @@ L R R26
 U 1 1 5801F550
 P 5850 4300
 F 0 "R26" V 5930 4300 50  0000 C CNN
-F 1 "R" V 5850 4300 50  0000 C CNN
+F 1 "0" V 5850 4300 50  0000 C CNN
 F 2 "Resistors_SMD:R_0402" V 5780 4300 50  0001 C CNN
 F 3 "" H 5850 4300 50  0000 C CNN
 	1    5850 4300
 	0    1    1    0   
 $EndComp
-Text Notes 3400 5700 0    50   ~ 0
-The debounce circuit has dual purpose. It debounces when operating\nas switched buttons, but can be adapted to be used by the touch\ncontroller of the STM32L. Depopulate all pullup resistors, all switches,\nand all but one of the capacitors. The line with the remaining capacitor\nis to be used as the sampling capacitor and should not have a touch\nsensor attached. The series resistors are used for noise reduction and\nso the sampling capacitor line can have its resistor removed (but all other\nlines should keep it since those are the sense lines).
 Text Notes 3400 6100 0    50   ~ 0
 Note: A larger sampling capacitor will make for more sensitive sensing\nbut for a longer sampling time.\n
+Text Notes 3400 5700 0    50   ~ 0
+For switched operation: Populate resistor with 0 ohms.\nDepopulate capacitor. Enable STM32 internal pullup on GPIO.\n\nFor capacitive touch operation: Populate exactly one capacitor with\nthe sampling capacitor value. Depopulate corresponding resistor.\nPopulate all other resistors with 0 ohms, optionally increasing that\nto increase noise immunity. No other capacitors should be\npopulated.
 $EndSCHEMATC

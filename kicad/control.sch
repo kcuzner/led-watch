@@ -137,10 +137,10 @@ F 4 "1276-1448-1-ND" H 1100 2350 60  0001 C CNN "Part No."
 	1    0    0    -1  
 $EndComp
 $Comp
-L +3.3V #PWR017
+L +3.3V #PWR016
 U 1 1 57FCBB0F
 P 700 700
-F 0 "#PWR017" H 700 550 50  0001 C CNN
+F 0 "#PWR016" H 700 550 50  0001 C CNN
 F 1 "+3.3V" H 700 840 50  0000 C CNN
 F 2 "" H 700 700 50  0000 C CNN
 F 3 "" H 700 700 50  0000 C CNN
@@ -148,10 +148,10 @@ F 3 "" H 700 700 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR018
+L GND #PWR017
 U 1 1 57FCBBFF
 P 1100 1600
-F 0 "#PWR018" H 1100 1350 50  0001 C CNN
+F 0 "#PWR017" H 1100 1350 50  0001 C CNN
 F 1 "GND" H 1100 1450 50  0000 C CNN
 F 2 "" H 1100 1600 50  0000 C CNN
 F 3 "" H 1100 1600 50  0000 C CNN
@@ -159,10 +159,10 @@ F 3 "" H 1100 1600 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR019
+L GND #PWR018
 U 1 1 57FCBD25
 P 2800 2000
-F 0 "#PWR019" H 2800 1750 50  0001 C CNN
+F 0 "#PWR018" H 2800 1750 50  0001 C CNN
 F 1 "GND" H 2800 1850 50  0000 C CNN
 F 2 "" H 2800 2000 50  0000 C CNN
 F 3 "" H 2800 2000 50  0000 C CNN
@@ -170,10 +170,10 @@ F 3 "" H 2800 2000 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR020
+L GND #PWR019
 U 1 1 57FCBED2
 P 1100 2700
-F 0 "#PWR020" H 1100 2450 50  0001 C CNN
+F 0 "#PWR019" H 1100 2450 50  0001 C CNN
 F 1 "GND" H 1100 2550 50  0000 C CNN
 F 2 "" H 1100 2700 50  0000 C CNN
 F 3 "" H 1100 2700 50  0000 C CNN
@@ -212,7 +212,7 @@ U 1 1 57FCC705
 P 1300 3250
 F 0 "Y1" H 1300 3400 50  0000 C CNN
 F 1 "32.767KHz" H 1300 3100 50  0000 C CNN
-F 2 "simple-led-watch:XTAL-CPFB" H 1300 3250 50  0000 C CNN
+F 2 "simple-led-watch:XTAL-CPFB" H 1300 3250 50  0001 C CNN
 F 3 "" H 1300 3250 50  0000 C CNN
 F 4 "370-1057-1-ND" H 1300 3250 60  0001 C CNN "Part No."
 	1    1300 3250
@@ -241,10 +241,10 @@ F 3 "" H 950 3500 50  0000 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L GND #PWR021
+L GND #PWR020
 U 1 1 57FCC8BD
 P 700 3600
-F 0 "#PWR021" H 700 3350 50  0001 C CNN
+F 0 "#PWR020" H 700 3350 50  0001 C CNN
 F 1 "GND" H 700 3450 50  0000 C CNN
 F 2 "" H 700 3600 50  0000 C CNN
 F 3 "" H 700 3600 50  0000 C CNN
@@ -272,10 +272,10 @@ F 3 "" H 1200 4750 50  0000 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L GND #PWR022
+L GND #PWR021
 U 1 1 5801A8C3
 P 1500 5000
-F 0 "#PWR022" H 1500 4750 50  0001 C CNN
+F 0 "#PWR021" H 1500 4750 50  0001 C CNN
 F 1 "GND" H 1500 4850 50  0000 C CNN
 F 2 "" H 1500 5000 50  0000 C CNN
 F 3 "" H 1500 5000 50  0000 C CNN
@@ -295,10 +295,10 @@ STM32_RESET
 Text Label 2600 4000 2    50   ~ 0
 STM32_RESET
 $Comp
-L GND #PWR023
+L GND #PWR022
 U 1 1 5801ADFC
 P 2800 4200
-F 0 "#PWR023" H 2800 3950 50  0001 C CNN
+F 0 "#PWR022" H 2800 3950 50  0001 C CNN
 F 1 "GND" H 2800 4050 50  0000 C CNN
 F 2 "" H 2800 4200 50  0000 C CNN
 F 3 "" H 2800 4200 50  0000 C CNN
@@ -376,10 +376,10 @@ F 4 "1276-1022-1-ND" H 1300 6450 60  0001 C CNN "Part No."
 	1    0    0    -1  
 $EndComp
 $Comp
-L +3.3V #PWR024
+L +3.3V #PWR023
 U 1 1 5801C871
 P 700 5400
-F 0 "#PWR024" H 700 5250 50  0001 C CNN
+F 0 "#PWR023" H 700 5250 50  0001 C CNN
 F 1 "+3.3V" H 700 5540 50  0000 C CNN
 F 2 "" H 700 5400 50  0000 C CNN
 F 3 "" H 700 5400 50  0000 C CNN
@@ -387,10 +387,10 @@ F 3 "" H 700 5400 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR025
+L GND #PWR024
 U 1 1 5801C913
 P 700 6800
-F 0 "#PWR025" H 700 6550 50  0001 C CNN
+F 0 "#PWR024" H 700 6550 50  0001 C CNN
 F 1 "GND" H 700 6650 50  0000 C CNN
 F 2 "" H 700 6800 50  0000 C CNN
 F 3 "" H 700 6800 50  0000 C CNN
@@ -398,10 +398,10 @@ F 3 "" H 700 6800 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR026
+L GND #PWR025
 U 1 1 5801CB03
 P 1800 6900
-F 0 "#PWR026" H 1800 6650 50  0001 C CNN
+F 0 "#PWR025" H 1800 6650 50  0001 C CNN
 F 1 "GND" H 1800 6750 50  0000 C CNN
 F 2 "" H 1800 6900 50  0000 C CNN
 F 3 "" H 1800 6900 50  0000 C CNN
@@ -421,10 +421,10 @@ F 4 "1276-1022-1-ND" H 1500 7050 60  0001 C CNN "Part No."
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR027
+L GND #PWR026
 U 1 1 5801CE9C
 P 1500 7300
-F 0 "#PWR027" H 1500 7050 50  0001 C CNN
+F 0 "#PWR026" H 1500 7050 50  0001 C CNN
 F 1 "GND" H 1500 7150 50  0000 C CNN
 F 2 "" H 1500 7300 50  0000 C CNN
 F 3 "" H 1500 7300 50  0000 C CNN
@@ -462,10 +462,10 @@ F 3 "" H 8900 5750 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L +3.3V #PWR028
+L +3.3V #PWR027
 U 1 1 5801D568
 P 8900 5400
-F 0 "#PWR028" H 8900 5250 50  0001 C CNN
+F 0 "#PWR027" H 8900 5250 50  0001 C CNN
 F 1 "+3.3V" H 8900 5540 50  0000 C CNN
 F 2 "" H 8900 5400 50  0000 C CNN
 F 3 "" H 8900 5400 50  0000 C CNN
@@ -474,59 +474,209 @@ F 3 "" H 8900 5400 50  0000 C CNN
 $EndComp
 NoConn ~ 2900 6200
 $Comp
-L R R17
-U 1 1 5801E1B3
-P 3000 5850
-F 0 "R17" V 3080 5850 50  0000 C CNN
-F 1 "10K" V 3000 5850 50  0000 C CNN
-F 2 "Resistors_SMD:R_0402" V 2930 5850 50  0001 C CNN
-F 3 "" H 3000 5850 50  0000 C CNN
-	1    3000 5850
-	1    0    0    -1  
-$EndComp
-$Comp
-L +3.3V #PWR029
+L +3.3V #PWR028
 U 1 1 5801E31A
 P 3000 5600
-F 0 "#PWR029" H 3000 5450 50  0001 C CNN
+F 0 "#PWR028" H 3000 5450 50  0001 C CNN
 F 1 "+3.3V" H 3000 5740 50  0000 C CNN
 F 2 "" H 3000 5600 50  0000 C CNN
 F 3 "" H 3000 5600 50  0000 C CNN
 	1    3000 5600
 	1    0    0    -1  
 $EndComp
-$Comp
-L R R14
-U 1 1 5801EACE
-P 700 5750
-F 0 "R14" V 780 5750 50  0000 C CNN
-F 1 "0" V 700 5750 50  0000 C CNN
-F 2 "Resistors_SMD:R_0402" V 630 5750 50  0001 C CNN
-F 3 "" H 700 5750 50  0000 C CNN
-	1    700  5750
-	1    0    0    -1  
-$EndComp
-Text Notes 850  5800 0    50   ~ 0
-This resistor for current\nmeasurement if needed
 Text Label 1000 6100 0    50   ~ 0
 ACCEL_VDD
-$Comp
-L R R9
-U 1 1 5801F8A0
-P 700 950
-F 0 "R9" V 780 950 50  0000 C CNN
-F 1 "0" V 700 950 50  0000 C CNN
-F 2 "Resistors_SMD:R_0402" V 630 950 50  0001 C CNN
-F 3 "" H 700 950 50  0000 C CNN
-	1    700  950 
-	1    0    0    -1  
-$EndComp
 Text Notes 900  700  0    50   ~ 0
 This resistor for current measurement if necessary
 Text Label 2000 3200 0    50   ~ 0
-STM32_OSC32_IN
+STM32_OSC32+
 Text Label 2000 3300 0    50   ~ 0
-STM32_OSC32_OUT
+STM32_OSC32-
+Entry Wire Line
+	6200 900  6300 800 
+Entry Wire Line
+	6200 1000 6300 900 
+Entry Wire Line
+	6200 1100 6300 1000
+Entry Wire Line
+	6200 1200 6300 1100
+Entry Wire Line
+	6200 1300 6300 1200
+Entry Wire Line
+	6200 1400 6300 1300
+Text HLabel 8200 800  2    50   Input ~ 0
+LED_A[0..5]
+Text Label 3400 6100 0    50   ~ 0
+~ACCEL_INT
+Text Notes 6500 1200 0    50   ~ 0
+LED pins chosen for consecutive\npin numbers, rather than for\nPWM capability (as there are no\n6-channel timers)
+Text Notes 3400 4700 0    50   ~ 0
+uC sleep current: 18uA (MSI 65KHz, 1.2V VOS)\nuC stop current: 0.41uA\nAccel low power current: 6.5uA (12.5Hz ODR)
+Text Label 5700 900  0    50   ~ 0
+LED_A0
+Text Label 5700 1000 0    50   ~ 0
+LED_A1
+Text Label 5700 1100 0    50   ~ 0
+LED_A2
+Text Label 5700 1200 0    50   ~ 0
+LED_A3
+Text Label 5700 1300 0    50   ~ 0
+LED_A4
+Text Label 5700 1400 0    50   ~ 0
+LED_A5
+Text Label 6950 800  0    50   ~ 0
+LED_A[0..5]
+Text Label 7000 2800 0    50   ~ 0
+LED_C_MUX[0..3]
+Text HLabel 8000 2800 2    50   Input ~ 0
+LED_C_MUX[0..3]
+Entry Wire Line
+	6500 2900 6600 2800
+Entry Wire Line
+	6500 3000 6600 2900
+Entry Wire Line
+	6500 3100 6600 3000
+Entry Wire Line
+	6500 3200 6600 3100
+Text Notes 6700 3000 0    50   ~ 0
+MUX pins chosen for consecutive\npin numbers...bye bye UART and SPI
+Text HLabel 9100 3300 2    50   Input ~ 0
+~LED_C_EN
+$Comp
+L R R12
+U 1 1 5801C130
+P 9000 3050
+F 0 "R12" V 9080 3050 50  0000 C CNN
+F 1 "10K" V 9000 3050 50  0000 C CNN
+F 2 "Resistors_SMD:R_0402" V 8930 3050 50  0001 C CNN
+F 3 "" H 9000 3050 50  0000 C CNN
+	1    9000 3050
+	1    0    0    -1  
+$EndComp
+$Comp
+L +3.3V #PWR029
+U 1 1 5801C3D8
+P 9000 2800
+F 0 "#PWR029" H 9000 2650 50  0001 C CNN
+F 1 "+3.3V" H 9000 2940 50  0000 C CNN
+F 2 "" H 9000 2800 50  0000 C CNN
+F 3 "" H 9000 2800 50  0000 C CNN
+	1    9000 2800
+	1    0    0    -1  
+$EndComp
+Text Notes 7900 4100 0    50   ~ 0
+Button pins chosen because of TSC\ngroup. Maybe in the future we can\nuse capacitive sensors and make a\nwaterproof case (would require\nsacrificing a button for Cs)
+Text Label 6100 2800 0    50   ~ 0
+~ACCEL_INT
+Text Label 6000 2900 0    50   ~ 0
+LED_C_MUX0
+Text Label 6000 3000 0    50   ~ 0
+LED_C_MUX1
+Text Label 6000 3100 0    50   ~ 0
+LED_C_MUX2
+Text Label 6000 3200 0    50   ~ 0
+LED_C_MUX3
+Text Notes 7750 2550 0    50   ~ 0
+Use SYSCFG_EXTICR1 to configure\nwakeup interrupts for these 3 pins
+$Comp
+L R R18
+U 1 1 580244E4
+P 6050 6100
+F 0 "R18" V 6130 6100 50  0000 C CNN
+F 1 "1K" V 6050 6100 50  0000 C CNN
+F 2 "Resistors_SMD:R_0402" V 5980 6100 50  0001 C CNN
+F 3 "" H 6050 6100 50  0000 C CNN
+	1    6050 6100
+	0    1    1    0   
+$EndComp
+$Comp
+L SPEAKER SP1
+U 1 1 5802456F
+P 7300 5200
+F 0 "SP1" H 7200 5450 50  0000 C CNN
+F 1 "CSS-0575A-SMT" H 7200 4950 50  0000 C CNN
+F 2 "simple-led-watch:CSS-0575A-SMT" H 7300 5200 50  0001 C CNN
+F 3 "" H 7300 5200 50  0000 C CNN
+F 4 "102-2201-1-ND" H 7300 5200 60  0001 C CNN "Part No."
+	1    7300 5200
+	1    0    0    -1  
+$EndComp
+$Comp
+L D_Small D4
+U 1 1 580245EA
+P 6700 5200
+F 0 "D4" H 6650 5280 50  0000 L CNN
+F 1 "RB521S30T5G" H 6550 5120 50  0000 L CNN
+F 2 "Diodes_SMD:SOD-523" V 6700 5200 50  0001 C CNN
+F 3 "" V 6700 5200 50  0000 C CNN
+F 4 "B521S30T5GOSCT-ND" H 6700 5200 60  0001 C CNN "Part No."
+	1    6700 5200
+	0    1    1    0   
+$EndComp
+$Comp
+L +3.3V #PWR030
+U 1 1 58024910
+P 6700 4850
+F 0 "#PWR030" H 6700 4700 50  0001 C CNN
+F 1 "+3.3V" H 6700 4990 50  0000 C CNN
+F 2 "" H 6700 4850 50  0000 C CNN
+F 3 "" H 6700 4850 50  0000 C CNN
+	1    6700 4850
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #PWR031
+U 1 1 58024E53
+P 6700 6400
+F 0 "#PWR031" H 6700 6150 50  0001 C CNN
+F 1 "GND" H 6700 6250 50  0000 C CNN
+F 2 "" H 6700 6400 50  0000 C CNN
+F 3 "" H 6700 6400 50  0000 C CNN
+	1    6700 6400
+	1    0    0    -1  
+$EndComp
+Text Label 6200 1500 0    50   ~ 0
+BUZ_OUTPUT
+Text Notes 6700 1500 0    50   ~ 0
+TIM22_CH1
+Text Label 5600 6100 2    50   ~ 0
+BUZ_OUTPUT
+NoConn ~ 5500 1600
+NoConn ~ 5500 1700
+NoConn ~ 5500 1800
+NoConn ~ 5500 1900
+NoConn ~ 5500 2400
+NoConn ~ 5500 3600
+NoConn ~ 5500 4100
+$Comp
+L R R13
+U 1 1 5805A0E0
+P 6700 5650
+F 0 "R13" V 6780 5650 50  0000 C CNN
+F 1 "R" V 6700 5650 50  0000 C CNN
+F 2 "Resistors_SMD:R_0402" V 6630 5650 50  0001 C CNN
+F 3 "" H 6700 5650 50  0000 C CNN
+	1    6700 5650
+	1    0    0    -1  
+$EndComp
+$Comp
+L Q_NPN_BEC Q2
+U 1 1 5805A454
+P 6600 6100
+F 0 "Q2" H 6900 6150 50  0000 R CNN
+F 1 "MMBT3904" H 7200 6050 50  0000 R CNN
+F 2 "TO_SOT_Packages_SMD:SOT-23" H 6800 6200 50  0001 C CNN
+F 3 "" H 6600 6100 50  0000 C CNN
+F 4 "MMBT3904FSCT-ND" H 6600 6100 60  0001 C CNN "Part No."
+	1    6600 6100
+	1    0    0    -1  
+$EndComp
+Text Notes 7900 4500 0    50   ~ 0
+Also note that the button pin numbers\ndo not intersect any other interrupted\npin numbers so they can be waking\ninterrupts.
+Text Notes 9200 3050 0    50   ~ 0
+Keep this pullup to keep\nthe lights off when the\nprocessor shuts down.
+Text Notes 3150 5900 0    50   ~ 0
+Pullup provided by STM32
 Wire Wire Line
 	8300 2200 7900 2200
 Wire Wire Line
@@ -681,7 +831,7 @@ Wire Wire Line
 Wire Wire Line
 	900  6100 900  6300
 Wire Wire Line
-	700  5900 700  6300
+	700  5400 700  6300
 Connection ~ 900  6100
 Connection ~ 700  6100
 Wire Wire Line
@@ -735,12 +885,8 @@ Wire Wire Line
 	3000 6100 3000 6000
 Wire Wire Line
 	3000 5600 3000 5700
-Wire Wire Line
-	700  5400 700  5600
 Connection ~ 1300 6100
 Connection ~ 1300 6200
-Wire Wire Line
-	700  700  700  800 
 Wire Wire Line
 	700  1300 900  1300
 Wire Wire Line
@@ -750,39 +896,7 @@ Wire Bus Line
 	6300 800  6300 1300
 Wire Bus Line
 	6300 800  8200 800 
-Entry Wire Line
-	6200 900  6300 800 
-Entry Wire Line
-	6200 1000 6300 900 
-Entry Wire Line
-	6200 1100 6300 1000
-Entry Wire Line
-	6200 1200 6300 1100
-Entry Wire Line
-	6200 1300 6300 1200
-Entry Wire Line
-	6200 1400 6300 1300
-Text HLabel 8200 800  2    50   Input ~ 0
-LED_A[0..5]
-Text Label 3400 6100 0    50   ~ 0
-~ACCEL_INT
 Connection ~ 3000 6100
-Text Notes 6500 1200 0    50   ~ 0
-LED pins chosen for consecutive\npin numbers, rather than for\nPWM capability (as there are no\n6-channel timers)
-Text Notes 3400 4700 0    50   ~ 0
-uC sleep current: 18uA (MSI 65KHz, 1.2V VOS)\nuC stop current: 0.41uA\nAccel low power current: 6.5uA (12.5Hz ODR)
-Text Label 5700 900  0    50   ~ 0
-LED_A0
-Text Label 5700 1000 0    50   ~ 0
-LED_A1
-Text Label 5700 1100 0    50   ~ 0
-LED_A2
-Text Label 5700 1200 0    50   ~ 0
-LED_A3
-Text Label 5700 1300 0    50   ~ 0
-LED_A4
-Text Label 5700 1400 0    50   ~ 0
-LED_A5
 Wire Wire Line
 	5500 900  6200 900 
 Wire Wire Line
@@ -795,24 +909,10 @@ Wire Wire Line
 	5500 1300 6200 1300
 Wire Wire Line
 	6200 1400 5500 1400
-Text Label 6950 800  0    50   ~ 0
-LED_A[0..5]
-Text Label 7000 2800 0    50   ~ 0
-LED_C_MUX[0..3]
-Text HLabel 8000 2800 2    50   Input ~ 0
-LED_C_MUX[0..3]
 Wire Bus Line
 	8000 2800 6600 2800
 Wire Bus Line
 	6600 2800 6600 3100
-Entry Wire Line
-	6500 2900 6600 2800
-Entry Wire Line
-	6500 3000 6600 2900
-Entry Wire Line
-	6500 3100 6600 3000
-Entry Wire Line
-	6500 3200 6600 3100
 Wire Wire Line
 	5500 3200 6500 3200
 Wire Wire Line
@@ -821,123 +921,21 @@ Wire Wire Line
 	5500 3000 6500 3000
 Wire Wire Line
 	6500 2900 5500 2900
-Text Notes 6700 3000 0    50   ~ 0
-MUX pins chosen for consecutive\npin numbers...bye bye UART and SPI
-Text HLabel 9100 3300 2    50   Input ~ 0
-~LED_C_EN
-$Comp
-L R R12
-U 1 1 5801C130
-P 9000 3050
-F 0 "R12" V 9080 3050 50  0000 C CNN
-F 1 "10K" V 9000 3050 50  0000 C CNN
-F 2 "Resistors_SMD:R_0402" V 8930 3050 50  0001 C CNN
-F 3 "" H 9000 3050 50  0000 C CNN
-	1    9000 3050
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	5500 3300 9100 3300
 Wire Wire Line
 	9000 3200 9000 3300
 Connection ~ 9000 3300
-$Comp
-L +3.3V #PWR030
-U 1 1 5801C3D8
-P 9000 2800
-F 0 "#PWR030" H 9000 2650 50  0001 C CNN
-F 1 "+3.3V" H 9000 2940 50  0000 C CNN
-F 2 "" H 9000 2800 50  0000 C CNN
-F 3 "" H 9000 2800 50  0000 C CNN
-	1    9000 2800
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	9000 2800 9000 2900
-Text Notes 7900 4100 0    50   ~ 0
-Button pins chosen because of TSC\ngroup. Maybe in the future we can\nuse capacitive sensors and make a\nwaterproof case (would require\nsacrificing a button for Cs)
-Text Label 6100 2800 0    50   ~ 0
-~ACCEL_INT
 Wire Wire Line
 	6100 2800 5500 2800
-Text Label 6000 2900 0    50   ~ 0
-LED_C_MUX0
-Text Label 6000 3000 0    50   ~ 0
-LED_C_MUX1
-Text Label 6000 3100 0    50   ~ 0
-LED_C_MUX2
-Text Label 6000 3200 0    50   ~ 0
-LED_C_MUX3
 Wire Wire Line
 	5500 2600 8000 2600
 Wire Wire Line
 	8000 2700 5500 2700
-Text Notes 7750 2550 0    50   ~ 0
-Use SYSCFG_EXTICR1 to configure\nwakeup interrupts for these 3 pins
-Text Label 1100 2100 0    50   ~ 0
-STM32_VDDA
-$Comp
-L INDUCTOR_SMALL L2
-U 1 1 5802341E
-P 700 1650
-F 0 "L2" H 700 1750 50  0000 C CNN
-F 1 "10u" H 700 1600 50  0000 C CNN
-F 2 "Resistors_SMD:R_0603" H 700 1650 50  0001 C CNN
-F 3 "" H 700 1650 50  0000 C CNN
-F 4 "445-6755-1-ND" H 700 1650 60  0001 C CNN "Part No."
-	1    700  1650
-	0    -1   -1   0   
-$EndComp
 Wire Wire Line
-	700  1100 700  1400
-Wire Wire Line
-	700  1900 700  2100
-$Comp
-L R R18
-U 1 1 580244E4
-P 6050 6100
-F 0 "R18" V 6130 6100 50  0000 C CNN
-F 1 "1K" V 6050 6100 50  0000 C CNN
-F 2 "Resistors_SMD:R_0402" V 5980 6100 50  0001 C CNN
-F 3 "" H 6050 6100 50  0000 C CNN
-	1    6050 6100
-	0    1    1    0   
-$EndComp
-$Comp
-L SPEAKER SP1
-U 1 1 5802456F
-P 7300 5200
-F 0 "SP1" H 7200 5450 50  0000 C CNN
-F 1 "CSS-0575A-SMT" H 7200 4950 50  0000 C CNN
-F 2 "simple-led-watch:CSS-0575A-SMT" H 7300 5200 50  0001 C CNN
-F 3 "" H 7300 5200 50  0000 C CNN
-F 4 "102-2201-1-ND" H 7300 5200 60  0001 C CNN "Part No."
-	1    7300 5200
-	1    0    0    -1  
-$EndComp
-$Comp
-L D_Small D4
-U 1 1 580245EA
-P 6700 5200
-F 0 "D4" H 6650 5280 50  0000 L CNN
-F 1 "RB521S30T5G" H 6550 5120 50  0000 L CNN
-F 2 "Diodes_SMD:SOD-523" V 6700 5200 50  0001 C CNN
-F 3 "" V 6700 5200 50  0000 C CNN
-F 4 "B521S30T5GOSCT-ND" H 6700 5200 60  0001 C CNN "Part No."
-	1    6700 5200
-	0    1    1    0   
-$EndComp
-$Comp
-L +3.3V #PWR031
-U 1 1 58024910
-P 6700 4850
-F 0 "#PWR031" H 6700 4700 50  0001 C CNN
-F 1 "+3.3V" H 6700 4990 50  0000 C CNN
-F 2 "" H 6700 4850 50  0000 C CNN
-F 3 "" H 6700 4850 50  0000 C CNN
-	1    6700 4850
-	1    0    0    -1  
-$EndComp
+	700  700  700  2100
 Wire Wire Line
 	6700 4850 6700 5100
 Wire Wire Line
@@ -958,77 +956,12 @@ Wire Wire Line
 Connection ~ 6700 5400
 Wire Wire Line
 	6200 6100 6400 6100
-$Comp
-L GND #PWR032
-U 1 1 58024E53
-P 6700 6400
-F 0 "#PWR032" H 6700 6150 50  0001 C CNN
-F 1 "GND" H 6700 6250 50  0000 C CNN
-F 2 "" H 6700 6400 50  0000 C CNN
-F 3 "" H 6700 6400 50  0000 C CNN
-	1    6700 6400
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	6700 6400 6700 6300
-Text Label 6200 1500 0    50   ~ 0
-BUZ_OUTPUT
 Wire Wire Line
 	6200 1500 5500 1500
-Text Notes 6700 1500 0    50   ~ 0
-TIM22_CH1
-Text Label 5600 6100 2    50   ~ 0
-BUZ_OUTPUT
 Wire Wire Line
 	5600 6100 5900 6100
-NoConn ~ 5500 1600
-NoConn ~ 5500 1700
-NoConn ~ 5500 1800
-NoConn ~ 5500 1900
-NoConn ~ 5500 2400
-NoConn ~ 5500 3600
-NoConn ~ 5500 4100
-$Comp
-L R R13
-U 1 1 5805A0E0
-P 6700 5650
-F 0 "R13" V 6780 5650 50  0000 C CNN
-F 1 "R" V 6700 5650 50  0000 C CNN
-F 2 "Resistors_SMD:R_0402" V 6630 5650 50  0001 C CNN
-F 3 "" H 6700 5650 50  0000 C CNN
-	1    6700 5650
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	6700 5800 6700 5900
-$Comp
-L Q_NPN_BEC Q2
-U 1 1 5805A454
-P 6600 6100
-F 0 "Q2" H 6900 6150 50  0000 R CNN
-F 1 "MMBT3904" H 7200 6050 50  0000 R CNN
-F 2 "TO_SOT_Packages_SMD:SOT-23" H 6800 6200 50  0001 C CNN
-F 3 "" H 6600 6100 50  0000 C CNN
-F 4 "MMBT3904FSCT-ND" H 6600 6100 60  0001 C CNN "Part No."
-	1    6600 6100
-	1    0    0    -1  
-$EndComp
-Text Notes 7900 4500 0    50   ~ 0
-Also note that the button pin numbers\ndo not intersect any other interrupted\npin numbers so they can be waking\ninterrupts.
-Wire Wire Line
-	700  5550 600  5550
-Wire Wire Line
-	600  5550 600  5950
-Wire Wire Line
-	600  5950 700  5950
-Connection ~ 700  5950
-Connection ~ 700  5550
-Wire Wire Line
-	700  750  550  750 
-Wire Wire Line
-	550  750  550  1150
-Wire Wire Line
-	550  1150 700  1150
-Connection ~ 700  1150
-Connection ~ 700  750 
 $EndSCHEMATC
