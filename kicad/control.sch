@@ -216,7 +216,7 @@ F 2 "simple-led-watch:XTAL-CPFB" H 1300 3250 50  0001 C CNN
 F 3 "" H 1300 3250 50  0000 C CNN
 F 4 "370-1057-1-ND" H 1300 3250 60  0001 C CNN "Part No."
 	1    1300 3250
-	0    1    1    0   
+	0    -1   -1   0   
 $EndComp
 $Comp
 L C C13
@@ -542,28 +542,6 @@ Text Notes 6700 3000 0    50   ~ 0
 MUX pins chosen for consecutive\npin numbers...bye bye UART and SPI
 Text HLabel 9100 3300 2    50   Input ~ 0
 ~LED_C_EN
-$Comp
-L R R12
-U 1 1 5801C130
-P 9000 3050
-F 0 "R12" V 9080 3050 50  0000 C CNN
-F 1 "10K" V 9000 3050 50  0000 C CNN
-F 2 "Resistors_SMD:R_0402" V 8930 3050 50  0001 C CNN
-F 3 "" H 9000 3050 50  0000 C CNN
-	1    9000 3050
-	1    0    0    -1  
-$EndComp
-$Comp
-L +3.3V #PWR029
-U 1 1 5801C3D8
-P 9000 2800
-F 0 "#PWR029" H 9000 2650 50  0001 C CNN
-F 1 "+3.3V" H 9000 2940 50  0000 C CNN
-F 2 "" H 9000 2800 50  0000 C CNN
-F 3 "" H 9000 2800 50  0000 C CNN
-	1    9000 2800
-	1    0    0    -1  
-$EndComp
 Text Notes 7900 4100 0    50   ~ 0
 Button pins chosen because of TSC\ngroup. Maybe in the future we can\nuse capacitive sensors and make a\nwaterproof case (would require\nsacrificing a button for Cs)
 Text Label 6100 2800 0    50   ~ 0
@@ -673,8 +651,8 @@ F 4 "MMBT3904FSCT-ND" H 6600 6100 60  0001 C CNN "Part No."
 $EndComp
 Text Notes 7900 4500 0    50   ~ 0
 Also note that the button pin numbers\ndo not intersect any other interrupted\npin numbers so they can be waking\ninterrupts.
-Text Notes 9200 3050 0    50   ~ 0
-Keep this pullup to keep\nthe lights off when the\nprocessor shuts down.
+Text Notes 8650 3200 0    50   ~ 0
+No pullup on led enable:\n1. When the microcontroller is off, it could float\nactive. However, the microcontroller's LED\noutputs are Hi-Z, so no current flows.\n2. When the microcontroller is on, it will be\nconfigured for open drain mode or normal GPIO\nmode. All is well.
 Text Notes 3150 5900 0    50   ~ 0
 Pullup provided by STM32
 Wire Wire Line
@@ -923,11 +901,6 @@ Wire Wire Line
 	6500 2900 5500 2900
 Wire Wire Line
 	5500 3300 9100 3300
-Wire Wire Line
-	9000 3200 9000 3300
-Connection ~ 9000 3300
-Wire Wire Line
-	9000 2800 9000 2900
 Wire Wire Line
 	6100 2800 5500 2800
 Wire Wire Line
