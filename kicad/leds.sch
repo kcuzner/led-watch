@@ -379,15 +379,15 @@ F 4 "160-1436-1-ND" H 8300 3200 60  0001 C CNN "Part No."
 	1    8300 3200
 	0    -1   -1   0   
 $EndComp
-Text Label 7100 3050 1    50   ~ 0
+Text Label 8300 3050 1    50   ~ 0
 LED_A_R0
-Text Label 7400 3050 1    50   ~ 0
+Text Label 8000 3050 1    50   ~ 0
 LED_A_R1
 Text Label 7700 3050 1    50   ~ 0
 LED_A_R2
-Text Label 8000 3050 1    50   ~ 0
+Text Label 7400 3050 1    50   ~ 0
 LED_A_R3
-Text Label 8300 3050 1    50   ~ 0
+Text Label 7100 3050 1    50   ~ 0
 LED_A_R4
 Entry Wire Line
 	7000 2700 7100 2800
@@ -539,15 +539,15 @@ F 4 "160-1436-1-ND" H 8300 4200 60  0001 C CNN "Part No."
 	1    8300 4200
 	0    -1   -1   0   
 $EndComp
-Text Label 7100 4050 1    50   ~ 0
+Text Label 8300 4050 1    50   ~ 0
 LED_A_R0
-Text Label 7400 4050 1    50   ~ 0
+Text Label 8000 4050 1    50   ~ 0
 LED_A_R1
 Text Label 7700 4050 1    50   ~ 0
 LED_A_R2
-Text Label 8000 4050 1    50   ~ 0
+Text Label 7400 4050 1    50   ~ 0
 LED_A_R3
-Text Label 8300 4050 1    50   ~ 0
+Text Label 7100 4050 1    50   ~ 0
 LED_A_R4
 Entry Wire Line
 	7000 3700 7100 3800
@@ -699,15 +699,15 @@ F 4 "160-1436-1-ND" H 8300 5200 60  0001 C CNN "Part No."
 	1    8300 5200
 	0    -1   -1   0   
 $EndComp
-Text Label 7100 5050 1    50   ~ 0
+Text Label 8300 5050 1    50   ~ 0
 LED_A_R0
-Text Label 7400 5050 1    50   ~ 0
+Text Label 8000 5050 1    50   ~ 0
 LED_A_R1
 Text Label 7700 5050 1    50   ~ 0
 LED_A_R2
-Text Label 8000 5050 1    50   ~ 0
+Text Label 7400 5050 1    50   ~ 0
 LED_A_R3
-Text Label 8300 5050 1    50   ~ 0
+Text Label 7100 5050 1    50   ~ 0
 LED_A_R4
 Entry Wire Line
 	7000 4700 7100 4800
@@ -859,15 +859,15 @@ F 4 "160-1436-1-ND" H 8300 6200 60  0001 C CNN "Part No."
 	1    8300 6200
 	0    -1   -1   0   
 $EndComp
-Text Label 7100 6050 1    50   ~ 0
+Text Label 8300 6050 1    50   ~ 0
 LED_A_R0
-Text Label 7400 6050 1    50   ~ 0
+Text Label 8000 6050 1    50   ~ 0
 LED_A_R1
 Text Label 7700 6050 1    50   ~ 0
 LED_A_R2
-Text Label 8000 6050 1    50   ~ 0
+Text Label 7400 6050 1    50   ~ 0
 LED_A_R3
-Text Label 8300 6050 1    50   ~ 0
+Text Label 7100 6050 1    50   ~ 0
 LED_A_R4
 Entry Wire Line
 	7000 5700 7100 5800
@@ -965,15 +965,15 @@ Entry Wire Line
 	7300 1700 7400 1800
 Entry Wire Line
 	7000 1700 7100 1800
-Text Label 8300 2050 1    50   ~ 0
+Text Label 7100 2050 1    50   ~ 0
 LED_A_R4
-Text Label 8000 2050 1    50   ~ 0
+Text Label 7400 2050 1    50   ~ 0
 LED_A_R3
 Text Label 7700 2050 1    50   ~ 0
 LED_A_R2
-Text Label 7400 2050 1    50   ~ 0
+Text Label 8000 2050 1    50   ~ 0
 LED_A_R1
-Text Label 7100 2050 1    50   ~ 0
+Text Label 8300 2050 1    50   ~ 0
 LED_A_R0
 $Comp
 L Led_Small D24
@@ -1125,15 +1125,15 @@ Entry Wire Line
 	7300 700  7400 800 
 Entry Wire Line
 	7000 700  7100 800 
-Text Label 8300 1050 1    50   ~ 0
+Text Label 7100 1050 1    50   ~ 0
 LED_A_R4
-Text Label 8000 1050 1    50   ~ 0
+Text Label 7400 1050 1    50   ~ 0
 LED_A_R3
 Text Label 7700 1050 1    50   ~ 0
 LED_A_R2
-Text Label 7400 1050 1    50   ~ 0
+Text Label 8000 1050 1    50   ~ 0
 LED_A_R1
-Text Label 7100 1050 1    50   ~ 0
+Text Label 8300 1050 1    50   ~ 0
 LED_A_R0
 $Comp
 L Led_Small D14
@@ -2158,4 +2158,6 @@ LED_B_A
 NoConn ~ 3700 6300
 NoConn ~ 3700 6400
 NoConn ~ 3700 6500
+Text Notes 9200 1700 0    50   ~ 0
+A note about numbering: Notice that the LEDs\nare ordered 0-4 on the left, but 4-0 on the\nright. This greatly simplifies routing (like making\nit incredibly easy vs nearly impossible) at the\nexpense of slightly more complicated software.\nI'm sure we can take advantage of odd rows\nbeing "backwards" and even rows being\n"forwards" somehow in software.
 $EndSCHEMATC

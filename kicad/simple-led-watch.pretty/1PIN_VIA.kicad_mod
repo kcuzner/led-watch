@@ -1,0 +1,10 @@
+(module 1PIN_VIA (layer F.Cu) (tedit 580597BC)
+  (fp_text reference REF** (at 0 2) (layer F.SilkS) hide
+    (effects (font (size 1 1) (thickness 0.15)))
+  )
+  (fp_text value 1PIN_VIA (at 0 -2) (layer F.Fab) hide
+    (effects (font (size 1 1) (thickness 0.15)))
+  )
+  (pad 1 thru_hole circle (at 0 0) (size 0.6858 0.6858) (drill 0.3302) (layers *.Cu)
+    (zone_connect 2))
+)
