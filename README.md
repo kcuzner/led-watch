@@ -1,4 +1,34 @@
-# LED Watch
+# LED Wristwatch
+
+By Kevin Cuzner
+
+## NOTE: This is a work in progress and may never be finished ##
+
+Currently on github to get internet assistance with kicad crashes and other
+things. I often start projects with the intention of learning something, rather
+than finishing them. But, this one is pretty awesome I think and I could see
+myself maybe finishing it.
+
+## Design Features
+
+- 32mm PCB diameter utilizing 72 0603 LEDs as the primary time display
+    - Target is 3 square inches, 4 layer, with standard technology (6mil trace,
+      no via in pad, etc)
+- 100mAH battery from [PowerStream](http://www.powerstream.com/)
+- Very high efficiency buck regulator.
+    - Target battery life: >168 hours
+- USB charging and programming
+- STM32L0-series microcontroller
+- Side-actuated mid-board PCB mount buttons with an option for replacement with
+  capacitive sensors.
+
+![Current "Artists" impression](docs/simple-led-watch.jpg)
+
+## Current status
+
+- Part selection complete, except resistors
+- PCB most of the way through initial 4-layer design
+- Firmware not developed
 
 This is based on a previous 44mm design that used 0805 LEDs and had touchpanel
 capability. The idea with this totally new fork is to:

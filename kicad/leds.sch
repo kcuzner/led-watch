@@ -81,10 +81,10 @@ LED_C_MUX2
 Text Label 2200 6200 0    50   ~ 0
 LED_C_MUX3
 $Comp
-L +3.3V #PWR037
+L +3.3V #PWR036
 U 1 1 5802731F
 P 2600 4900
-F 0 "#PWR037" H 2600 4750 50  0001 C CNN
+F 0 "#PWR036" H 2600 4750 50  0001 C CNN
 F 1 "+3.3V" H 2600 5040 50  0000 C CNN
 F 2 "" H 2600 4900 50  0000 C CNN
 F 3 "" H 2600 4900 50  0000 C CNN
@@ -92,10 +92,10 @@ F 3 "" H 2600 4900 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR038
+L GND #PWR037
 U 1 1 5802733F
 P 2600 5200
-F 0 "#PWR038" H 2600 4950 50  0001 C CNN
+F 0 "#PWR037" H 2600 4950 50  0001 C CNN
 F 1 "GND" H 2600 5050 50  0000 C CNN
 F 2 "" H 2600 5200 50  0000 C CNN
 F 3 "" H 2600 5200 50  0000 C CNN
@@ -115,10 +115,10 @@ F 4 "1276-1022-1-ND" H 2200 5050 60  0001 C CNN "Part No."
 	1    0    0    -1  
 $EndComp
 $Comp
-L +3.3V #PWR039
+L +3.3V #PWR038
 U 1 1 5802739E
 P 2200 4700
-F 0 "#PWR039" H 2200 4550 50  0001 C CNN
+F 0 "#PWR038" H 2200 4550 50  0001 C CNN
 F 1 "+3.3V" H 2200 4840 50  0000 C CNN
 F 2 "" H 2200 4700 50  0000 C CNN
 F 3 "" H 2200 4700 50  0000 C CNN
@@ -126,10 +126,10 @@ F 3 "" H 2200 4700 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR040
+L GND #PWR039
 U 1 1 580273B6
 P 2200 5400
-F 0 "#PWR040" H 2200 5150 50  0001 C CNN
+F 0 "#PWR039" H 2200 5150 50  0001 C CNN
 F 1 "GND" H 2200 5250 50  0000 C CNN
 F 2 "" H 2200 5400 50  0000 C CNN
 F 3 "" H 2200 5400 50  0000 C CNN
@@ -137,22 +137,10 @@ F 3 "" H 2200 5400 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C25
-U 1 1 580276EE
-P 1700 5050
-F 0 "C25" H 1725 5150 50  0000 L CNN
-F 1 "1u" H 1725 4950 50  0000 L CNN
-F 2 "Capacitors_SMD:C_0402" H 1738 4900 50  0001 C CNN
-F 3 "" H 1700 5050 50  0000 C CNN
-F 4 "1276-1448-1-ND" H 1700 5050 60  0001 C CNN "Part No."
-	1    1700 5050
-	1    0    0    -1  
-$EndComp
-$Comp
-L GND #PWR041
+L GND #PWR040
 U 1 1 5802794D
 P 2600 6600
-F 0 "#PWR041" H 2600 6350 50  0001 C CNN
+F 0 "#PWR040" H 2600 6350 50  0001 C CNN
 F 1 "GND" H 2600 6450 50  0000 C CNN
 F 2 "" H 2600 6600 50  0000 C CNN
 F 3 "" H 2600 6600 50  0000 C CNN
@@ -2160,4 +2148,6 @@ NoConn ~ 3700 6400
 NoConn ~ 3700 6500
 Text Notes 9200 1700 0    50   ~ 0
 A note about numbering: Notice that the LEDs\nare ordered 0-4 on the left, but 4-0 on the\nright. This greatly simplifies routing (like making\nit incredibly easy vs nearly impossible) at the\nexpense of slightly more complicated software.\nI'm sure we can take advantage of odd rows\nbeing "backwards" and even rows being\n"forwards" somehow in software.
+Text Notes 1250 5150 0    50   ~ 0
+C25: 1uF\n\nNo way it could fit...
 $EndSCHEMATC
