@@ -93,41 +93,10 @@ F 3 "" H 5700 4400 50  0000 C CNN
 	1    5700 4400
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	4050 3500 4200 3500
-Wire Wire Line
-	4200 3500 4200 3650
-Wire Wire Line
-	4050 3100 9300 3100
-Wire Wire Line
-	5800 3600 5700 3600
-Wire Wire Line
-	5700 3600 5700 3100
-Connection ~ 5700 3100
-Wire Wire Line
-	5700 4400 5700 4200
-Wire Wire Line
-	5700 4200 5800 4200
-Wire Wire Line
-	4050 3200 5600 3200
-Wire Wire Line
-	5600 3200 5600 3800
-Wire Wire Line
-	5600 3800 5800 3800
-Wire Wire Line
-	4050 3300 5500 3300
-Wire Wire Line
-	5500 3300 5500 4000
-Wire Wire Line
-	5500 4000 5800 4000
 Text HLabel 8000 4000 2    60   Input ~ 0
 USB_D+
 Text HLabel 8000 3800 2    60   Input ~ 0
 USB_D-
-Wire Wire Line
-	6800 3800 8000 3800
-Wire Wire Line
-	8000 4000 6800 4000
 $Comp
 L R R36
 U 1 1 5805F39C
@@ -150,6 +119,48 @@ F 3 "" H 3650 4050 50  0000 C CNN
 	1    3650 4050
 	1    0    0    -1  
 $EndComp
+$Comp
+L GND #PWR035
+U 1 1 5805F4FD
+P 3650 4400
+F 0 "#PWR035" H 3650 4150 50  0001 C CNN
+F 1 "GND" H 3650 4250 50  0000 C CNN
+F 2 "" H 3650 4400 50  0000 C CNN
+F 3 "" H 3650 4400 50  0000 C CNN
+	1    3650 4400
+	1    0    0    -1  
+$EndComp
+Text Notes 3900 4100 0    50   ~ 0
+Populate 0402 as needed
+Text Label 4600 3200 0    50   ~ 0
+USB_C_D-
+Text Label 4600 3300 0    50   ~ 0
+USB_C_D+
+Text Label 3650 3800 0    50   ~ 0
+USB_SHIELD
+Wire Wire Line
+	4050 3500 4200 3500
+Wire Wire Line
+	4200 3500 4200 3650
+Wire Wire Line
+	4050 3100 9300 3100
+Wire Wire Line
+	5800 3600 5700 3600
+Wire Wire Line
+	5700 3600 5700 3100
+Connection ~ 5700 3100
+Wire Wire Line
+	5700 4400 5700 4200
+Wire Wire Line
+	5700 4200 5800 4200
+Wire Wire Line
+	4050 3200 5600 3200
+Wire Wire Line
+	4050 3300 5500 3300
+Wire Wire Line
+	6800 3800 8000 3800
+Wire Wire Line
+	8000 4000 6800 4000
 Wire Wire Line
 	3650 3700 3650 3900
 Wire Wire Line
@@ -163,24 +174,13 @@ Wire Wire Line
 	3400 4300 3650 4300
 Wire Wire Line
 	3650 4200 3650 4400
-$Comp
-L GND #PWR035
-U 1 1 5805F4FD
-P 3650 4400
-F 0 "#PWR035" H 3650 4150 50  0001 C CNN
-F 1 "GND" H 3650 4250 50  0000 C CNN
-F 2 "" H 3650 4400 50  0000 C CNN
-F 3 "" H 3650 4400 50  0000 C CNN
-	1    3650 4400
-	1    0    0    -1  
-$EndComp
 Connection ~ 3650 4300
-Text Notes 3900 4100 0    50   ~ 0
-Populate 0402 as needed
-Text Label 4600 3200 0    50   ~ 0
-USB_C_D-
-Text Label 4600 3300 0    50   ~ 0
-USB_C_D+
-Text Label 3650 3800 0    50   ~ 0
-USB_SHIELD
+Wire Wire Line
+	5500 3300 5500 4000
+Wire Wire Line
+	5500 4000 5800 4000
+Wire Wire Line
+	5600 3200 5600 3800
+Wire Wire Line
+	5600 3800 5800 3800
 $EndSCHEMATC

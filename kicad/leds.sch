@@ -2148,6 +2148,16 @@ NoConn ~ 3700 6400
 NoConn ~ 3700 6500
 Text Notes 9200 1700 0    50   ~ 0
 A note about numbering: Notice that the LEDs\nare ordered 0-4 on the left, but 4-0 on the\nright. This greatly simplifies routing (like making\nit incredibly easy vs nearly impossible) at the\nexpense of slightly more complicated software.\nI'm sure we can take advantage of odd rows\nbeing "backwards" and even rows being\n"forwards" somehow in software.
-Text Notes 1250 5150 0    50   ~ 0
-C25: 1uF\n\nNo way it could fit...
+$Comp
+L C C25
+U 1 1 58084349
+P 1700 5050
+F 0 "C25" H 1725 5150 50  0000 L CNN
+F 1 "1u" H 1725 4950 50  0000 L CNN
+F 2 "Capacitors_SMD:C_0402" H 1738 4900 50  0001 C CNN
+F 3 "" H 1700 5050 50  0000 C CNN
+F 4 "1276-1448-1-ND" H 1700 5050 60  0001 C CNN "Part No."
+	1    1700 5050
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC

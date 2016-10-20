@@ -216,7 +216,7 @@ F 2 "simple-led-watch:XTAL-CPFB" H 1300 3250 50  0001 C CNN
 F 3 "" H 1300 3250 50  0000 C CNN
 F 4 "370-1057-1-ND" H 1300 3250 60  0001 C CNN "Part No."
 	1    1300 3250
-	0    -1   -1   0   
+	0    1    1    0   
 $EndComp
 $Comp
 L C C13
