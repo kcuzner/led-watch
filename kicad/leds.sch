@@ -1521,8 +1521,6 @@ Text Label 6650 6400 0    50   ~ 0
 LED_SEG11
 Text Label 4100 6200 2    50   ~ 0
 LED_RGB_C
-Wire Wire Line
-	1600 6400 2700 6400
 Wire Bus Line
 	1600 5800 2000 5800
 Wire Bus Line
@@ -1557,10 +1555,6 @@ Wire Wire Line
 Wire Wire Line
 	1700 5300 2200 5300
 Connection ~ 2200 5300
-Wire Wire Line
-	2600 6600 2600 6500
-Wire Wire Line
-	2600 6500 2700 6500
 Wire Wire Line
 	4600 1300 4600 1400
 Wire Wire Line
@@ -2160,4 +2154,14 @@ F 4 "1276-1448-1-ND" H 1700 5050 60  0001 C CNN "Part No."
 	1    1700 5050
 	1    0    0    -1  
 $EndComp
+Wire Wire Line
+	2700 6400 2600 6400
+Wire Wire Line
+	2600 6400 2600 6600
+Wire Wire Line
+	2050 6500 2700 6500
+Wire Wire Line
+	2050 6500 2050 6400
+Wire Wire Line
+	2050 6400 1600 6400
 $EndSCHEMATC
