@@ -23,4 +23,9 @@
   (pad 4 smd rect (at 1.15 0.8) (size 0.9 0.55) (layers F.Cu F.Paste F.Mask))
   (pad 5 smd rect (at 1.15 0) (size 0.9 0.55) (layers F.Cu F.Paste F.Mask))
   (pad 6 smd rect (at 1.15 -0.8) (size 0.9 0.55) (layers F.Cu F.Paste F.Mask))
+  (model /home/kcuzner/Projects/ARM/simple-led-watch/cad/CLY6D-FKC.wrl
+    (at (xyz 0 0 0))
+    (scale (xyz 0.3937 0.3937 0.3937))
+    (rotate (xyz 0 0 90))
+  )
 )

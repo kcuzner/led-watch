@@ -27,4 +27,9 @@
   (pad 6 smd rect (at -3.75 0) (size 2.3 1.9) (layers F.Cu F.Paste F.Mask))
   (pad 6 smd rect (at -1.15 0) (size 1.8 1.9) (layers F.Cu F.Paste F.Mask))
   (pad 6 smd rect (at 1.15 0) (size 1.8 1.9) (layers F.Cu F.Paste F.Mask))
+  (model ${KIPRJMOD}/../cad/10104110-0001LF.wrl
+    (at (xyz 0 0.1 0.265))
+    (scale (xyz 0.3937 0.3937 0.3937))
+    (rotate (xyz 0 0 0))
+  )
 )
