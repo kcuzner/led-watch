@@ -17,4 +17,9 @@
   (pad 1 smd rect (at -1.9 1.75) (size 2.1 1.7) (layers F.Cu F.Paste F.Mask))
   (pad 2 smd rect (at 1.9 1.75) (size 2.1 1.7) (layers F.Cu F.Paste F.Mask))
   (pad 3 smd rect (at -1.9 -1.75) (size 2.1 1.7) (layers F.Cu F.Paste F.Mask))
+  (model ${KIPRJMOD}/../cad/css-0575a-smt.wrl
+    (at (xyz 0 0 0.035))
+    (scale (xyz 1 1 1))
+    (rotate (xyz -90 0 0))
+  )
 )

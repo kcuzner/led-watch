@@ -21,6 +21,9 @@ kicad/*.csv
 # blender
 *.blend1
 
+# freecad
+*.fcstd1
+
 # firmware
 bin
 obj

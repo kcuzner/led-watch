@@ -20,4 +20,9 @@
   (pad 1 smd rect (at 1.5 3.425) (size 0.6 1.55) (layers F.Cu F.Paste F.Mask))
   (pad NC smd rect (at -2.8 0.9) (size 1.2 1.8) (layers F.Cu F.Paste F.Mask))
   (pad NC smd rect (at 2.8 0.9) (size 1.2 1.8) (layers F.Cu F.Paste F.Mask))
+  (model ${KIPRJMOD}/../cad/JST-SH.wrl
+    (at (xyz 0 -0.035 0))
+    (scale (xyz 0.393701 0.393701 0.393701))
+    (rotate (xyz 0 0 0))
+  )
 )
