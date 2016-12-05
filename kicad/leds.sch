@@ -1465,8 +1465,8 @@ Entry Wire Line
 	3900 6900 4000 6800
 Entry Wire Line
 	4200 6900 4300 6800
-Text Notes 1400 2300 0    50   ~ 0
-For ease of layout, the minute LEDs should be consecutive\nand the hour LEDs should be consecutive, but the two rings\nmust not have their refdes interlaced.
+Text Notes 1400 2550 0    50   ~ 0
+For ease of layout, the minute LEDs should be consecutive\nand the hour LEDs should be consecutive, but the two rings\nmust not have their refdes interlaced.\n\nI have a script I wrote that allows for layout out exact circles\nso long as that refdes pattern is followed.
 Entry Wire Line
 	8900 5700 9000 5800
 Text Label 9000 6150 1    50   ~ 0
@@ -1519,8 +1519,6 @@ Text Label 5950 6400 0    50   ~ 0
 LED_SEG10
 Text Label 6650 6400 0    50   ~ 0
 LED_SEG11
-Text Label 4100 6200 2    50   ~ 0
-LED_RGB_C
 Wire Bus Line
 	1600 5800 2000 5800
 Wire Bus Line
@@ -1931,8 +1929,6 @@ Wire Wire Line
 Wire Bus Line
 	1000 700  1200 700 
 Wire Bus Line
-	1200 700  1200 3800
-Wire Bus Line
 	2400 700  2400 1700
 Wire Wire Line
 	1300 800  1600 800 
@@ -2032,113 +2028,50 @@ Wire Wire Line
 Wire Wire Line
 	9000 6500 6800 6500
 Connection ~ 4200 7650
-Wire Wire Line
-	3700 6200 4100 6200
-$Comp
-L LED_RGB D65
-U 1 1 5804CA95
-P 5200 7100
-F 0 "D65" H 5200 7525 50  0000 C CNN
-F 1 "LED_RGB" H 5200 7450 50  0000 C CNN
-F 2 "simple-led-watch:PLCC6" H 5200 7050 50  0000 C CNN
-F 3 "" H 5200 7050 50  0000 C CNN
-F 4 "CLY6D-FKC-CNP1ST1E1BB7D3D3CT-ND" H 5200 7100 60  0001 C CNN "Part No."
-	1    5200 7100
-	-1   0    0    1   
-$EndComp
-Text Notes 5400 7600 0    50   ~ 0
-Red and blue are swapped, but\nI'm too lazy to make a new\nsymbol.
 $Comp
 L R R33
 U 1 1 5804E18D
-P 1750 3500
-F 0 "R33" V 1830 3500 50  0000 C CNN
-F 1 "R" V 1750 3500 50  0000 C CNN
-F 2 "Resistors_SMD:R_0402" V 1680 3500 50  0001 C CNN
-F 3 "" H 1750 3500 50  0000 C CNN
-	1    1750 3500
+P 5050 6900
+F 0 "R33" V 5130 6900 50  0000 C CNN
+F 1 "R" V 5050 6900 50  0000 C CNN
+F 2 "Resistors_SMD:R_0402" V 4980 6900 50  0001 C CNN
+F 3 "" H 5050 6900 50  0000 C CNN
+	1    5050 6900
 	0    1    1    0   
 $EndComp
 $Comp
 L R R34
 U 1 1 5804E381
-P 1750 3700
-F 0 "R34" V 1830 3700 50  0000 C CNN
-F 1 "R" V 1750 3700 50  0000 C CNN
-F 2 "Resistors_SMD:R_0402" V 1680 3700 50  0001 C CNN
-F 3 "" H 1750 3700 50  0000 C CNN
-	1    1750 3700
+P 5050 7100
+F 0 "R34" V 5130 7100 50  0000 C CNN
+F 1 "R" V 5050 7100 50  0000 C CNN
+F 2 "Resistors_SMD:R_0402" V 4980 7100 50  0001 C CNN
+F 3 "" H 5050 7100 50  0000 C CNN
+	1    5050 7100
 	0    1    1    0   
 $EndComp
 $Comp
 L R R35
 U 1 1 5804E495
-P 1750 3900
-F 0 "R35" V 1830 3900 50  0000 C CNN
-F 1 "R" V 1750 3900 50  0000 C CNN
-F 2 "Resistors_SMD:R_0402" V 1680 3900 50  0001 C CNN
-F 3 "" H 1750 3900 50  0000 C CNN
-	1    1750 3900
+P 5050 7300
+F 0 "R35" V 5130 7300 50  0000 C CNN
+F 1 "R" V 5050 7300 50  0000 C CNN
+F 2 "Resistors_SMD:R_0402" V 4980 7300 50  0001 C CNN
+F 3 "" H 5050 7300 50  0000 C CNN
+	1    5050 7300
 	0    1    1    0   
 $EndComp
 Text Label 5900 7100 0    50   ~ 0
-LED_RGB_C
-Wire Wire Line
-	5400 7100 5900 7100
-Wire Wire Line
-	5600 6900 5600 7300
-Wire Wire Line
-	5600 6900 5400 6900
-Connection ~ 5600 7100
-Wire Wire Line
-	5600 7300 5400 7300
-Wire Wire Line
-	1900 3500 2200 3500
-Wire Wire Line
-	1900 3700 2200 3700
-Wire Wire Line
-	1900 3900 2200 3900
-Text Label 2200 3500 2    50   ~ 0
-LED_R_A
-Text Label 2200 3700 2    50   ~ 0
-LED_G_A
-Text Label 2200 3900 2    50   ~ 0
-LED_B_A
-Entry Wire Line
-	1200 3800 1300 3900
-Entry Wire Line
-	1200 3600 1300 3700
+LED_A0
 Entry Wire Line
 	1200 3400 1300 3500
 Wire Wire Line
 	1300 3500 1600 3500
-Wire Wire Line
-	1300 3700 1600 3700
-Wire Wire Line
-	1300 3900 1600 3900
-Text Label 1300 3500 0    50   ~ 0
+Text Label 1600 3500 2    50   ~ 0
 LED_A0
-Text Label 1300 3700 0    50   ~ 0
-LED_A1
-Text Label 1300 3900 0    50   ~ 0
-LED_A2
 Connection ~ 4200 6800
 Wire Wire Line
 	6800 6500 6800 7650
-Wire Wire Line
-	4700 6900 5000 6900
-Wire Wire Line
-	4700 7100 5000 7100
-Wire Wire Line
-	4700 7300 5000 7300
-Text Label 4700 6900 0    50   ~ 0
-LED_R_A
-Text Label 4700 7100 0    50   ~ 0
-LED_G_A
-Text Label 4700 7300 0    50   ~ 0
-LED_B_A
-NoConn ~ 3700 6300
-NoConn ~ 3700 6400
 NoConn ~ 3700 6500
 Text Notes 9200 1700 0    50   ~ 0
 A note about numbering: Notice that the LEDs\nare ordered 0-4 on the left, but 4-0 on the\nright. This greatly simplifies routing (like making\nit incredibly easy vs nearly impossible) at the\nexpense of slightly more complicated software.\nI'm sure we can take advantage of odd rows\nbeing "backwards" and even rows being\n"forwards" somehow in software.
@@ -2164,4 +2097,58 @@ Wire Wire Line
 	2050 6500 2050 6400
 Wire Wire Line
 	2050 6400 1600 6400
+$Comp
+L Led_RGB_CA D65
+U 1 1 5844C5B1
+P 5500 7100
+F 0 "D65" H 5500 7450 50  0000 C CNN
+F 1 "QBLP600-RGB" H 5500 6750 50  0000 C CNN
+F 2 "simple-led-watch:LED-0606" H 5455 7050 50  0001 C CNN
+F 3 "" H 5455 7050 50  0000 C CNN
+F 4 "1516-1184-1-ND" H 5500 7100 60  0001 C CNN "Part No."
+	1    5500 7100
+	1    0    0    -1  
+$EndComp
+Text Label 4100 6200 2    50   ~ 0
+LED_R_C
+Wire Wire Line
+	3700 6200 4100 6200
+Wire Wire Line
+	3700 6300 4100 6300
+Wire Wire Line
+	3700 6400 4100 6400
+Text Label 4100 6300 2    50   ~ 0
+LED_G_C
+Text Label 4100 6400 2    50   ~ 0
+LED_B_C
+Wire Bus Line
+	1200 700  1200 3400
+Text Label 4600 7300 0    50   ~ 0
+LED_B_C
+Text Label 4600 6900 0    50   ~ 0
+LED_R_C
+Text Label 4600 7100 0    50   ~ 0
+LED_G_C
+Wire Wire Line
+	4600 6900 4900 6900
+Wire Wire Line
+	4600 7100 4900 7100
+Wire Wire Line
+	4600 7300 4900 7300
+Text Notes 1650 3550 0    50   ~ 0
+Direct access to this net for the RGB led\nwhose resistors are on its cathodes.
+Wire Wire Line
+	5900 7100 5700 7100
+Wire Wire Line
+	5300 6900 5200 6900
+Wire Wire Line
+	5300 7100 5200 7100
+Wire Wire Line
+	5300 7300 5200 7300
+Text Label 5200 6900 0    50   ~ 0
+LED_R_R
+Text Label 5200 7100 0    50   ~ 0
+LED_G_R
+Text Label 5200 7300 0    50   ~ 0
+LED_B_R
 $EndSCHEMATC
