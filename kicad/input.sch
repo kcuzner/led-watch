@@ -285,6 +285,7 @@ F 0 "R20" V 5930 2500 50  0000 C CNN
 F 1 "0" V 5850 2500 50  0000 C CNN
 F 2 "Resistors_SMD:R_0402" V 5780 2500 50  0001 C CNN
 F 3 "" H 5850 2500 50  0000 C CNN
+F 4 "311-0.0JRCT-ND" H 5850 2500 60  0001 C CNN "Part No."
 	1    5850 2500
 	0    1    1    0   
 $EndComp
@@ -296,6 +297,7 @@ F 0 "R22" V 5930 3100 50  0000 C CNN
 F 1 "0" V 5850 3100 50  0000 C CNN
 F 2 "Resistors_SMD:R_0402" V 5780 3100 50  0001 C CNN
 F 3 "" H 5850 3100 50  0000 C CNN
+F 4 "311-0.0JRCT-ND" H 5850 3100 60  0001 C CNN "Part No."
 	1    5850 3100
 	0    1    1    0   
 $EndComp
@@ -307,6 +309,7 @@ F 0 "R24" V 5930 3700 50  0000 C CNN
 F 1 "0" V 5850 3700 50  0000 C CNN
 F 2 "Resistors_SMD:R_0402" V 5780 3700 50  0001 C CNN
 F 3 "" H 5850 3700 50  0000 C CNN
+F 4 "311-0.0JRCT-ND" H 5850 3700 60  0001 C CNN "Part No."
 	1    5850 3700
 	0    1    1    0   
 $EndComp
@@ -318,11 +321,12 @@ F 0 "R26" V 5930 4300 50  0000 C CNN
 F 1 "0" V 5850 4300 50  0000 C CNN
 F 2 "Resistors_SMD:R_0402" V 5780 4300 50  0001 C CNN
 F 3 "" H 5850 4300 50  0000 C CNN
+F 4 "311-0.0JRCT-ND" H 5850 4300 60  0001 C CNN "Part No."
 	1    5850 4300
 	0    1    1    0   
 $EndComp
 Text Notes 3400 6100 0    50   ~ 0
 Note: A larger sampling capacitor will make for more sensitive sensing\nbut for a longer sampling time.\n
 Text Notes 3400 5700 0    50   ~ 0
-For switched operation: Populate resistor with 0 ohms.\nDepopulate capacitor. Enable STM32 internal pullup on GPIO.\n\nFor capacitive touch operation: Populate exactly one capacitor with\nthe sampling capacitor value. Depopulate corresponding resistor.\nPopulate all other resistors with 0 ohms, optionally increasing that\nto increase noise immunity. No other capacitors should be\npopulated.
+There is no debouncing here!\n\nFor switched operation: Populate resistor with 0 ohms.\nDepopulate capacitor. Enable STM32 internal pullup on GPIO.\n\nFor capacitive touch operation: Populate exactly one capacitor with\nthe sampling capacitor value. Depopulate corresponding resistor.\nPopulate all other resistors with 0 ohms, optionally increasing that\nto increase noise immunity. No other capacitors should be\npopulated.
 $EndSCHEMATC

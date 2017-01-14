@@ -17,8 +17,8 @@ $CMP MMA8652FC
 D 3-Axis, 12-bit, Digital Accelerometer
 $ENDCMP
 #
-$CMP STM32L052CxTx
-D STM32L052CxTx 48-LQFP 32-bit ARM Cortex-M0+ Microcontroller
+$CMP STM32L052x8
+D STM32L052x8/6 48-LQFP 32-bit ARM Cortex-M0+ Microcontroller
 $ENDCMP
 #
 $CMP TPS62736

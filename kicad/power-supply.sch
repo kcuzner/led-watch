@@ -93,6 +93,7 @@ F 0 "R1" V 3780 1750 50  0000 C CNN
 F 1 "20K" V 3700 1750 50  0000 C CNN
 F 2 "Resistors_SMD:R_0402" V 3630 1750 50  0001 C CNN
 F 3 "" H 3700 1750 50  0000 C CNN
+F 4 "311-20.0KLRCT-ND" H 3700 1750 60  0001 C CNN "Part No."
 	1    3700 1750
 	1    0    0    -1  
 $EndComp
@@ -186,10 +187,10 @@ L C C1
 U 1 1 57FA9A87
 P 1600 1550
 F 0 "C1" H 1625 1650 50  0000 L CNN
-F 1 "1u" H 1625 1450 50  0000 L CNN
+F 1 "4.7u" H 1625 1450 50  0000 L CNN
 F 2 "Capacitors_SMD:C_0402" H 1638 1400 50  0001 C CNN
 F 3 "" H 1600 1550 50  0000 C CNN
-F 4 "1276-1448-1-ND" H 1600 1550 60  0001 C CNN "Part No."
+F 4 "1276-6819-1-ND" H 1600 1550 60  0001 C CNN "Part No."
 	1    1600 1550
 	1    0    0    -1  
 $EndComp
@@ -292,8 +293,8 @@ F 4 "RB521S30T5GOSCT-ND" H 4250 3100 60  0001 C CNN "Part No."
 	1    4250 3100
 	0    -1   -1   0   
 $EndComp
-Text Notes 500  3200 0    50   ~ 0
-Low eakage diode to prevent backpowering\nwhen USB isn't plugged in
+Text Notes 500  3550 0    50   ~ 0
+Low eakage diode to prevent backpowering\nwhen USB isn't plugged in.\n\nJustification: UVLO starts by 3.2V. The\nbattery puts out 4.2V at start of\ndischarge (3.9V present on REG_SRC).
 $Comp
 L GND #PWR07
 U 1 1 57FB19E3
@@ -343,9 +344,10 @@ L R R5
 U 1 1 57FC6198
 P 5700 5150
 F 0 "R5" V 5780 5150 50  0000 C CNN
-F 1 "6.3M" V 5700 5150 50  0000 C CNN
+F 1 "825K" V 5700 5150 50  0000 C CNN
 F 2 "Resistors_SMD:R_0402" V 5630 5150 50  0001 C CNN
 F 3 "" H 5700 5150 50  0000 C CNN
+F 4 "YAG3241CT-ND" H 5700 5150 60  0001 C CNN "Part No."
 	1    5700 5150
 	1    0    0    -1  
 $EndComp
@@ -354,9 +356,10 @@ L R R7
 U 1 1 57FC6243
 P 5700 6150
 F 0 "R7" V 5780 6150 50  0000 C CNN
-F 1 "3.67M" V 5700 6150 50  0000 C CNN
+F 1 "475K" V 5700 6150 50  0000 C CNN
 F 2 "Resistors_SMD:R_0402" V 5630 6150 50  0001 C CNN
 F 3 "" H 5700 6150 50  0000 C CNN
+F 4 "311-475KLRCT-ND" H 5700 6150 60  0001 C CNN "Part No."
 	1    5700 6150
 	1    0    0    -1  
 $EndComp
@@ -369,17 +372,6 @@ F 1 "GND" H 5700 6250 50  0000 C CNN
 F 2 "" H 5700 6400 50  0000 C CNN
 F 3 "" H 5700 6400 50  0000 C CNN
 	1    5700 6400
-	1    0    0    -1  
-$EndComp
-$Comp
-L R R6
-U 1 1 57FC6B32
-P 5700 5650
-F 0 "R6" V 5780 5650 50  0000 C CNN
-F 1 "0" V 5700 5650 50  0000 C CNN
-F 2 "Resistors_SMD:R_0402" V 5630 5650 50  0001 C CNN
-F 3 "" H 5700 5650 50  0000 C CNN
-	1    5700 5650
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -430,6 +422,7 @@ F 0 "R4" V 2630 2600 50  0000 C CNN
 F 1 "1K" V 2550 2600 50  0000 C CNN
 F 2 "Resistors_SMD:R_0402" V 2480 2600 50  0001 C CNN
 F 3 "" H 2550 2600 50  0000 C CNN
+F 4 "311-1.00KLRCT-ND" H 2550 2600 60  0001 C CNN "Part No."
 	1    2550 2600
 	0    1    1    0   
 $EndComp
@@ -553,8 +546,6 @@ Wire Wire Line
 Wire Wire Line
 	5700 6400 5700 6300
 Wire Wire Line
-	6300 5100 6700 5100
-Wire Wire Line
 	6700 4500 6300 4500
 Wire Wire Line
 	6300 4500 6300 4700
@@ -612,8 +603,6 @@ Text Label 5700 4900 0    50   ~ 0
 +3.3V_REG_VRDIV
 Text Label 5900 5000 0    50   ~ 0
 +3.3V_REG_VOUT_SET
-Text Label 6300 5100 0    50   ~ 0
-+3.3V_REG_VOK_SET
 Text Label 8200 4200 1    50   ~ 0
 +3.3V_REG_SW
 Wire Wire Line
@@ -630,6 +619,7 @@ F 0 "R2" V 9980 3950 50  0000 C CNN
 F 1 "0" V 9900 3950 50  0000 C CNN
 F 2 "Resistors_SMD:R_0402" V 9830 3950 50  0001 C CNN
 F 3 "" H 9900 3950 50  0000 C CNN
+F 4 "311-0.0JRCT-ND" H 9900 3950 60  0001 C CNN "Part No."
 	1    9900 3950
 	1    0    0    -1  
 $EndComp
@@ -652,17 +642,23 @@ Wire Wire Line
 	8100 4700 8200 4700
 Connection ~ 8200 4700
 Wire Wire Line
-	5700 6000 5700 5800
-Wire Wire Line
-	5700 5500 5700 5300
+	5700 5300 5700 6000
 Wire Wire Line
 	5700 5400 5900 5400
 Wire Wire Line
 	5900 5400 5900 5000
 Connection ~ 5700 5400
+Text Notes 10050 4750 0    50   ~ 0
+Zener protects against\naccidental overvoltage\nwhen USB is plugged in.\nMay not be necessary.\nTest it first.
 Wire Wire Line
-	6300 5100 6300 5900
+	6700 5100 6150 5100
 Wire Wire Line
-	6300 5900 5700 5900
-Connection ~ 5700 5900
+	6150 5100 6150 4200
+Connection ~ 6150 4200
+Text Notes 6050 5500 0    50   ~ 0
+VIN_OK_SET tied to VIN to disable
+Text Notes 6050 6450 0    50   ~ 0
+Tolerance should be <1%.\n\nToo high of a resistance\nwill cause susceptibility\nto noise due to high\nimpedance.\n\nThe total resistance only\nhas a slight effect on iq.\nGoing from 13M to 1M\nadds about 150nA.
+Text Notes 7400 6000 0    50   ~ 0
+VOUT=VBIAS((R5+R7)/R7), VBIAS=1.21V\n3.312=1.21*((825K+475K)/475K)
 $EndSCHEMATC
