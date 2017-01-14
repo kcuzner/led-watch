@@ -1,4 +1,5 @@
 EESchema Schematic File Version 2
+LIBS:simple-led-watch-rescue
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -576,7 +577,7 @@ F 0 "D4" H 6650 5280 50  0000 L CNN
 F 1 "RB521S30T5G" H 6550 5120 50  0000 L CNN
 F 2 "Diodes_SMD:SOD-523" V 6700 5200 50  0001 C CNN
 F 3 "" V 6700 5200 50  0000 C CNN
-F 4 "B521S30T5GOSCT-ND" H 6700 5200 60  0001 C CNN "Part No."
+F 4 "RB521S30T5GOSCT-ND" H 6700 5200 60  0001 C CNN "Part No."
 	1    6700 5200
 	0    1    1    0   
 $EndComp

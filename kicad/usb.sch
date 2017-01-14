@@ -1,4 +1,5 @@
 EESchema Schematic File Version 2
+LIBS:simple-led-watch-rescue
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -45,9 +46,11 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L USB_OTG P3
+L USB_OTG-RESCUE-simple-led-watch P3
 U 1 1 57FA80BD
 P 3750 3300
+AR Path="/57FA80BD" Ref="P3"  Part="1" 
+AR Path="/57FA8096/57FA80BD" Ref="P3"  Part="1" 
 F 0 "P3" H 4075 3175 50  0000 C CNN
 F 1 "USB_OTG" H 3750 3500 50  0000 C CNN
 F 2 "simple-led-watch:AMP-10104110-USB" V 3700 3200 50  0001 C CNN

@@ -1,4 +1,5 @@
 EESchema Schematic File Version 2
+LIBS:simple-led-watch-rescue
 LIBS:power
 LIBS:device
 LIBS:transistors
