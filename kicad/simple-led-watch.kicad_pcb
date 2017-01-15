@@ -3,7 +3,7 @@
   (general
     (links 372)
     (no_connects 1)
-    (area 148.716498 72.516498 181.685001 105.283502)
+    (area 121.92 67.023 206.777143 125.947)
     (thickness 1.6)
     (drawings 24)
     (tracks 1741)
@@ -13,6 +13,13 @@
   )
 
   (page A4)
+  (title_block
+    (title "LED Watch, STM32L0")
+    (date 2017-01-14)
+    (rev A)
+    (company "Kevin Cuzner")
+  )
+
   (layers
     (0 F.Cu signal)
     (1 In1.Cu power)
@@ -8795,7 +8802,7 @@
     (connect_pads yes (clearance 0.254))
     (min_thickness 0.1524)
     (keepout (tracks not_allowed) (vias not_allowed) (copperpour allowed))
-    (fill yes (arc_segments 16) (thermal_gap 0.1524) (thermal_bridge_width 0.254) (smoothing chamfer) (radius 0.1))
+    (fill yes (arc_segments 16) (thermal_gap 0.1524) (thermal_bridge_width 0.254))
     (polygon
       (pts
         (xy 164.465 93.599) (xy 165.735 93.599) (xy 165.735 95.758) (xy 164.465 95.758)

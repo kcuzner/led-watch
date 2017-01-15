@@ -36,9 +36,9 @@ EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
 Sheet 2 6
-Title "Li-Ion/Li-Poly Charger and Power Supply"
-Date ""
-Rev ""
+Title "LED Watch, STM32L0"
+Date "2017-01-14"
+Rev "A"
 Comp "Kevin Cuzner"
 Comment1 ""
 Comment2 ""

@@ -36,9 +36,9 @@ EELAYER END
 $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 1 6
-Title "LED Watch, Simplified"
-Date ""
-Rev ""
+Title "LED Watch, STM32L0"
+Date "2017-01-14"
+Rev "A"
 Comp "Kevin Cuzner"
 Comment1 ""
 Comment2 ""
