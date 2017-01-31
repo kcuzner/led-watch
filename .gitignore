@@ -31,3 +31,6 @@ obj
 # git
 *.orig
 
+# vim
+*.sw*
+

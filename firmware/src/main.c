@@ -9,6 +9,7 @@
 
 #include "buzzer.h"
 #include "buttons.h"
+#include "leds.h"
 
 static volatile uint8_t segment = 0;
 
@@ -16,44 +17,38 @@ int main(void)
 {
     SystemCoreClockUpdate();
 
-    //Enable clocks
-    RCC->IOPENR |= RCC_IOPENR_IOPAEN | RCC_IOPENR_IOPBEN | RCC_IOPENR_IOPCEN |
-        RCC_IOPENR_IOPDEN | RCC_IOPENR_IOPHEN;
 
     buzzer_init();
     buttons_init();
+    leds_init();
 
-    //Set all LED control pins to output
-    GPIOA->MODER &= ~(GPIO_MODER_MODE0 | GPIO_MODER_MODE1 | GPIO_MODER_MODE2 |
-            GPIO_MODER_MODE3 | GPIO_MODER_MODE4 | GPIO_MODER_MODE5);
-    GPIOA->MODER |= GPIO_MODER_MODE0_0 | GPIO_MODER_MODE1_0 | GPIO_MODER_MODE2_0 |
-        GPIO_MODER_MODE3_0 | GPIO_MODER_MODE4_0 | GPIO_MODER_MODE5_0;
-    GPIOB->MODER &= ~(GPIO_MODER_MODE3 | GPIO_MODER_MODE4 | GPIO_MODER_MODE5 |
-            GPIO_MODER_MODE6 | GPIO_MODER_MODE7);
-    GPIOB->MODER |= GPIO_MODER_MODE3_0 | GPIO_MODER_MODE4_0 | GPIO_MODER_MODE5_0 |
-       GPIO_MODER_MODE6_0 | GPIO_MODER_MODE7_0;
+    RCC->APB1ENR |= RCC_APB1ENR_TIM2EN;
+    TIM2->DIER = TIM_DIER_UIE;
+    TIM2->CR1 = TIM_CR1_CEN;
+    NVIC_EnableIRQ(TIM2_IRQn);
 
-
-    GPIOB->BSRR = GPIO_BSRR_BR_7;
-
-    GPIOA->BSRR = GPIO_BSRR_BS_1;// | GPIO_BSRR_BS_1 | GPIO_BSRR_BS_2 |
-//        GPIO_BSRR_BS_3 | GPIO_BSRR_BS_4 | GPIO_BSRR_BS_5;
+    leds_enable();
     
     while (1)
     {
-        GPIOB->ODR = (segment & 0xF) << 3;
-
-        //segment++;
-        //segment &= 0xF;
     }
 
     return 0;
 }
 
-void hook_buttons_state_changed(uint8_t state)
+void TIM2_IRQHandler()
 {
-    buzzer_trigger_beep();
-    GPIOA->BSRR = (((GPIOA->ODR & 0xFF) ^ state) & state) |
-        ((((GPIOA->ODR & 0xFF) ^ state) & GPIOA->ODR) << 16);
+    static uint8_t c = 0;
+    //buzzer_trigger_beep();
+        leds_set_center(0, 1, 0);
+    leds_set_minute(c++, 1);
+    leds_set_hour(c / 5, 1);
+    leds_commit();
+    if (c == 60)
+    {
+        c = 0;
+        leds_clear();
+    }
+    TIM2->SR = 0;
 }
 
