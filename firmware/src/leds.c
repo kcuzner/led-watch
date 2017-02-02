@@ -58,7 +58,7 @@ void leds_init(void)
     GPIOB->BSRR = GPIO_BSRR_BS_7;
 
     //Prepare the timer for interrupt
-    TIM21->ARR = 5000;// 1000; //this gives us ~30Hz at 2.1MHz
+    TIM21->ARR = 546; //240 complete refreshes per second...any lower and there is a noticeable flicker. Weird.
     TIM21->DIER = TIM_DIER_UIE;
     NVIC_EnableIRQ(TIM21_IRQn);
 
@@ -157,5 +157,7 @@ void TIM21_IRQHandler(void)
     status.current_level++;
     if (!status.current_level)
         status.current_segment++;
+
+    TIM21->SR = 0;
 }
 

@@ -36,7 +36,7 @@ void buttons_init(void)
 
 void __attribute__ ((weak)) hook_buttons_state_changed(uint8_t state) { }
 
-void EXTI4_15_IRQHandler()
+void __attribute__ ((interrupt ("IRQ"))) EXTI4_15_IRQHandler()
 {
     //TODO: Le Debounce
     hook_buttons_state_changed((GPIOB->IDR & (GPIO_IDR_ID14 | GPIO_IDR_ID13 |
