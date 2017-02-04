@@ -23,7 +23,7 @@ void buttons_init(void)
             GPIO_PUPDR_PUPD14);
     GPIOB->PUPDR |= GPIO_PUPDR_PUPD11_0 | GPIO_PUPDR_PUPD12_0 | GPIO_PUPDR_PUPD13_0 |
         GPIO_PUPDR_PUPD14_0;
-    
+
     //set up external interrupts from those pins
     SYSCFG->EXTICR[2] = SYSCFG_EXTICR3_EXTI11_PB;
     SYSCFG->EXTICR[3] = SYSCFG_EXTICR4_EXTI12_PB | SYSCFG_EXTICR4_EXTI13_PB |
@@ -41,6 +41,8 @@ void __attribute__ ((interrupt ("IRQ"))) EXTI4_15_IRQHandler()
     //TODO: Le Debounce
     hook_buttons_state_changed((GPIOB->IDR & (GPIO_IDR_ID14 | GPIO_IDR_ID13 |
                     GPIO_IDR_ID12 | GPIO_IDR_ID11)) >> GPIO_IDR_ID11_Pos);
-    EXTI->PR = EXTI->PR;
+    EXTI->PR = EXTI->PR & (EXTI_PR_PIF4 | EXTI_PR_PIF5 | EXTI_PR_PIF6 | EXTI_PR_PIF7 |
+            EXTI_PR_PIF8 | EXTI_PR_PIF9 | EXTI_PR_PIF10 | EXTI_PR_PIF11 | EXTI_PR_PIF12 |
+            EXTI_PR_PIF13 | EXTI_PR_PIF14 | EXTI_PR_PIF15);
 }
 
