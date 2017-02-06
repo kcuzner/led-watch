@@ -26,10 +26,53 @@ OUTPUT_FORMAT("elf32-littlearm", "elf32-littlearm", "elf32-littlearm")
 OUTPUT_ARCH(arm)
 ENTRY(Reset_Handler)
 
+/**
+ * A word about the PMA
+ *
+ * TODO: PMA might be 512 16-bit words on the STM32L0x2xx
+ *
+ * The PMA is 512 bytes long, arranged as 256 16-bit words. However, because it
+ * is attached to the APB, it must be accessed in 32-bit chunks. So, each
+ * 32-bit address is mapped into the PMA per the example below:
+ *
+ *  ADDR+OFFSET: |  0x0  |  0x1  |  0x2  |  0x3  |
+ *  -------------|-------|-------|-------|-------|
+ *    0x40006000 | 0x000 | 0x001 | ----- | ----- |
+ *    0x40006004 | 0x002 | 0x003 | ----- | ----- |
+ *    0x40006008 | 0x004 | 0x005 | ----- | ----- |
+ *    0x4000600C | 0x006 | 0x007 | ----- | ----- |
+ *    0x40006010 | 0x008 | 0x009 | ----- | ----- |
+ *    ....
+ *    0x400063F8 | 0x1FC | 0x1FD | ----- | ----- |
+ *    0x400063FC | 0x1FE | 0x1FF | ----- | ----- |
+ *
+ * Basically, the access into each 16-bit word (0x0, 0x2, 0x4, etc) must be
+ * 32-bit aligned (0x0, 0x4, 0x8, etc). Therefore, because each 16-bit word
+ * essentially "takes up" 32 bits of space, 512 bytes of PMA actually uses
+ * 1024 bytes of virtual address space and comes with the caveat that it must
+ * be accessed only by word, with one word every 4 virtual bytes.
+ *
+ * However, the purpose of this linker script is to enable gcc to manage usage
+ * of symbols located inside the PMA and produce linker errors when statically
+ * allocated symbols overrun the area. In order to accomplish this, this linker
+ * script declares the PMA to be 512 bytes long. In the USB driver, macros are
+ * provided which will translate a linker-generated address into a "local
+ * address" which can be used with the USB registers and an "application
+ * address" which can be used by normal code to make word-accesses into the
+ * memory. Sadly, it does not seem possible to wrangle gcc into allowing
+ * transparent byte-level accesses into memory. So, standard functions like
+ * memcpy cannot be used. Functions like memset can be used, provided that the
+ * application address is fed to the function and the size of the area to be
+ * set is multiplied by two.
+ *
+ * Direct usage of symbols allocated in the PMA may cause unexpected behavior.
+ */
+
 MEMORY
 {
     FLASH (RX) : ORIGIN = 0x08000000, LENGTH = 64K
     RAM (W!RX)  : ORIGIN = 0x20000000, LENGTH = 8K
+    PMA (W)  : ORIGIN = 0x40006000, LENGTH = 512 /* 256 x 16bit */
 }
 
 /**
@@ -127,6 +170,16 @@ SECTIONS
         . = ALIGN(4);
     } > RAM
 
+    /* USB/CAN Packet Memory Area (PMA) */
+    .pma :
+    {
+        _pma_start = .; /* Start of PMA in real memory space */
+        . = ALIGN(2);
+        *(.pma)
+        *(.pma*)
+        . = ALIGN(2);
+        _pma_end = .; /* End of PMA in PMA space */
+    } > PMA
 
     /* Remove information from the standard libraries */
     /DISCARD/ :
