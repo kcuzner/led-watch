@@ -7,9 +7,10 @@
  */
 
 #include "usb.h"
-#include "osc.h"
+#include "usb_desc.h"
 #include "stm32l0xx.h"
 
+#include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
 
@@ -49,20 +50,7 @@ typedef struct {
     uint16_t rx_len; //receive buffer length
 } USBEndpointStatus;
 
-typedef struct {
-    union {
-        uint16_t wRequestAndType;
-        struct {
-            uint8_t bmRequestType;
-            uint8_t bRequest;
-        };
-    };
-    uint16_t wValue;
-    uint16_t wIndex;
-    uint16_t wLength;
-} USBSetupPacket;
-
-typedef enum { TOK_SETUP, TOK_IN, TOK_OUT } USBToken;
+typedef enum { USB_TOK_ANY, USB_TOK_SETUP, USB_TOK_IN, USB_TOK_OUT } USBToken;
 
 #define USB_ENDPOINT_REGISTER(ENDP) (*((&USB->EP0R) + ((ENDP) << 1)))
 
@@ -142,6 +130,31 @@ static USBEndpointStatus endpoint_status[8];
  */
 static USBSetupPacket last_setup;
 
+/**
+ * Possible state of the control state machine
+ */
+typedef enum { USB_ST_ANY, USB_ST_SETUP, USB_ST_DATA, USB_ST_STATUS } USBControlState;
+
+typedef USBControlState (*USBControlFn)(void);
+
+typedef struct {
+    USBControlState state;
+    USBToken event;
+    USBControlFn fn;
+} USBControlStateEntry;
+
+/**
+ * Temporary buffer for sending or receiving miscellaneous data outside of descriptors and setup packets
+ *
+ * Used for status stages as well
+ */
+static uint8_t endp0_buffer[64];
+
+USBControlResult __attribute__ ((weak)) hook_usb_handle_setup_request(USBSetupPacket const *setup, USBTransferData *nextTransfer)
+{
+    return USB_CTL_STALL; //default: Stall on an unhandled request
+}
+void __attribute__ ((weak)) hook_usb_setup_complete(USBSetupPacket const *setup) { }
 void __attribute__ ((weak)) hook_usb_reset(void) { }
 void __attribute__ ((weak)) hook_usb_sof(void) { }
 void __attribute__ ((weak)) hook_usb_set_configuration(uint8_t configuration) { }
@@ -500,6 +513,18 @@ void usb_endpoint_receive(uint8_t endpoint, void *buf, uint16_t len)
     }
 }
 
+void usb_endpoint_stall(uint8_t endpoint, USBDirection direction)
+{
+    if (direction & USB_HOST_IN)
+    {
+        usb_set_endpoint_status(endpoint, USB_EP_TX_STALL, USB_EPTX_STAT);
+    }
+    if (direction & USB_HOST_OUT)
+    {
+        usb_set_endpoint_status(endpoint, USB_EP_RX_STALL, USB_EPRX_STAT);
+    }
+}
+
 /**
  * Called during interrupt for a usb reset
  */
@@ -507,7 +532,7 @@ static void usb_reset(void)
 {
     //clear all interrupts
     USB->ISTR = 0;
-    
+
     //enable clock recovery system
     CRS->CR |= CRS_CR_AUTOTRIMEN | CRS_CR_CEN;
 
@@ -537,39 +562,186 @@ static void usb_reset(void)
     USB->DADDR = USB_DADDR_EF;
 }
 
-static void usb_endp0_setup(void)
+/**
+ * Finds a descriptor by value and index
+ *
+ * wValue: Descriptor type and index
+ * wIndex: Zero or language ID
+ * dataOut: Data that will point to the descriptor at the end of this function, if found
+ *
+ * Returns whether or not a descriptor was found
+ */
+static bool usb_find_descriptor(uint16_t wValue, uint16_t wIndex, USBTransferData *dataOut)
+{
+    uint32_t i = 0;
+    const USBDescriptorEntry *current;
+    while ((current = &usb_descriptors[i])->addr)
+    {
+        if (current->wValue == wValue && current->wIndex == wIndex)
+        {
+            dataOut->addr = current->addr;
+            dataOut->len = current->length;
+            return true;
+        }
+        i++;
+    }
+
+    return false;
+}
+
+static USBControlResult usb_endp0_handle_setup(USBTransferData *nextTransfer)
 {
     switch (last_setup.wRequestAndType)
     {
         case 0x0680:
         case 0x0681:
-            leds_set_center(1, 0, 0);
-            break;
-        case 0x0580:
-            leds_set_center(0, 1, 0);
-            break;
+            if (!usb_find_descriptor(last_setup.wIndex, last_setup.wValue, nextTransfer))
+                return USB_CTL_OK;
+            else
+                return USB_CTL_STALL;
+        case 0x0500:
+            return USB_CTL_OK;
         default:
-            break;
+            return hook_usb_handle_setup_request(&last_setup, nextTransfer);
     }
 }
 
 /**
- * Performs all control operations, delegating to the application if needed. Called at the
- * end of a token.
+ * Handles the setup state of a setup request
+ *
+ * Returns the next state
+ */
+static USBControlState usb_endp0_setup(void)
+{
+    USBTransferData transfer = { 0, 0};
+
+    //Handle the token
+    if (usb_endp0_handle_setup(&transfer) == USB_CTL_STALL)
+        goto stall;
+
+    //Determine the next stage based on the setup packet
+    if (last_setup.bmRequestType & 0x80)
+    {
+        //this is an IN (device to host)
+        if (last_setup.wLength)
+        {
+            if (!transfer.addr)
+                goto stall; //whoops!
+            //prepare IN data stage
+            usb_endpoint_send(0, transfer.addr, transfer.len);
+            return USB_ST_DATA;
+        }
+        else
+        {
+            //prepare OUT status stage
+            usb_endpoint_receive(0, endp0_buffer, 0);
+            return USB_ST_STATUS;
+        }
+    }
+    else
+    {
+        //this is an OUT (host to device)
+        if (last_setup.wLength)
+        {
+            if (!transfer.addr)
+                goto stall; //whoops!
+            //prepare OUT data stage
+            usb_endpoint_receive(0, transfer.addr, transfer.len);
+            return USB_ST_DATA;
+        }
+        else
+        {
+            //prepare IN status stage
+            usb_endpoint_send(0, endp0_buffer, 0);
+            return USB_ST_STATUS;
+        }
+    }
+
+stall:
+    usb_endpoint_stall(0, USB_HOST_IN | USB_HOST_OUT);
+    return USB_ST_SETUP;
+}
+
+/**
+ * Handles completion of the data stage of a control request
+ *
+ * Returns the next state
+ */
+static USBControlState usb_endp0_data(void)
+{
+    if (last_setup.bmRequestType & 0x80)
+    {
+        //this is an IN (device to host)
+        //prepare OUT status stage
+        usb_endpoint_receive(0, endp0_buffer, 0);
+    }
+    else
+    {
+        //this is an OUT (host to device)
+        //prepare IN status stage
+        usb_endpoint_send(0, endp0_buffer, 0);
+    }
+
+    return USB_ST_SETUP;
+}
+
+/**
+ * Handles completion of the status stage of a contorl request
+ *
+ * Returns the next state
+ */
+static USBControlState usb_endp0_status(void)
+{
+    if (last_setup.wRequestAndType == 0x0500)
+    {
+        leds_set_center(0, 1, 0);
+        //set address
+        USB->DADDR |= last_setup.wValue & 0x7F;
+    }
+
+    hook_usb_setup_complete(&last_setup);
+
+    return USB_ST_SETUP;
+}
+
+/**
+ * Called when an invalid event is received into the FSM
+ */
+static USBControlState usb_endp0_error(void)
+{
+    //on error, stall the endpoint
+    usb_endpoint_stall(0, USB_HOST_IN | USB_HOST_OUT);
+    return USB_ST_SETUP;
+}
+
+static USBControlStateEntry usb_control_fsm[] = {
+    { USB_ST_SETUP, USB_TOK_SETUP, &usb_endp0_setup },
+    { USB_ST_DATA, USB_TOK_IN, &usb_endp0_data },
+    { USB_ST_DATA, USB_TOK_OUT, &usb_endp0_data },
+    { USB_ST_STATUS, USB_TOK_IN, &usb_endp0_status },
+    { USB_ST_STATUS, USB_TOK_OUT, &usb_endp0_status },
+    { USB_ST_ANY, USB_TOK_ANY, &usb_endp0_error }
+};
+#define USB_CTL_STATE_COUNT (sizeof(usb_control_fsm)/sizeof(*usb_control_fsm))
+
+/**
+ * Endpoint 0 state machine. Executes the state machine defined above.
  *
  * token: Token type that has been completed and triggered the call to this function
  */
 static void usb_handle_endp0(USBToken token)
 {
-    switch (token)
+    static USBControlState state = USB_ST_SETUP;
+    for (uint32_t i = 0; i < USB_CTL_STATE_COUNT; i++)
     {
-        case TOK_SETUP:
-            usb_endp0_setup();
-            break;
-        case TOK_IN:
-            break;
-        case TOK_OUT:
-            break;
+        if ((state == usb_control_fsm[i].state) || (USB_ST_ANY == usb_control_fsm[i].state))
+        {
+            if ((token == usb_control_fsm[i].event) || (USB_TOK_ANY == usb_control_fsm[i].event))
+            {
+                state = (usb_control_fsm[i].fn)();
+                break;
+            }
+        }
     }
 }
 
@@ -628,7 +800,7 @@ void USB_IRQHandler(void)
                 else
                 {
                     //endpoint 0 OUT or SETUP complete
-                    usb_handle_endp0(val & USB_EP_SETUP ? TOK_SETUP : TOK_OUT);
+                    usb_handle_endp0(val & USB_EP_SETUP ? USB_TOK_SETUP : USB_TOK_OUT);
                 }
             }
         }
@@ -646,7 +818,7 @@ void USB_IRQHandler(void)
                 else
                 {
                     //endpoint 0 IN complete
-                    usb_handle_endp0(TOK_IN);
+                    usb_handle_endp0(USB_TOK_IN);
                 }
             }
         }

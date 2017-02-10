@@ -18,6 +18,40 @@
 typedef enum { USB_ENDPOINT_BULK, USB_ENDPOINT_CONTROL, USB_ENDPOINT_INTERRUPT } USBEndpointType;
 
 /**
+ * Direction of a USB transfer from the host perspective
+ */
+typedef enum { USB_HOST_IN = 1 << 0, USB_HOST_OUT = 1 << 1 } USBDirection;
+
+/**
+ * Setup packet type definition
+ */
+typedef struct {
+    union {
+        uint16_t wRequestAndType;
+        struct {
+            uint8_t bmRequestType;
+            uint8_t bRequest;
+        };
+    };
+    uint16_t wValue;
+    uint16_t wIndex;
+    uint16_t wLength;
+} USBSetupPacket;
+
+/**
+ * Basic data needed to initiate a transfer
+ */
+typedef struct {
+    void *addr;
+    uint16_t len;
+} USBTransferData;
+
+/**
+ * Result of a control setup request handler
+ */
+typedef enum { USB_CTL_OK, USB_CTL_STALL } USBControlResult;
+
+/**
  * Initializes the USB peripheral. Before calling this, the USB divider
  * must be set appropriately
  */
@@ -79,6 +113,33 @@ void usb_endpoint_send(uint8_t endpoint, void *buf, uint16_t len);
  */
 void usb_endpoint_receive(uint8_t endpoint, void *buf, uint16_t len);
 
+/**
+ * Places an endpoint in a stalled state, which persists until usb_endpoint_send
+ * or usb_endpoint_receive is called.
+ *
+ * endpoint: Endpoint to stall
+ * direction: Direction to stall
+ */
+void usb_endpoint_stall(uint8_t endpoint, USBDirection direction);
+
+
+/**
+ * Hook function implemented by the application which is called when a
+ * non-standard setup request arrives.
+ *
+ * setup: Setup packet received
+ * nextTransfer: Filled during this function call with any data for the next state
+ *
+ * Returns whether to continue with the control pipeline or stall
+ */
+USBControlResult hook_usb_handle_setup_request(USBSetupPacket const *setup, USBTransferData *nextTransfer);
+
+/**
+ * Hook function implemented by the application which is called when the status stage of a setup request is completed
+ *
+ * setup: Setup packet received
+ */
+void hook_usb_setup_complete(USBSetupPacket const *setup);
 
 /**
  * Hook function implemented by the application which is called when the
