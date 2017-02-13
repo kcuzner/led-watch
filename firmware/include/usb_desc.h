@@ -9,12 +9,13 @@
 #define _USB_DESC_H_
 
 #include <stdint.h>
+#include <stddef.h>
 
 typedef struct {
     uint16_t wValue;
     uint16_t wIndex;
-    uint8_t length;
-    void *addr;
+    size_t length;
+    const void *addr;
 } USBDescriptorEntry;
 
 typedef struct {

@@ -51,6 +51,18 @@ typedef struct {
  */
 typedef enum { USB_CTL_OK, USB_CTL_STALL } USBControlResult;
 
+#define USB_REQ_DIR_IN   (1 << 7)
+#define USB_REQ_DIR_OUT  (0 << 7)
+#define USB_REQ_TYPE_STD (0 << 5)
+#define USB_REQ_TYPE_CLS (1 << 5)
+#define USB_REQ_TYPE_VND (2 << 5)
+#define USB_REQ_RCP_DEV  (0)
+#define USB_REQ_RCP_IFACE (1)
+#define USB_REQ_RCP_ENDP  (2)
+#define USB_REQ_RCP_OTHER (3)
+
+#define USB_REQ(REQUEST, TYPE) (uint16_t)(((REQUEST) << 8) | ((TYPE) & 0xFF))
+
 /**
  * Initializes the USB peripheral. Before calling this, the USB divider
  * must be set appropriately
@@ -115,7 +127,8 @@ void usb_endpoint_receive(uint8_t endpoint, void *buf, uint16_t len);
 
 /**
  * Places an endpoint in a stalled state, which persists until usb_endpoint_send
- * or usb_endpoint_receive is called.
+ * or usb_endpoint_receive is called. Note that setup packets can still be
+ * received.
  *
  * endpoint: Endpoint to stall
  * direction: Direction to stall
@@ -125,7 +138,7 @@ void usb_endpoint_stall(uint8_t endpoint, USBDirection direction);
 
 /**
  * Hook function implemented by the application which is called when a
- * non-standard setup request arrives.
+ * non-standard setup request arrives on endpoint zero.
  *
  * setup: Setup packet received
  * nextTransfer: Filled during this function call with any data for the next state
@@ -135,11 +148,12 @@ void usb_endpoint_stall(uint8_t endpoint, USBDirection direction);
 USBControlResult hook_usb_handle_setup_request(USBSetupPacket const *setup, USBTransferData *nextTransfer);
 
 /**
- * Hook function implemented by the application which is called when the status stage of a setup request is completed
+ * Hook function implemented by the application which is called when the status
+ * stage of a setup request is completed on endpoint zero.
  *
  * setup: Setup packet received
  */
-void hook_usb_setup_complete(USBSetupPacket const *setup);
+void hook_usb_control_complete(USBSetupPacket const *setup);
 
 /**
  * Hook function implemented by the application which is called when the
@@ -157,13 +171,20 @@ void hook_usb_sof(void);
  * Hook function implemented by the application which is called when the host
  * sets a configuration. The configuration index is passed.
  */
-void hook_usb_set_configuration(uint8_t configuration);
+void hook_usb_set_configuration(uint16_t configuration);
 
 /**
  * Hook function implemented by the application which is called when the host
  * sets an [alternate] interface for the current configuration.
  */
-void hook_usb_set_interface(uint8_t configuration, uint8_t interface);
+void hook_usb_set_interface(uint16_t interface);
+
+/**
+ * Hook function implemented by the application which is called when a setup
+ * token has been received. Setup tokens will always be processed, regardless
+ * of NAK or STALL status.
+ */
+void hook_usb_endpoint_setup(uint8_t endpoint, USBSetupPacket const *setup);
 
 /**
  * Hook function implemented by the application which is called when data has
