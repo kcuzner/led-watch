@@ -32,7 +32,7 @@ USBControlResult hook_usb_handle_setup_request(USBSetupPacket const *setup, USBT
 
 void hook_usb_set_configuration(uint16_t configuration)
 {
-    usb_endpoint_setup(1, 0x80, 64, USB_ENDPOINT_INTERRUPT);
+    usb_endpoint_setup(1, 0x81, 64, USB_ENDPOINT_INTERRUPT);
 
     usb_endpoint_send(1, report, sizeof(report));
 }

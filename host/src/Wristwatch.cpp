@@ -30,6 +30,8 @@ void Wristwatch::read()
     else
     {
         cout << "Read " << res << " characters" << endl;
+        if (res)
+            printf("0x%02x\n", data[0]);
     }
 }
 

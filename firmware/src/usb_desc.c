@@ -54,15 +54,12 @@ static const FLASH_ALIGN uint8_t hid_report_descriptor[] = {
     HID_SHORT(0x08, 0x01), //USAGE (Vendor 1)
     HID_SHORT(0xa0, 0x01), //COLLECTION (Application)
     HID_SHORT(0x08, 0x01), //  USAGE (Vendor 1)
-    HID_SHORT(0xa0, 0x00), //  COLLECTION (Physical)
-    HID_SHORT(0x08, 0x01), //    USAGE (Vendor 1)
-    HID_SHORT(0x14, 0x00), //    LOGICAL_MINIMUM (0)
+    HID_SHORT(0x14, 0x00), //  LOGICAL_MINIMUM (0)
     HID_SHORT(0x24, 0xFF, 0x00), //LOGICAL_MAXIMUM (0x00FF)
-    HID_SHORT(0x74, 0x08), //    REPORT_SIZE (8)
-    HID_SHORT(0x94, 0x01), //    REPORT_COUNT(1)
-    HID_SHORT(0x80, 0x02), //    INPUT (Data, Var, Abs)
-    HID_SHORT(0xc0),       //  END_COLLECTION
-    HID_SHORT(0xc0)        //END_COLLECTION
+    HID_SHORT(0x74, 0x08), //  REPORT_SIZE (8)
+    HID_SHORT(0x94, 0x01), //  REPORT_COUNT(1)
+    HID_SHORT(0x80, 0x02), //  INPUT (Data, Var, Abs)
+    HID_SHORT(0xc0),       //END_COLLECTION
 };
 
 /**
