@@ -151,11 +151,6 @@ typedef struct {
  */
 static uint8_t endp0_buffer[64];
 
-uint16_t usbtemp[256];
-uint8_t usbtempi;
-uint8_t usbtemp2[32];
-uint8_t usbtempj;
-
 USBControlResult __attribute__ ((weak)) hook_usb_handle_setup_request(USBSetupPacket const *setup, USBTransferData *nextTransfer)
 {
     return USB_CTL_STALL; //default: Stall on an unhandled request
@@ -548,8 +543,6 @@ void usb_endpoint_stall(uint8_t endpoint, USBDirection direction)
     {
         usb_set_endpoint_status(endpoint, USB_EP_RX_STALL, USB_EPRX_STAT);
     }
-    if (!USB_ENDPOINT_REGISTER(endpoint))
-            leds_set_center(0, 1, 0);
 }
 
 
