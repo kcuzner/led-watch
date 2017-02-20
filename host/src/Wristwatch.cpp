@@ -2,6 +2,9 @@
 
 #include <stdexcept>
 #include <cwchar>
+#include <cstring>
+#include <codecvt>
+#include <locale>
 
 #include <iostream>
 
@@ -12,6 +15,8 @@ Wristwatch::Wristwatch(const string &path)
     m_dev = hid_open_path(path.c_str());
     if (!m_dev)
         throw new runtime_error("Unable to open device");
+
+    hid_set_nonblocking(m_dev, 1);
 }
 
 Wristwatch::~Wristwatch()
@@ -19,19 +24,25 @@ Wristwatch::~Wristwatch()
     hid_close(m_dev);
 }
 
-void Wristwatch::read()
+bool Wristwatch::getReport(WristwatchReport &report)
 {
-    unsigned char data[255];
-    int res = hid_read_timeout(m_dev, data, sizeof(data), 1000);
-    if (!res || res == -1)
+    unsigned char data[sizeof(report)];
+    int res = hid_read(m_dev, data, sizeof(data));
+    if (res < 0)
     {
-        cout << "Unable to read device" << endl;
+        auto error = wstring(hid_error(m_dev));
+        using convert_type = std::codecvt_utf8<wchar_t>;
+        wstring_convert<convert_type, wchar_t> converter;
+        throw new runtime_error(converter.to_bytes(error));
+    }
+    else if (res)
+    {
+        memcpy(&report, data, sizeof(report));
+        return true;
     }
     else
     {
-        cout << "Read " << res << " characters" << endl;
-        if (res)
-            printf("0x%02x\n", data[0]);
+        return false;
     }
 }
 

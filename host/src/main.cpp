@@ -9,7 +9,10 @@
 #include <cstdlib>
 #include <iostream>
 
+#include <gtkmm/application.h>
+
 #include "Wristwatch.h"
+#include "MainWindow.h"
 
 using namespace std;
 
@@ -24,9 +27,9 @@ int main(int argc, char **argv)
         exit(EXIT_FAILURE);
     }
 
-    Wristwatch watch(*it);
+    auto app = Gtk::Application::create(argc, argv, "com.kevincuzner.wristwatch");
 
-    watch.read();
+    MainWindow mainWindow;
 
-    return 0;
+    return app->run(mainWindow);
 }

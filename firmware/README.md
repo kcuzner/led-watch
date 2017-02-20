@@ -8,6 +8,12 @@
  - Use the power saving capabilities of the STM32L0 to remain powered for long
    periods of time between recharges.
 
+## USB Features
+
+ - Connect as an HID peripheral
+ - Get/Set watch time through HID
+ - Possible feature: Reflash firmware through USB
+
 ## Build instructions
 
 Prerequisites:
