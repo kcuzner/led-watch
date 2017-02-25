@@ -22,7 +22,7 @@ void i2c_init(void)
     GPIOB->OTYPER |= GPIO_OTYPER_OT_8 | GPIO_OTYPER_OT_9;
 
     //Set up for master mode, 100KHz, assuming a 2.1MHz clock
-    I2C1->TIMINGR = ((0 & 0xF) << I2C_TIMINGR_PRESC_Pos) |
+    I2C1->TIMINGR = ((8 & 0xF) << I2C_TIMINGR_PRESC_Pos) |
         ((5 & 0xF) << I2C_TIMINGR_SCLDEL_Pos) |
         ((5 & 0xF) << I2C_TIMINGR_SDADEL_Pos) |
         ((5 & 0xFF) << I2C_TIMINGR_SCLH_Pos) |
