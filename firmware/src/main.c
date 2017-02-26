@@ -14,6 +14,7 @@
 #include "mma8652.h"
 #include "rtc.h"
 #include "usb.h"
+#include "power.h"
 
 static volatile uint8_t segment = 0;
 
@@ -36,6 +37,7 @@ int main(void)
     mma8652_init();
     rtc_init();
     usb_init();
+    power_init();
 
     usb_enable();
 
@@ -61,9 +63,21 @@ int main(void)
     {
         rtc_refresh();
         leds_clear();
+        switch (power_get_battery_state())
+        {
+        case POWER_BATTERY_CHARGING:
+            leds_set_center(1, 0, 0);
+            break;
+        case POWER_BATTERY_CHARGED:
+            leds_set_center(1, 1, 0);
+            break;
+        default:
+            leds_set_center(0, 1, 0);
+            break;
+        }
         leds_set_minute(rtc_get_minutes(), 3);
         leds_set_minute(rtc_get_seconds(), 1);
-        leds_set_hour(rtc_get_hours(), 3);
+        leds_set_hour(rtc_get_hours() % 12, 3);
         leds_commit();
     }
 
