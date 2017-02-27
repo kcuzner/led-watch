@@ -19,19 +19,16 @@ void WristwatchPoller::poll()
 
     try
     {
-        auto watch = Wristwatch(path);
+        /*auto watch = Wristwatch(path);
         while (!getStop())
         {
             if (watch.getReport(report))
                 callback(report);
-        }
+        }*/
     }
     catch (...)
     {
-        return false;
     }
-
-    return true;
 }
 
 void WristwatchPoller::stop()

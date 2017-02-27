@@ -55,6 +55,8 @@ static uint8_t date_to_weekday(uint8_t year, uint8_t month, uint8_t day)
     return weekday + 1; //we require Monday = 1 format
 }
 
+uint8_t yr, mth, dy, hr, mn, sc;
+
 void rtc_set(uint8_t year, uint8_t month, uint8_t day, uint8_t hour, uint8_t minute, uint8_t second)
 {
     uint8_t year_bcd, month_bcd, day_bcd, hour_bcd, minute_bcd, second_bcd;
@@ -70,6 +72,13 @@ void rtc_set(uint8_t year, uint8_t month, uint8_t day, uint8_t hour, uint8_t min
 
     //program the prescaler for the 32.768KHz clock
     RTC->PRER = 0x007F00FF;
+
+    yr = year;
+    mth = month;
+    dy = day;
+    hr = hour;
+    mn = minute;
+    sc = second;
 
     //Convert the values to BCD
     year_bcd = bin_to_bcd(year);

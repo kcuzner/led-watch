@@ -16,6 +16,11 @@
 #include "usb.h"
 #include "power.h"
 
+typedef struct __attribute__((packed))
+{
+    uint8_t data[8];
+} WristwatchReport;
+
 static volatile uint8_t segment = 0;
 
 int main(void)
@@ -53,9 +58,6 @@ int main(void)
     GPIOA->MODER &= ~(GPIO_MODER_MODE15);
     GPIOA->MODER |= GPIO_MODER_MODE15_0;
 
-    if (!rtc_is_set())
-        rtc_set(17, 2, 25, 0, 38, 11);
-
     //buzzer_trigger_beep();
 
     uint8_t c = 0;
@@ -88,3 +90,12 @@ void TIM2_IRQHandler()
 {
     TIM2->SR = 0;
 }
+
+void hook_usb_hid_out_report(const USBTransferData *transfer)
+{
+    //well this is unsafe...
+    WristwatchReport *report = (WristwatchReport *)(transfer->addr);
+
+    rtc_set(report->data[0], report->data[1], report->data[2], report->data[3], report->data[4], report->data[5]);
+}
+
