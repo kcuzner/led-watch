@@ -13,26 +13,10 @@
 #include <stddef.h>
 #include <stdint.h>
 
-//These must be half-word aligned to avoid a hard fault. I believe it is due to
-//the fact that these are copied by halfword and halfword accesses seem to be
-//only allowed on halfword boundaries. This could be completely wrong as it is
-//a guess based on my observation.
-//
-//Specifically, the case was that one of these consts happened to land on
-//address 0x08000155f and then the LDRH instruction in the usb sending function
-//(which copies these into the PMA) would explode with a hard fault. Removing
-//the cfg_descriptor (which has a odd length) would suddenly make it work since
-//the addresses would then become halfword aligned again.
-//
-//I believe these are being compacted to 1-byte alignment by default due to the
-//Os flag, but that's another guess. No hard faults occurred when the flag was
-//removed.
-#define WORD_ALIGN __attribute__ ((aligned(2)))
-
 /**
  * Device descriptor
  */
-static const WORD_ALIGN uint8_t dev_descriptor[] = {
+static const USB_DATA_ALIGN uint8_t dev_descriptor[] = {
     18, //bLength
     1, //bDescriptorType
     0x00, 0x02, //bcdUSB
@@ -49,7 +33,7 @@ static const WORD_ALIGN uint8_t dev_descriptor[] = {
     1, //bNumConfigurations
 };
 
-static const WORD_ALIGN uint8_t hid_report_descriptor[] = {
+static const USB_DATA_ALIGN uint8_t hid_report_descriptor[] = {
     HID_SHORT(0x04, 0x00, 0xFF), //USAGE_PAGE (Vendor Defined)
     HID_SHORT(0x08, 0x01), //USAGE (Vendor 1)
     HID_SHORT(0xa0, 0x01), //COLLECTION (Application)
@@ -67,7 +51,7 @@ static const WORD_ALIGN uint8_t hid_report_descriptor[] = {
 /**
  * Configuration descriptor
  */
-static const WORD_ALIGN uint8_t cfg_descriptor[] = {
+static const USB_DATA_ALIGN uint8_t cfg_descriptor[] = {
     9, //bLength
     2, //bDescriptorType
     9 + 9 + 9 + 7 + 7, 0x00, //wTotalLength
@@ -113,13 +97,13 @@ static const WORD_ALIGN uint8_t cfg_descriptor[] = {
     /* INTERFACE 0 END */
 };
 
-static const WORD_ALIGN uint8_t lang_descriptor[] = {
+static const USB_DATA_ALIGN uint8_t lang_descriptor[] = {
     4, //bLength
     3, //bDescriptorType
     0x09, 0x04 //wLANGID[0]
 };
 
-static const WORD_ALIGN uint8_t manuf_descriptor[] = {
+static const USB_DATA_ALIGN uint8_t manuf_descriptor[] = {
     2 + 15 * 2, //bLength
     3, //bDescriptorType
     'k', 0x00, //wString
@@ -139,7 +123,7 @@ static const WORD_ALIGN uint8_t manuf_descriptor[] = {
     'm', 0x00
 };
 
-static const WORD_ALIGN uint8_t product_descriptor[] = {
+static const USB_DATA_ALIGN uint8_t product_descriptor[] = {
     2 + 14 * 2, //bLength
     3, //bDescriptorType
     'L', 0x00,

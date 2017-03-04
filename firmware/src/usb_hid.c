@@ -6,8 +6,8 @@
 
 #include "usb_hid.h"
 
-static uint8_t report_in[8];
-static uint8_t report_out[8];
+static USB_DATA_ALIGN uint8_t report_in[8];
+static USB_DATA_ALIGN uint8_t report_out[8];
 
 void __attribute__((weak)) hook_usb_hid_out_report(const USBTransferData *report) { }
 

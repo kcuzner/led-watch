@@ -10,6 +10,24 @@
 
 #include <stdint.h>
 
+//Anything sent over USB must be half-word aligned to avoid a hard
+//fault. I believe it is due to the fact that these are copied by
+//halfword and halfword accesses seem to be only allowed on halfword
+//boundaries. This could be completely wrong as it is a guess based on
+//my observation.
+//
+//Specifically, the case was that a descriptor const happened to land
+//on address 0x08000155f and then the LDRH instruction in the usb
+//sending function (which copies these into the PMA) would explode with
+//a hard fault. Removing the cfg_descriptor (which has a odd length)
+//would suddenly make it work since the addresses would then become
+//halfword aligned again.
+//
+//I believe these are being compacted to 1-byte alignment by default due
+//to the Os flag, but that's another guess. No hard faults occurred when
+//the flag was removed.
+#define USB_DATA_ALIGN __attribute__ ((aligned(2)))
+
 #define USB_CONTROL_ENDPOINT_SIZE 64
 
 /**

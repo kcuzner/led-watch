@@ -103,6 +103,7 @@ static PowerState power_fsm_usb_main(void)
 
 static PowerState power_fsm_usb_disconnect(void)
 {
+    countdown = 0;
     hook_power_on_usb_disconnect();
     return PWR_ST_BATTERY;
 }
@@ -130,7 +131,6 @@ static PowerState power_fsm_sleep_main(void)
 {
     hook_power_on_sleep();
     SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;
-    RCC->CFGR |= RCC_CFGR_STOPWUCK; //for debug only since we aren't varying frequency yet
     __ASM volatile ("wfi");
     countdown = 0;
     hook_power_on_wake();

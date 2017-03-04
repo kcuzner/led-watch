@@ -7,6 +7,21 @@
 #include "i2c.h"
 
 #include "stm32l0xx.h"
+#include "system_stm32l0xx.h"
+#include "osc.h"
+
+static void i2c_set_timing(void)
+{
+    uint32_t prescaler = SystemCoreClock / 2000000;
+    if (prescaler > 15)
+        prescaler = 15;
+    //Set up for master mode, 100KHz, assuming a 2.1MHz clock
+    I2C1->TIMINGR = ((prescaler & 0xF) << I2C_TIMINGR_PRESC_Pos) |
+        ((5 & 0xF) << I2C_TIMINGR_SCLDEL_Pos) |
+        ((5 & 0xF) << I2C_TIMINGR_SDADEL_Pos) |
+        ((5 & 0xFF) << I2C_TIMINGR_SCLH_Pos) |
+        ((5 & 0xFF) << I2C_TIMINGR_SCLL_Pos);
+}
 
 void i2c_init(void)
 {
@@ -21,12 +36,9 @@ void i2c_init(void)
     GPIOB->MODER |= GPIO_MODER_MODE8_1 | GPIO_MODER_MODE9_1;
     GPIOB->OTYPER |= GPIO_OTYPER_OT_8 | GPIO_OTYPER_OT_9;
 
-    //Set up for master mode, 100KHz, assuming a 2.1MHz clock
-    I2C1->TIMINGR = ((8 & 0xF) << I2C_TIMINGR_PRESC_Pos) |
-        ((5 & 0xF) << I2C_TIMINGR_SCLDEL_Pos) |
-        ((5 & 0xF) << I2C_TIMINGR_SDADEL_Pos) |
-        ((5 & 0xFF) << I2C_TIMINGR_SCLH_Pos) |
-        ((5 & 0xFF) << I2C_TIMINGR_SCLL_Pos);
+    //Set up timing and add a callback to oscillator changes
+    i2c_set_timing();
+    osc_add_callback(&i2c_set_timing);
 }
 
 /**

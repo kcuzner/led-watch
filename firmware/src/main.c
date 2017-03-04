@@ -15,6 +15,7 @@
 #include "rtc.h"
 #include "usb.h"
 #include "power.h"
+#include "osc.h"
 
 typedef struct __attribute__((packed))
 {
@@ -25,15 +26,7 @@ static volatile uint8_t segment = 0;
 
 int main(void)
 {
-    //switch clock to HSI16 for USB debugging
-    RCC->CR |= RCC_CR_HSION;
-    while (!(RCC->CR & RCC_CR_HSIRDY)) { }
-    RCC->CFGR ^= (RCC->CFGR ^ RCC_CFGR_SW_HSI) & RCC_CFGR_SW_HSI;
-    while ((RCC->CFGR & RCC_CFGR_SWS) != RCC_CFGR_SWS_HSI) { }
-    //TODO: Build an oscillator system that allows callbacks for when the system frequency is changed
-
     SystemCoreClockUpdate();
-
 
     buzzer_init();
     buttons_init();
@@ -94,12 +87,14 @@ void hook_power_on_sleep()
 
 void hook_power_on_usb_connect()
 {
+    osc_request_hsi16();
     usb_enable();
 }
 
 void hook_power_on_usb_disconnect()
 {
     usb_disable();
+    osc_request_msi(5); //Anything slower than 2MHz makes for some crazy flicker
 }
 
 void hook_buttons_state_changed(uint8_t state)
