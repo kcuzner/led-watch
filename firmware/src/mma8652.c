@@ -158,9 +158,10 @@ bool mma8652_init(void)
         GPIOB->PUPDR |= GPIO_PUPDR_PUPD2_0;
 
         //set up external interrupts from ~ACCEL_INT
-        SYSCFG->EXTICR[0] = SYSCFG_EXTICR1_EXTI2_PB;
-        EXTI->IMR = EXTI_IMR_IM2;
-        EXTI->FTSR = EXTI_FTSR_FT2;
+        SYSCFG->EXTICR[0] &= ~(SYSCFG_EXTICR1_EXTI2);
+        SYSCFG->EXTICR[0] |= SYSCFG_EXTICR1_EXTI2_PB;
+        EXTI->IMR |= EXTI_IMR_IM2;
+        EXTI->FTSR |= EXTI_FTSR_FT2;
         NVIC_EnableIRQ(EXTI2_3_IRQn);
 
         AccelStatus.setup = 1;
@@ -173,9 +174,11 @@ bool mma8652_init(void)
 void __attribute__((weak)) hook_mma8652_tap(void) { }
 
 //TODO: Add a separate EXTI module with callback registration
-void EXTI2_3_IRQHandler(void)
+void __attribute__((interrupt ("IRQ"))) EXTI2_3_IRQHandler(void)
 {
     uint8_t temp;
+
+    EXTI->PR &= EXTI_PR_PIF2 | EXTI_PR_PIF3;
 
     if (!AccelStatus.setup)
         return;
@@ -185,9 +188,6 @@ void EXTI2_3_IRQHandler(void)
     if (!i2c_read(DEV_ADDR, REG_PULSE_SRC, &temp, 1))
         return;
 
-    leds_set_center(1, 1, 0);
-    leds_commit();
-
-    EXTI->PR = EXTI->PR & (EXTI_PR_PIF2 | EXTI_PR_PIF3);
+    hook_mma8652_tap();
 }
 

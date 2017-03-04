@@ -44,44 +44,12 @@ int main(void)
     usb_init();
     power_init();
 
-    usb_enable();
-
-    RCC->APB1ENR |= RCC_APB1ENR_TIM2EN;
+    /*RCC->APB1ENR |= RCC_APB1ENR_TIM2EN;
     TIM2->DIER = TIM_DIER_UIE;
     TIM2->CR1 = TIM_CR1_CEN;
-    NVIC_EnableIRQ(TIM2_IRQn);
+    NVIC_EnableIRQ(TIM2_IRQn);*/
 
-    leds_enable();
-
-    leds_commit();
-
-    GPIOA->MODER &= ~(GPIO_MODER_MODE15);
-    GPIOA->MODER |= GPIO_MODER_MODE15_0;
-
-    //buzzer_trigger_beep();
-
-    uint8_t c = 0;
-    while (1)
-    {
-        rtc_refresh();
-        leds_clear();
-        switch (power_get_battery_state())
-        {
-        case POWER_BATTERY_CHARGING:
-            leds_set_center(1, 0, 0);
-            break;
-        case POWER_BATTERY_CHARGED:
-            leds_set_center(1, 1, 0);
-            break;
-        default:
-            leds_set_center(0, 1, 0);
-            break;
-        }
-        leds_set_minute(rtc_get_minutes(), 3);
-        leds_set_minute(rtc_get_seconds(), 1);
-        leds_set_hour(rtc_get_hours() % 12, 3);
-        leds_commit();
-    }
+    power_main();
 
     return 0;
 }
@@ -89,6 +57,54 @@ int main(void)
 void TIM2_IRQHandler()
 {
     TIM2->SR = 0;
+}
+
+void hook_power_awake()
+{
+    rtc_refresh();
+    leds_clear();
+    switch (power_get_battery_state())
+    {
+    case POWER_BATTERY_CHARGING:
+        leds_set_center(1, 0, 0);
+        break;
+    case POWER_BATTERY_CHARGED:
+        leds_set_center(1, 1, 0);
+        break;
+    default:
+        leds_set_center(0, 1, 0);
+        break;
+    }
+    leds_set_minute(rtc_get_minutes(), 3);
+    leds_set_minute(rtc_get_seconds(), 1);
+    leds_set_hour(rtc_get_hours() % 12, 3);
+    leds_commit();
+}
+
+void hook_power_on_wake()
+{
+    power_set_awake_time(1000);
+    leds_enable();
+}
+
+void hook_power_on_sleep()
+{
+    leds_disable();
+}
+
+void hook_power_on_usb_connect()
+{
+    usb_enable();
+}
+
+void hook_power_on_usb_disconnect()
+{
+    usb_disable();
+}
+
+void hook_buttons_state_changed(uint8_t state)
+{
+    buzzer_trigger_beep();
 }
 
 void hook_usb_hid_out_report(const USBTransferData *transfer)

@@ -33,8 +33,8 @@ void buzzer_init(void)
     //50%, a couple hundred mV with 25%, and less than a hundred with 2%.
 
     //TODO: Change this to take into account new clock frequencies
-    TIM22->ARR = 2100;
-    TIM22->CCR1 = 50;
+    TIM22->ARR = 2100 * 8;
+    TIM22->CCR1 = 50 * 8;
     TIM22->CCMR1 = TIM_CCMR1_OC1M_2 | TIM_CCMR1_OC1M_1;
     TIM22->DIER = TIM_DIER_UIE;
 

@@ -10,9 +10,6 @@
 
 #define ORIGIN_CENTURY 2000
 
-static uint32_t time_buffer;
-static uint32_t date_buffer;
-
 void rtc_init(void)
 {
     //enable PWR

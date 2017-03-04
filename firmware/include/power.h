@@ -48,7 +48,7 @@ PowerBatteryState power_get_battery_state(void);
  *
  * ticks: Number of ticks to stay awake (TODO: Determine what a tick is)
  */
-void power_set_awake_time(uint16_t ticks);
+void power_set_awake_time(uint32_t ticks);
 
 /**
  * Hook function implemented by the application which is called
@@ -70,6 +70,18 @@ void hook_power_on_wake(void);
  * during this function are ignored.
  */
 void hook_power_on_sleep(void);
+
+/**
+ * Hook function implemented by the application which is called when the
+ * USB cable is plugged in, after hook_power_on_wake.
+ */
+void hook_power_on_usb_connect(void);
+
+/**
+ * Hook function implemented by the application which is called when the
+ * USB cable is unplugged, before hook_power_on_sleep.
+ */
+void hook_power_on_usb_disconnect(void);
 
 #endif //_POWER_H_
 
