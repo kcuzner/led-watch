@@ -40,6 +40,7 @@ comp_usb_height = 3 * mm; //height of usb port space
 comp_usb_height_offset = -0.5 * mm; //offset of USB port space beneath PCB
 comp_keepout_length = 1 * inches; //area beneath the PCB for component keepout
 comp_keepout_width = 1.145 * inches; //area benath the PCB for component keepout
+comp_keepout_length2 = 0.2 * inches;
 comp_keepout_width_offset = 0.15 * inches;
 comp_prog_x = 0.2 * inches;
 comp_prog_y = -0.34 * inches;
@@ -55,6 +56,14 @@ band_width = 20 * mm;
 band_height = 2 * mm;
 band_angle = 45 * degrees;
 band_center_offset = 0.7 * mm;
+
+button_width = 3 * mm;
+button_thickness = 0.65 * mm;
+button_height = 2 * mm;
+button_height_offset = -1 * mm;
+button_cap_thickness = 0.5 * mm;
+button_cap_radius = 0.5 * mm;
+button_angles = [30, 150, -150, -30] * degrees;
 
 //Base shape for the case
 module CaseBase() {
@@ -130,10 +139,13 @@ module ComponentInset() {
                 }
             }
             //board support keepout
-            translate([comp_keepout_width_offset, 0, 0]) {
-                union () {
+            union () {
+                translate([comp_keepout_width_offset, 0, 0])
                     cube(size = [comp_keepout_width, comp_keepout_length, comp_height + comp_usb_height], center = true);
-                }
+                translate([0, comp_keepout_length/2 - comp_keepout_length2, 0])
+                    cube(size = [pcb_radius * 2, comp_keepout_length / 2 - comp_keepout_length2 / 2, comp_height + comp_usb_height], center = true);
+                translate([0, -comp_keepout_length/2 + comp_keepout_length2, 0])
+                    cube(size = [pcb_radius * 2, comp_keepout_length / 2 - comp_keepout_length2 / 2, comp_height + comp_usb_height], center = true);
             }
         }
         //programming header
@@ -160,6 +172,28 @@ module WatchBandInset() {
     }
 }
 
+//Subtractive solid for the buttons
+module ButtonInset() {
+    button_padding = pad_manifold + pcb_radius - cos(asin(button_width / (2 * pcb_radius))) * pcb_radius; //distance to edge of PCB from the far corner of the button
+    button_depth = case_radius - pcb_radius + pad_manifold;
+    for (angle = button_angles) {
+        rotate([0, 0, angle]) {
+            translate([pcb_radius + button_thickness / 2 - button_padding/2, 0, button_height / 2 + button_height_offset]) {
+                translate([0, 0, (button_height_offset + pcb_height)/2 + pad_manifold/2])
+                    cube(size = [button_thickness + button_padding, button_width, button_height + (button_height_offset + pcb_height) + pad_manifold], center = true);
+                hull() {
+                    translate([button_thickness / 2, 0, ])
+                        cube(size = [button_thickness + button_cap_thickness, button_width, button_height], center = true);
+                    rotate([0, 90, 0])
+                        cylinder(h = button_thickness + button_cap_thickness, r = button_cap_radius);
+                }
+                rotate([0, 90, 0])
+                    cylinder(h = button_depth + pad_manifold, r = button_cap_radius);
+            }
+        }
+    }
+}
+
 difference() {
     CaseBase();
     translate([0, 0, case_height - lid_height]) {
@@ -169,6 +203,7 @@ difference() {
     translate([0, 0, case_height - lid_height - pcb_height]) {
         PCBInset();
         ComponentInset();
+        ButtonInset();
     }
     translate([0, 0, (case_height - lid_height) / 2 - band_center_offset]) {
         WatchBandInset();
