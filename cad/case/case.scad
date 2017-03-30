@@ -15,7 +15,7 @@ $fn = 360;
 
 pad_manifold = 0.1 * mm; //padding for maintaining a manifold (avoiding zero-width shapes)
 
-case_radius = 18 * mm;
+case_radius = 18.2 * mm;
 case_width = 25 * mm;
 case_length = 42 * mm;
 case_height = 9 * mm;
