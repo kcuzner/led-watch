@@ -124,7 +124,7 @@ static const USB_DATA_ALIGN uint8_t manuf_descriptor[] = {
 };
 
 static const USB_DATA_ALIGN uint8_t product_descriptor[] = {
-    2 + 14 * 2, //bLength
+    2 + 25 * 2, //bLength
     3, //bDescriptorType
     'L', 0x00,
     'E', 0x00,
@@ -139,7 +139,18 @@ static const USB_DATA_ALIGN uint8_t product_descriptor[] = {
     'a', 0x00,
     't', 0x00,
     'c', 0x00,
-    'h', 0x00
+    'h', 0x00,
+    ' ', 0x00,
+    'B', 0x00,
+    'o', 0x00,
+    'o', 0x00,
+    't', 0x00,
+    'l', 0x00,
+    'o', 0x00,
+    'a', 0x00,
+    'd', 0x00,
+    'e', 0x00,
+    'r', 0x00,
 };
 
 const USBDescriptorEntry usb_descriptors[] = {
