@@ -7,8 +7,8 @@
 #include "stm32l0xx.h"
 #include "system_stm32l0xx.h"
 
-#include "osc.h"
 #include "usb.h"
+#include "osc.h"
 
 typedef struct __attribute__((packed))
 {
@@ -38,7 +38,5 @@ void TIM2_IRQHandler()
 
 void hook_usb_hid_out_report(const USBTransferData *transfer)
 {
-    //well this is unsafe...
-    WristwatchReport *report = (WristwatchReport *)(transfer->addr);
 }
 

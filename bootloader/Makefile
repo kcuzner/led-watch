@@ -1,9 +1,9 @@
-# Makefile for the STM32F103C8 blink program
+# Makefile for the LED Wristwatch Firmware
 #
 # Kevin Cuzner
 #
 
-PROJECT = wristwatch
+PROJECT = wristwatch-bootloader
 
 # Project Structure
 SRCDIR = src
@@ -22,7 +22,7 @@ ASM = $(wildcard $(SRCDIR)/*.s)
 INCLUDE  = -I$(INCDIR) -Icmsis
 
 # Linker
-LSCRIPT = STM32L052X8_RAM.ld
+LSCRIPT = STM32L052X8.ld
 
 # C Flags
 GCFLAGS  = -std=c99 -Wall -Os -fno-common -mthumb -mcpu=$(CPU) -DSTM32L052xx --specs=nosys.specs --specs=nano.specs -g -Wa,-ahlms=$(addprefix $(OBJDIR)/,$(notdir $(<:.c=.lst)))
@@ -56,6 +56,15 @@ all:: $(BINDIR)/$(PROJECT).bin $(BINDIR)/$(PROJECT).hex
 
 Build: $(BINDIR)/$(PROJECT).bin
 
+install: $(BINDIR)/$(PROJECT).bin $(BINDIR)/openocd.pid
+	cat openocd/flash.cfg | nc localhost 4444
+
+gdb: $(BINDIR)/$(PROJECT).elf $(BINDIR)/openocd.pid
+	$(GDB) -ex "target remote localhost:3333" $(BINDIR)/$(PROJECT).elf
+
+stop:
+	echo shutdown | nc localhost 4444
+
 macros:
 	$(CC) $(GCFLAGS) -dM -E - < /dev/null
 
@@ -67,6 +76,11 @@ clean:
 
 size:
 	$(SIZE) $(BINDIR)/$(PROJECT).elf
+
+# Debug
+
+$(BINDIR)/openocd.pid:
+	openocd/run-openocd-server.sh $(OCD) $@
 
 # Compilation
 

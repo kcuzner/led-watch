@@ -150,7 +150,7 @@ static const USB_DATA_ALIGN uint8_t product_descriptor[] = {
     'a', 0x00,
     'd', 0x00,
     'e', 0x00,
-    'r', 0x00,
+    'r', 0x00
 };
 
 const USBDescriptorEntry usb_descriptors[] = {

@@ -1,4 +1,4 @@
-# Makefile for the STM32F103C8 blink program
+# Makefile for the LED Wristwatch Firmware
 #
 # Kevin Cuzner
 #

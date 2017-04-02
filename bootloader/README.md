@@ -5,17 +5,27 @@ SWD beyond the first initial flashing of this image.
 
 ## Program Format
 
-This bootloader lives in the first 4KB sector of program flash. Programs to be
-loaded through this bootloader must have their sections located in the
-following format:
+This bootloader lives in the first 4KB sector of program flash and reserves the
+first 256 bytes of EEPROM. Programs to be loaded through this bootloader must
+have their sections located in the following format:
 
 ```
-0x08001000: Interrupt vector table
-0x080010C0-0x08000FFFF: User program (.text, .rodata, etc)
+Flash:
+0x08001000: User program (.text, .rodata, etca (the bootloader reserves the first sector)
+
+EEPROM:
+0x08080010-0x08080FFF: EEPROM (the bootloader reserves the first 256 bytes)
+
+Information block:
+All sections may be used by the program
 ```
 
-All writes and reads to the bootloader section (0x08000000-0x08000FFF) will be
-ignored and generate an appropriate status report.
+All writes and reads to the bootloader section (0x08000000-0x08000FFF,
+0x08080000-0x080800FF) will be ignored and generate an appropriate status
+report.
+
+Firmware which writes to the first 256 bytes of EEPROM may cause the bootloader
+to behave unexpectedly.
 
 ## Programming Verification
 
@@ -54,6 +64,20 @@ so no HID report ID needs to be sent with the report.
 
 The device will generate 64-byte IN reports on occasion to communicate the
 device status. These reports have the following format:
+
+```
+Byte 0-3: First four bytes of the last command received or 0x00000000
+Byte 4: Status flags
+Byte 5-7: N/A
+Byte 8-11: CRC32 of the page report to follow, if applicable
+Byte 12-63: N/A
+```
+
+The status flag byte may be interpreted as follows:
+
+7 | 6 | 5 | 4 | 3 | 2 | 1 | 0
+--- | --- | --- | --- | --- | --- | --- | ---
+Command Received | Command OK | Command Status | Command Error | 0 | 0 | 0 | Page Report to follow
 
 ### Resetting the programming state machine
 
@@ -129,11 +153,14 @@ To exit bootloader mode, a report with the following format should be sent:
 
 ```
 Byte 0: 0xC3
-Byte 1-63: N/A
+Byte 1-3: 0x00
+Byte 4-7: Vector table offset in user flash
+Byte 8-63: N/A
 ```
 
-Upon receipt of this command, the device will initiate a USB reset and start
-the user program.
+Upon receipt of this command, the device will send a status report and perform
+a USB reset after the host has read the report. The newly written program will
+then be executed.
 
 **This command must not be sent until the entire program has been written to
 the flash.** In the event that the device stops programming before receiving

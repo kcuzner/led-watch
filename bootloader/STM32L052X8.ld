@@ -1,5 +1,5 @@
 /**
- * STM32L052X8 linker script, locating the program into RAM
+ * STM32L052X8 linker script
  *
  * Copyright 2017 Kevin Cuzner
  *
