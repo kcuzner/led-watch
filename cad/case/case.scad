@@ -16,17 +16,9 @@ $fn = 360;
 pad_manifold = 0.1 * mm; //padding for maintaining a manifold (avoiding zero-width shapes)
 
 case_radius = 18.2 * mm;
-case_width = 25 * mm;
+case_width = 27 * mm;
 case_length = 42 * mm;
 case_height = 9 * mm;
-
-lid_height = 3 * mm;
-lid_tab_width = 1.1875 * mm;
-lid_tab_length = (case_length - (26 * mm)) / 2;
-lid_tab_radius = 0.5 * mm;
-lid_tab_padding = 0.3 * mm; //tuning parameter for lid fit
-
-chamfer_size = sqrt(2 * pow(lid_height, 2)) * mm;
 
 pcb_radius = 32.7 * mm / 2;
 pcb_height = 1.6 * mm; //height of the actual circuit board, no parts
@@ -34,9 +26,22 @@ pcb_padding = 0.2 * mm; //tuning parameter for pcb fit
 pcb_usb_length = 11.65 * mm;
 pcb_usb_width = 32.95 * mm - pcb_radius * 2;
 
-comp_height = 2.5 * mm;
+lid_height = 2 * mm;
+lid_tab_width = 1.1875 * mm;
+lid_tab_length = (case_length - (26 * mm)) / 2;
+lid_tab_radius = 0.5 * mm;
+lid_tab_padding = 0.3 * mm; //tuning parameter for lid fit (on case)
+lid_height_padding = 0.1 * mm; //tuning parameter for lid fit (on lid)
+lid_chamfer_size = 1 * mm;
+lid_pcb_retention = 0.5 * mm;
+lid_window_radius = pcb_radius - 1 * mm;
+lid_window_height = 0.3 * mm;
+
+chamfer_size = sqrt(2 * pow(lid_height, 2)) * mm;
+
+comp_height = 3 * mm;
 comp_usb_length = 8.5 * mm;
-comp_usb_height = 3 * mm; //height of usb port space
+comp_usb_height = 3.5 * mm; //height of usb port space
 comp_usb_height_offset = -0.5 * mm; //offset of USB port space beneath PCB
 comp_keepout_length = 1 * inches; //area beneath the PCB for component keepout
 comp_keepout_width = 1.145 * inches; //area benath the PCB for component keepout
@@ -49,13 +54,17 @@ comp_prog_length = 6.4 * mm;
 
 battery_width = 15.2 * mm;
 battery_length = 35.7 * mm;
-battery_height = 2.5 * mm;
+battery_height = 3 * mm;
 battery_padding = 0.2 * mm;
 
 band_width = 20 * mm;
-band_height = 2 * mm;
-band_angle = 45 * degrees;
-band_center_offset = 0.7 * mm;
+band_height = case_height - lid_height - 2 * mm;
+band_depth = 2.7 * mm;
+
+bar_radius = 1 * mm / 2;
+bar_end_offset = 0.85 * mm;
+bar_height_offset = 1 * mm;
+bar_hole_depth = 1.5 * mm;
 
 button_width = 3 * mm;
 button_thickness = 0.65 * mm;
@@ -165,9 +174,16 @@ module BatteryInset() {
 
 //Subtractive solid for the watch band slots
 module WatchBandInset() {
-    translate([0, -case_length / 2, 0]) {
-        rotate([-band_angle, 0, 0]) {
-            cube(size = [band_width, case_height * 2, band_height], center = true);
+    translate([0, -case_length / 2 + band_depth / 2 - pad_manifold, band_height / 2 - pad_manifold]) {
+        cube(size = [band_width, band_depth, band_height], center = true);
+    }
+}
+
+//Subtractive solid for the spring bar holes
+module SpringBarInset() {
+    translate([0, -case_length / 2 + bar_end_offset, bar_height_offset]) {
+        rotate([0, 90, 0]) {
+            cylinder(h = band_width + 2 * bar_hole_depth, r = bar_radius, center = true);
         }
     }
 }
@@ -194,22 +210,87 @@ module ButtonInset() {
     }
 }
 
-difference() {
-    CaseBase();
-    translate([0, 0, case_height - lid_height]) {
-        CaseLidInset();
-        BatteryInset();
-    }
-    translate([0, 0, case_height - lid_height - pcb_height]) {
-        PCBInset();
-        ComponentInset();
-        ButtonInset();
-    }
-    translate([0, 0, (case_height - lid_height) / 2 - band_center_offset]) {
-        WatchBandInset();
-        mirror([0, 1, 0]) {
-            WatchBandInset();
+//Base solid for the lid component
+module LidBase() {
+    difference() {
+        translate([0, 0, lid_height / 2 + lid_height_padding / 2]) {
+            union () {
+                //chamfered center circle
+                hull() {
+                    cylinder(h = lid_height - lid_height_padding, r = case_radius - lid_chamfer_size / 2, center = true);
+                    translate([0, 0, -lid_chamfer_size/2])
+                        cylinder(h = lid_height - lid_chamfer_size - lid_height_padding, r = case_radius, center = true);
+                }
+                //edge chamfered rectangle for tabs
+                hull() {
+                    translate([0, 0, lid_height / 2 - lid_tab_radius - lid_height_padding / 2])
+                        cube(size = [case_width - lid_tab_width * 2 - lid_tab_radius * 4, case_length, lid_tab_radius * 2], center = true);
+                    cube(size = [case_width - lid_tab_width * 2, case_length, max(lid_height - lid_tab_radius * 4 - lid_height_padding, pad_manifold)], center = true);
+                    translate([0, 0, -lid_height / 2  + lid_tab_radius + lid_height_padding / 2])
+                        cube(size = [case_width - lid_tab_width * 2 - lid_tab_radius * 4, case_length, lid_tab_radius * 2], center = true);
+                }
+            }
+        }
+        //chamfer 1
+        translate([0, -case_length/2, lid_height]) {
+            rotate([45, 0, 0]) {
+                cube([case_width + pad_manifold * 2, chamfer_size, chamfer_size], center = true);
+            }
+        }
+        //chamfer 2
+        translate([0, case_length/2, lid_height]) {
+            rotate([45, 0, 0]) {
+                cube([case_width + pad_manifold * 2, chamfer_size, chamfer_size], center = true);
+            }
         }
     }
+}
+
+//Subtractive solid for the window in the lid
+module LidWindowInset() {
+    translate([0, 0, lid_height / 2]) {
+        cylinder(h = lid_height + pad_manifold, r = lid_window_radius, center = true);
+        translate([0, 0, -lid_window_height])
+            cylinder(h = lid_height - lid_window_height + pad_manifold, r = pcb_radius - lid_pcb_retention, center = true);
+    }
+}
+
+module Body() { // `make` me
+    difference() {
+        CaseBase();
+        translate([0, 0, case_height - lid_height]) {
+            CaseLidInset();
+            BatteryInset();
+        }
+        translate([0, 0, case_height - lid_height - pcb_height]) {
+            PCBInset();
+            ComponentInset();
+            ButtonInset();
+        }
+        translate([0, 0, (case_height - lid_height) / 2, 0]) {
+            WatchBandInset();
+            mirror([0, 1, 0]) {
+                WatchBandInset();
+            }
+        }
+        translate([0, 0, 0]) {
+            SpringBarInset();
+            mirror([0, 1, 0]) {
+                SpringBarInset();
+            }
+        }
+    }
+}
+
+module Lid() { // `make` me
+    difference() {
+        LidBase();
+        LidWindowInset();
+    }
+}
+
+Body();
+translate([0, 0, case_height - lid_height]) {
+    Lid();
 }
 

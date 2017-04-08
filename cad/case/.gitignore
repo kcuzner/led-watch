@@ -1,0 +1,7 @@
+*.stl
+*.stl.deps
+*.gcode
+
+Body.scad
+Lid.scad
+
