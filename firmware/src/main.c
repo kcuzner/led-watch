@@ -76,7 +76,7 @@ void hook_power_awake()
 
 void hook_power_on_wake()
 {
-    power_set_awake_time(1000);
+    power_set_awake_time(5000);
     leds_enable();
 }
 
