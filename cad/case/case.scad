@@ -17,7 +17,7 @@ pad_manifold = 0.1 * mm; //padding for maintaining a manifold (avoiding zero-wid
 
 case_radius = 18.2 * mm;
 case_width = 27 * mm;
-case_length = 42 * mm;
+case_length = 44 * mm;
 case_height = 9 * mm;
 
 pcb_radius = 32.7 * mm / 2;
@@ -26,8 +26,8 @@ pcb_padding = 0.2 * mm; //tuning parameter for pcb fit
 pcb_usb_length = 11.65 * mm;
 pcb_usb_width = 32.95 * mm - pcb_radius * 2;
 
-lid_height = 2 * mm;
-lid_tab_width = 1.1875 * mm;
+lid_height = 2.5 * mm;
+lid_tab_width = 1.5 * mm;
 lid_tab_length = (case_length - (26 * mm)) / 2;
 lid_tab_radius = 0.5 * mm;
 lid_tab_padding = 0.3 * mm; //tuning parameter for lid fit (on case)
@@ -38,6 +38,10 @@ lid_window_radius = pcb_radius - 1 * mm;
 lid_window_height = 0.3 * mm;
 
 chamfer_size = sqrt(2 * pow(lid_height, 2)) * mm;
+
+lip_height = 1 * mm;
+lip_radius = pcb_radius + abs(case_radius - pcb_radius) * 0.5;
+lip_padding = 0.3 * mm; //tuning parameter for lid fit (on lid)
 
 comp_height = 3 * mm;
 comp_usb_length = 8.5 * mm;
@@ -59,15 +63,15 @@ battery_padding = 0.2 * mm;
 
 band_width = 20 * mm;
 band_height = case_height - lid_height - 2 * mm;
-band_depth = 2.7 * mm;
+band_depth = 3.9 * mm;
 
 bar_radius = 1 * mm / 2;
 bar_end_offset = 0.85 * mm;
 bar_height_offset = 1 * mm;
 bar_hole_depth = 1.5 * mm;
 
-button_width = 3 * mm;
-button_thickness = 0.65 * mm;
+button_width = 3 * mm; //TODO: Increase this slightly...the non-usb buttons are being damaged when put in the case
+button_thickness = 0.8 * mm;
 button_height = 2 * mm;
 button_height_offset = -1 * mm;
 button_cap_thickness = 0.5 * mm;
@@ -104,9 +108,15 @@ module CaseLidInset() {
                 }
             }
         }
-        //cut across watch face (the cube may be redundant)
-        cube(size = [case_radius * 2 + pad_manifold, case_length - (lid_tab_length * 2) + lid_tab_padding * 2, lid_height + pad_manifold], center = true);
-        cylinder(h = lid_height + pad_manifold, r = case_radius + lid_tab_padding, center = true);
+        //cut across watch face
+        cylinder(h = lid_height + pad_manifold, r = lip_radius, center = true);
+        translate([0, 0, lid_height / 2 - (lid_height - lip_height)/2])
+            cylinder(h = lid_height - lip_height + pad_manifold, r = case_radius + lid_tab_padding, center = true);
+        //remove any remaining stubs from the tabs (if the distance from lip top to case top is less than then tab height, there will be a spike left over)
+        intersection() {
+            cube(size = [case_width - lid_tab_width * 2 + lid_tab_padding * 2, case_length + pad_manifold, lid_height + pad_manifold], center = true);
+            cylinder(h = lid_height + pad_manifold, r = case_radius + lid_tab_padding, center = true);
+        }
     }
     //chamfer 1
     translate([0, -case_length/2, lid_height]) {
@@ -255,6 +265,16 @@ module LidWindowInset() {
     }
 }
 
+//Subtractive solid for the lid lip
+module LidLipInset() {
+    difference() {
+        cylinder(h = lip_height + lid_height_padding, r = case_radius + pad_manifold);
+        cylinder(h = lip_height + lid_height_padding, r = lip_radius - lip_padding);
+        translate([0, 0, (lid_height + pad_manifold) / 2])
+            cube(size = [case_width - lid_tab_width * 2, case_length, lid_height + pad_manifold], center = true);
+    }
+}
+
 module Body() { // `make` me
     difference() {
         CaseBase();
@@ -286,6 +306,7 @@ module Lid() { // `make` me
     difference() {
         LidBase();
         LidWindowInset();
+        LidLipInset();
     }
 }
 
