@@ -41,7 +41,7 @@ static const USB_DATA_ALIGN uint8_t hid_report_descriptor[] = {
     HID_SHORT(0x14, 0x00), //  LOGICAL_MINIMUM (0)
     HID_SHORT(0x24, 0xFF, 0x00), //LOGICAL_MAXIMUM (0x00FF)
     HID_SHORT(0x74, 0x08), //  REPORT_SIZE (8)
-    HID_SHORT(0x94, 0x08), //  REPORT_COUNT(8)
+    HID_SHORT(0x94, 0x40), //  REPORT_COUNT(64)
     HID_SHORT(0x80, 0x02), //  INPUT (Data, Var, Abs)
     HID_SHORT(0x08, 0x01), //  USAGE (Vendor 1)
     HID_SHORT(0x90, 0x02), //  OUTPUT (Data, Var, Abs)

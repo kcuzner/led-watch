@@ -40,10 +40,18 @@ void usb_hid_set_out_report(const USBTransferData *buffer);
 void hook_usb_hid_get_report(USBHIDReportType type, uint8_t reportId, USBTransferData *report);
 
 /**
+ * Hook function implemented by the application which is called whenever and IN
+ * report has been sent to the host.
+ *
+ * report: Report that has been sent
+ */
+void hook_usb_hid_in_report(const USBTransferData *report);
+
+/**
  * Hook function implemented by the application which is called whenever an OUT
  * report is received from the host.
  *
- * report: Report received, if a buffer has been set up.
+ * report: Report received
  */
 void hook_usb_hid_out_report(const USBTransferData *report);
 
