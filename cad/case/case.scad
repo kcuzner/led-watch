@@ -70,8 +70,8 @@ bar_end_offset = 0.85 * mm;
 bar_height_offset = 1 * mm;
 bar_hole_depth = 1.5 * mm;
 
-button_width = 3 * mm; //TODO: Increase this slightly...the non-usb buttons are being damaged when put in the case
-button_thickness = 0.8 * mm;
+button_width = 3.5 * mm;
+button_thickness = 1 * mm;
 button_height = 2 * mm;
 button_height_offset = -1 * mm;
 button_cap_thickness = 0.5 * mm;
