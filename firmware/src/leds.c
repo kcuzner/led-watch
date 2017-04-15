@@ -55,7 +55,7 @@ void leds_init(void)
        GPIO_MODER_MODE6_0 | GPIO_MODER_MODE7_0;
 
     //Set the LED outputs to disable
-    GPIOB->BSRR = GPIO_BSRR_BS_7;
+    leds_disable();
 
     //Prepare the timer for interrupt
     TIM21->ARR = 546; //240 complete refreshes per second...any lower and there is a noticeable flicker. Weird.
@@ -73,9 +73,20 @@ void leds_enable(void)
 
 void leds_disable(void)
 {
-    GPIOB->BSRR = GPIO_BSRR_BS_7;
     TIM21->CR1 = 0;
-}
+
+    //Disable the mux
+    GPIOB->BSRR = GPIO_BSRR_BS_7;
+
+    //The following is a fix for a badly selected part: The OSRAM blue LEDs.
+    //Turn out, they don't appreciate being reverse-voltaged and draw 2.7mA
+    //apiece (the datasheet only says "not designed for reverse operation" and
+    //doesn't say what will happen. I guess we know now (and I've probably
+    //killed the lifetime of those LEDs). Although I can't prevent that while
+    //the display is actually displaying something, setting the blue pin high
+    //will make the voltage across all hour LEDs rise to 0V when the mux is
+    //disabled.
+    GPIOA->BSRR = GPIO_BSRR_BS_5; }
 
 void leds_clear(void)
 {
