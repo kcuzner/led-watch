@@ -41,6 +41,11 @@ typedef enum { USB_ENDPOINT_BULK, USB_ENDPOINT_CONTROL, USB_ENDPOINT_INTERRUPT }
 typedef enum { USB_HOST_IN = 1 << 0, USB_HOST_OUT = 1 << 1 } USBDirection;
 
 /**
+ * Flags for usb transfers for some USB-specific settings
+ */
+typedef enum { USB_FLAGS_NONE = 0, USB_FLAGS_NOZLP = 1 << 0 } USBTransferFlags;
+
+/**
  * Setup packet type definition
  */
 typedef struct {
@@ -115,8 +120,9 @@ void usb_disable(void);
  * address: Endpoint address
  * size: Endpoint maximum packet size
  * type: Endpoint type
+ * flags: Endpoint transfer flags
  */
-void usb_endpoint_setup(uint8_t endpoint, uint8_t address, uint16_t size, USBEndpointType type);
+void usb_endpoint_setup(uint8_t endpoint, uint8_t address, uint16_t size, USBEndpointType type, USBTransferFlags flags);
 
 /**
  * Sets up or disables send operations from the passed buffer. A send operation
