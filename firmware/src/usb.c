@@ -377,11 +377,13 @@ static void usb_endpoint_send_next_packet(uint8_t endpoint)
     //    called again.
     //
     //Exceptions:
-    // - Certain classes (such as HID) do not normally send ZLPs, so the ZLP
-    //   functionality created by case 2 is removed by making len == packetSize
-    //   a valid condition for ending a transfer
+    // - Certain classes (such as HID) do not normally send ZLPs, so the
+    //   case 3 logic is supplemented by the condition that if the NOZLP
+    //   flag is set, the len == packetSize, and completedLength + len
+    //   >= tx_len.
     //
-    if (len != packetSize || ((endpoint_status[endpoint].flags & USB_FLAGS_NOZLP) && len == packetSize))
+    if (len != packetSize ||
+            ((endpoint_status[endpoint].flags & USB_FLAGS_NOZLP) && len == packetSize && (len + completedLength >= endpoint_status[endpoint].tx_len)))
     {
         endpoint_status[endpoint].tx_pos = 0;
     }
@@ -515,7 +517,14 @@ static USBRXStatus usb_endpoint_end_packet_receive(uint8_t endpoint)
         //   functionality created by case 2 is removed by making len == packetSize
         //   a valid condition for ending a transfer
         //
-        if (received != packetSize || ((endpoint_status[endpoint].flags & USB_FLAGS_NOZLP) && received == packetSize)) //use received instead of len so we react correctly to actual events
+        //Exceptions:
+        // - Certain classes (such as HID) do not normally send ZLPs, so the
+        //   case 3 logic is supplemented by the condition that if the NOZLP
+        //   flag is set, received == packetSize, and completedLength + received
+        //   >= rx_len.
+        //
+        if (received != packetSize ||
+                ((endpoint_status[endpoint].flags & USB_FLAGS_NOZLP) && received == packetSize && (received + completedLength >= endpoint_status[endpoint].rx_len))) //use received instead of len so we react correctly to actual events
         {
             //this is the end of reception. We no longer will receive. Update rx_len to actual received length.
             endpoint_status[endpoint].rx_len = completedLength + len;

@@ -42,6 +42,18 @@ typedef enum { USB_HOST_IN = 1 << 0, USB_HOST_OUT = 1 << 1 } USBDirection;
 
 /**
  * Flags for usb transfers for some USB-specific settings
+ *
+ * USB_FLAGS_NOZLP: This replaces ZLP-based transfer endings with exact length
+ * transfer endings. For transmit, this merely stops ZLPs from being sent at
+ * the end of a transfer with a length which is a multiple of the endpoint size.
+ * For receive, this disables the ability for the endpoint to finish receiving
+ * into a buffer in the event that packets an exact multiple of the endpoint
+ * size are received. For example, if a 64 byte endpoint is set up to receive
+ * 128 bytes and the host only sends 64 bytes, the endpoint will not complete
+ * the reception until the next packet is received, whatever the length. This
+ * flag is meant specifically for USB classes where the expected transfer size
+ * is known in advance. In this case, the application must implement some sort
+ * of synchronization to avoid issues stemming from host-side hiccups.
  */
 typedef enum { USB_FLAGS_NONE = 0, USB_FLAGS_NOZLP = 1 << 0 } USBTransferFlags;
 
