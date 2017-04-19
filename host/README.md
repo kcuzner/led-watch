@@ -1,40 +1,21 @@
 # LED Wristwatch Host Software
 
-## Build Instructions (Linux)
+This software is written in Python and intended for use on Linux. It should be
+easy enough to port to other OSes.
 
-Prerequisites:
+## Prerequisites
 
- - cmake
- - g++ compatible with C++11
- - gtkmm-3.0
- - hidapi-hidraw
+ * Python 3
+ * hidapi from PyPi
+ * Corresponding hidapi installation
 
-To build the first time:
+## Running instructions
 
-```
-$ mkdir build
-$ cd build
-$ cmake ../
-$ make
-```
-
-To build the Nth time:
+The host software has two modes: Clock update and Bootloader mode. For
+instructions, use:
 
 ```
-$ cd build && make
-```
-
-To ensure source updates occur after creating a new file:
-
-```
-$ touch CMakeLists.txt
-$ cd build && make
-```
-
-To run:
-
-```
-$ ./build/wristwatch
+$ ./wristwatch -h
 ```
 
 ## Troubleshooting

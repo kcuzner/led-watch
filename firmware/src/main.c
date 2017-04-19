@@ -14,13 +14,17 @@
 #include "mma8652.h"
 #include "rtc.h"
 #include "usb.h"
+#include "usb_hid.h"
 #include "power.h"
 #include "osc.h"
 
 typedef struct __attribute__((packed))
 {
-    uint8_t data[8];
+    uint32_t command;
+    uint8_t data[60];
 } WristwatchReport;
+
+static WristwatchReport report;
 
 static volatile uint8_t segment = 0;
 
@@ -102,11 +106,26 @@ void hook_buttons_state_changed(uint8_t state)
     buzzer_trigger_beep();
 }
 
-void hook_usb_hid_out_report(const USBTransferData *transfer)
+void hook_usb_hid_configured()
 {
-    //well this is unsafe...
-    WristwatchReport *report = (WristwatchReport *)(transfer->addr);
+    USBTransferData data = { &report, sizeof(report) };
+    usb_hid_receive(&data);
+}
 
-    rtc_set(report->data[0], report->data[1], report->data[2], report->data[3], report->data[4], report->data[5]);
+void hook_usb_hid_out_report_received(const USBTransferData *transfer)
+{
+    if (transfer->addr != &report)
+        return;
+
+    switch (report.command)
+    {
+        case 1:
+            buzzer_trigger_beep();
+            rtc_set(report.data[0], report.data[1], report.data[2], report.data[3], report.data[4], report.data[5]);
+            break;
+        default:
+            break;
+    }
+    usb_hid_receive(transfer);
 }
 

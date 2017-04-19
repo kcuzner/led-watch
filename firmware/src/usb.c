@@ -32,6 +32,7 @@ typedef struct __attribute__((packed)) {
  * USB by the application program.
  *
  * size: Endpoint packet size in PMA (buffer table contains PMA buffer addresses)
+ * flags: Flags for this endpoint (such as class-specific disabling of ZLPs)
  *
  * tx_buf: Start of transmit buffer located in main memory
  * tx_pos: Current transmit position within the buffer or zero if transmission is finished
@@ -45,6 +46,7 @@ typedef struct __attribute__((packed)) {
  */
 typedef struct {
     uint16_t size; //endpoint packet size
+    USBTransferFlags flags; //flags for this endpoint
     void *tx_buf; //transmit buffer located in main memory
     void *tx_pos; //next transmit position in the buffer or zero if done
     uint16_t tx_len; //transmit buffer length
@@ -259,12 +261,13 @@ static inline void usb_set_endpoint_status(uint8_t endpoint, uint32_t status, ui
     USB_ENDPOINT_REGISTER(endpoint) = (val ^ (status & tx_rx_mask)) & (USB_EPREG_MASK | tx_rx_mask);
 }
 
-void usb_endpoint_setup(uint8_t endpoint, uint8_t address, uint16_t size, USBEndpointType type)
+void usb_endpoint_setup(uint8_t endpoint, uint8_t address, uint16_t size, USBEndpointType type, USBTransferFlags flags)
 {
     if (endpoint > 7 || type > USB_ENDPOINT_INTERRUPT)
         return; //protect against tomfoolery
 
     endpoint_status[endpoint].size = size;
+    endpoint_status[endpoint].flags = flags;
     USB_ENDPOINT_REGISTER(endpoint) = (type == USB_ENDPOINT_BULK ? USB_EP_BULK :
             type == USB_ENDPOINT_CONTROL ? USB_EP_CONTROL :
             USB_EP_INTERRUPT) |
@@ -372,7 +375,15 @@ static void usb_endpoint_send_next_packet(uint8_t endpoint)
     //    condition which will prevent repeated notifications. Further calls to
     //    this function will result in no operation until usb_endpoint_send is
     //    called again.
-    if (len != packetSize)
+    //
+    //Exceptions:
+    // - Certain classes (such as HID) do not normally send ZLPs, so the
+    //   case 3 logic is supplemented by the condition that if the NOZLP
+    //   flag is set, the len == packetSize, and completedLength + len
+    //   >= tx_len.
+    //
+    if (len != packetSize ||
+            ((endpoint_status[endpoint].flags & USB_FLAGS_NOZLP) && len == packetSize && (len + completedLength >= endpoint_status[endpoint].tx_len)))
     {
         endpoint_status[endpoint].tx_pos = 0;
     }
@@ -500,7 +511,20 @@ static USBRXStatus usb_endpoint_end_packet_receive(uint8_t endpoint)
         //    condition which will prevent repeated notifications. Further calls to
         //    this function will result in no operation until usb_endpoint_receive is
         //    called again.
-        if (received != packetSize) //use received instead of len so we react correctly to actual events
+        //
+        //Exceptions:
+        // - Certain classes (such as HID) do not normally send ZLPs, so the ZLP
+        //   functionality created by case 2 is removed by making len == packetSize
+        //   a valid condition for ending a transfer
+        //
+        //Exceptions:
+        // - Certain classes (such as HID) do not normally send ZLPs, so the
+        //   case 3 logic is supplemented by the condition that if the NOZLP
+        //   flag is set, received == packetSize, and completedLength + received
+        //   >= rx_len.
+        //
+        if (received != packetSize ||
+                ((endpoint_status[endpoint].flags & USB_FLAGS_NOZLP) && received == packetSize && (received + completedLength >= endpoint_status[endpoint].rx_len))) //use received instead of len so we react correctly to actual events
         {
             //this is the end of reception. We no longer will receive. Update rx_len to actual received length.
             endpoint_status[endpoint].rx_len = completedLength + len;
@@ -612,7 +636,7 @@ static USBControlState usb_endp0_reset(void)
 {
     //Set up endpoint 0 as a 64-byte control endpoint
     //TODO: Dynamically determine the endpoint size from the descriptor
-    usb_endpoint_setup(0, 0, USB_CONTROL_ENDPOINT_SIZE, USB_ENDPOINT_CONTROL);
+    usb_endpoint_setup(0, 0, USB_CONTROL_ENDPOINT_SIZE, USB_ENDPOINT_CONTROL, USB_FLAGS_NONE);
     usb_endpoint_receive(0, endp0_buffer, sizeof(endp0_buffer)); //note that setup requests have their own buffer
 
     return USB_ST_SETUP;
