@@ -6,10 +6,23 @@
 
 #include "usb_hid.h"
 
-static USB_DATA_ALIGN uint8_t report_in[64];
-static USB_DATA_ALIGN uint8_t report_out[64];
+#define HID_IN_ENDPOINT 1
+#define HID_OUT_ENDPOINT 2
 
+void __attribute__((weak)) hook_usb_hid_configured(void) { }
 void __attribute__((weak)) hook_usb_hid_out_report(const USBTransferData *report) { }
+void __attribute__((weak)) hook_usb_hid_in_report_sent(const USBTransferData *report) { }
+void __attribute__((weak)) hook_usb_hid_out_report_received(const USBTransferData *report) { }
+
+void usb_hid_send(const USBTransferData *report)
+{
+    usb_endpoint_send(HID_IN_ENDPOINT, report->addr, report->len);
+}
+
+void usb_hid_receive(const USBTransferData *report)
+{
+    usb_endpoint_receive(HID_OUT_ENDPOINT, report->addr, report->len);
+}
 
 /**
  * Implementation of hook_usb_handle_setup_request which implements HID class
@@ -19,11 +32,11 @@ USBControlResult hook_usb_handle_setup_request(USBSetupPacket const *setup, USBT
 {
     switch (setup->wRequestAndType)
     {
-        case USB_REQ(0x01, USB_REQ_DIR_IN | USB_REQ_TYPE_CLS | USB_REQ_RCP_IFACE):
+        /*case USB_REQ(0x01, USB_REQ_DIR_IN | USB_REQ_TYPE_CLS | USB_REQ_RCP_IFACE):
             //Get report request
             nextTransfer->addr = report_in;
             nextTransfer->len = sizeof(report_in);
-            return USB_CTL_OK;
+            return USB_CTL_OK;*/
         case USB_REQ(0x0A, USB_REQ_DIR_OUT | USB_REQ_TYPE_CLS | USB_REQ_RCP_IFACE):
             return USB_CTL_OK;
     }
@@ -32,23 +45,27 @@ USBControlResult hook_usb_handle_setup_request(USBSetupPacket const *setup, USBT
 
 void hook_usb_set_configuration(uint16_t configuration)
 {
-    usb_endpoint_setup(1, 0x81, 64, USB_ENDPOINT_INTERRUPT, USB_FLAGS_NOZLP);
-    usb_endpoint_setup(2, 0x02, 64, USB_ENDPOINT_INTERRUPT, USB_FLAGS_NOZLP);
+    usb_endpoint_setup(HID_IN_ENDPOINT, 0x81, USB_HID_ENDPOINT_SIZE, USB_ENDPOINT_INTERRUPT, USB_FLAGS_NOZLP);
+    usb_endpoint_setup(HID_OUT_ENDPOINT, 0x02, USB_HID_ENDPOINT_SIZE, USB_ENDPOINT_INTERRUPT, USB_FLAGS_NOZLP);
 
-    usb_endpoint_send(1, report_in, sizeof(report_in));
-    usb_endpoint_receive(2, report_out, sizeof(report_out));
+    hook_usb_hid_configured();
 }
 
 void hook_usb_endpoint_sent(uint8_t endpoint, void *buf, uint16_t len)
 {
-    usb_endpoint_send(1, report_in, sizeof(report_in));
+    USBTransferData report = { buf, len };
+    if (endpoint == HID_IN_ENDPOINT)
+    {
+        hook_usb_hid_in_report_sent(&report);
+    }
 }
 
 void hook_usb_endpoint_received(uint8_t endpoint, void *buf, uint16_t len)
 {
     USBTransferData report = { buf, len };
-    buzzer_trigger_beep();
-    hook_usb_hid_out_report(&report);
-    usb_endpoint_receive(2, report_out, sizeof(report_out));
+    if (endpoint == HID_OUT_ENDPOINT)
+    {
+        hook_usb_hid_out_report_received(&report);
+    }
 }
 

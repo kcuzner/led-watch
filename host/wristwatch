@@ -1,0 +1,16 @@
+#!/usr/bin/env python3
+
+from device import wristwatch
+import sys
+
+def main():
+    dev = wristwatch.find_device()
+    if dev is None:
+        sys.exit('No device found')
+    with dev:
+        dev.set_time()
+        print('Time has been set')
+
+if __name__ == '__main__':
+    main()
+

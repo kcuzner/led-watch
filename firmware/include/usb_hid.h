@@ -12,6 +12,8 @@
 #include "usb.h"
 #include "macro_helpers.h"
 
+#define USB_HID_ENDPOINT_SIZE 64
+
 /**
  * Enum for various report types
  */
@@ -20,13 +22,19 @@ typedef enum { USB_HID_IN, USB_HID_OUT, USB_HID_FEATURE } USBHIDReportType;
 /**
  * Sets the data for the next IN report that will be sent
  */
-void usb_hid_set_in_report(const USBTransferData *report);
+void usb_hid_send(const USBTransferData *report);
 
 /**
  * Sets the buffer location for receiving the next OUT report that may be
  * received.
  */
-void usb_hid_set_out_report(const USBTransferData *buffer);
+void usb_hid_receive(const USBTransferData *buffer);
+
+/**
+ * Hook function optionally implemented by the application which is called
+ * whenever the USB device has been configured.
+ */
+void hook_usb_hid_configured(void);
 
 /**
  * Hook function implemented by the application which is called whenever the
@@ -40,12 +48,20 @@ void usb_hid_set_out_report(const USBTransferData *buffer);
 void hook_usb_hid_get_report(USBHIDReportType type, uint8_t reportId, USBTransferData *report);
 
 /**
- * Hook function implemented by the application which is called whenever an OUT
- * report is received from the host.
+ * Hook function optionally implemented by the application which is called
+ * whenever an IN report has been sent to the host.
  *
- * report: Report received, if a buffer has been set up.
+ * report: Report sent
  */
-void hook_usb_hid_out_report(const USBTransferData *report);
+void hook_usb_hid_in_report_sent(const USBTransferData *report);
+
+/**
+ * Hook function optionally implemented by the application which is called
+ * whenever an OUT report is received from the host.
+ *
+ * report: Report received
+ */
+void hook_usb_hid_out_report_received(const USBTransferData *report);
 
 
 /**
