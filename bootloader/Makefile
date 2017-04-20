@@ -10,16 +10,17 @@ SRCDIR = src
 BINDIR = bin
 OBJDIR = obj
 INCDIR = include
+COMDIR = ../common
 
 # Project target
 CPU = cortex-m0plus
 
 # Sources
-SRC = $(wildcard $(SRCDIR)/*.c)
-ASM = $(wildcard $(SRCDIR)/*.s)
+SRC = $(wildcard $(SRCDIR)/*.c) $(wildcard $(COMDIR)/src/*.c)
+ASM = $(wildcard $(SRCDIR)/*.s) $(wildcard $(COMDIR)/src/*.s)
 
 # Include directories
-INCLUDE  = -I$(INCDIR) -Icmsis
+INCLUDE  = -I$(INCDIR) -I$(COMDIR)/include -I$(COMDIR)/cmsis
 
 # Linker
 LSCRIPT = STM32L052X8.ld
@@ -105,11 +106,11 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.s
 	$(AS) $(ASFLAGS) -o $@ $<
 
 
-$(OBJDIR)/%.o: $(COMDIR)/%.c
+$(OBJDIR)/%.o: $(COMDIR)/src/%.c
 	@mkdir -p $(dir $@)
 	$(CC) $(GCFLAGS) -c $< -o $@
 
-$(OBJDIR)/%.o: $(COMDIR)/%.s
+$(OBJDIR)/%.o: $(COMDIR)/src/%.s
 	@mkdir -p $(dir $@)
 	$(AS) $(ASFLAGS) -o $@ $<
 

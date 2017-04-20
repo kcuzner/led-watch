@@ -45,13 +45,9 @@ external reset.
 
 ### Entering Bootloader Mode
 
-Bootloader mode can be entered one of two ways:
-
- - Performing a software reset from the existing firmware (perhaps as a result
-   of a special USB request).
- - Performing an external reset while pressing any of the watch buttons. This
-   serves as a "failsafe" in the case that the newly flashed firmware does not
-   behave correctly.
+Bootloader is entered by simply performing any reset except a power-on reset.
+If the power-on reset bit is set, the bootloader clears it and then jumps to the
+user program, if it has been programmed.
 
 ### USB
 

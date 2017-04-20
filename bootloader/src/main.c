@@ -9,6 +9,8 @@
 
 #include "usb.h"
 #include "osc.h"
+#include "usb_hid.h"
+#include "bootloader.h"
 
 typedef struct __attribute__((packed))
 {
@@ -26,6 +28,8 @@ int main(void)
     osc_request_hsi16();
     usb_enable();
 
+    bootloader_init();
+
     while (1) { }
 
     return 0;
@@ -34,9 +38,5 @@ int main(void)
 void TIM2_IRQHandler()
 {
     TIM2->SR = 0;
-}
-
-void hook_usb_hid_out_report(const USBTransferData *transfer)
-{
 }
 
