@@ -23,7 +23,7 @@ ASM = $(wildcard $(SRCDIR)/*.s) $(wildcard $(COMDIR)/src/*.s)
 INCLUDE  = -I$(INCDIR) -I$(COMDIR)/include -I$(COMDIR)/cmsis
 
 # Linker
-LSCRIPT = STM32L052X8.ld
+LSCRIPT = STM32L052X8_Bootloader.ld
 
 # C Flags
 GCFLAGS  = -std=c99 -Wall -Os -fno-common -mthumb -mcpu=$(CPU) -DSTM32L052xx --specs=nosys.specs --specs=nano.specs -g -Wa,-ahlms=$(addprefix $(OBJDIR)/,$(notdir $(<:.c=.lst)))

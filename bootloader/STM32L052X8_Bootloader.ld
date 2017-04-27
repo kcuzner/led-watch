@@ -70,9 +70,10 @@ ENTRY(Reset_Handler)
 
 MEMORY
 {
-    FLASH (RX) : ORIGIN = 0x08000000, LENGTH = 64K
+    FLASH (RX)  : ORIGIN = 0x08000000, LENGTH = 8K
+    EEPROM (W)  : ORIGIN = 0x08080000, LENGTH = 256
     RAM (W!RX)  : ORIGIN = 0x20000000, LENGTH = 8K
-    PMA (W)  : ORIGIN = 0x40006000, LENGTH = 512 /* 256 x 16bit */
+    PMA (W)     : ORIGIN = 0x40006000, LENGTH = 512 /* 256 x 16bit */
 }
 
 /**
@@ -132,6 +133,12 @@ SECTIONS
         KEEP (*(.fini_array*))
         PROVIDE_HIDDEN (__fini_array_end = .);
     } > FLASH
+
+    .eeprom :
+    {
+        *(.eeprom)
+        *(.eeprom*)
+    } > EEPROM
 
     /* Load address of .data in flash for startup code */
     _sidata = LOADADDR(.data);

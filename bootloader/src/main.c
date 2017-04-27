@@ -11,6 +11,7 @@
 #include "osc.h"
 #include "usb_hid.h"
 #include "bootloader.h"
+#include "power.h"
 
 typedef struct __attribute__((packed))
 {

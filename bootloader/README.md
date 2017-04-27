@@ -5,13 +5,13 @@ SWD beyond the first initial flashing of this image.
 
 ## Program Format
 
-This bootloader lives in the first 4KB sector of program flash and reserves the
-first 256 bytes of EEPROM. Programs to be loaded through this bootloader must
-have their sections located in the following format:
+This bootloader lives in the first 8KB of program flash and reserves the first
+256 bytes of EEPROM. Programs to be loaded through this bootloader must have
+their sections located in the following format:
 
 ```
 Flash:
-0x08001000: User program (.text, .rodata, etca (the bootloader reserves the first sector)
+0x08002000: User program (.text, .rodata, etc)
 
 EEPROM:
 0x08080010-0x08080FFF: EEPROM (the bootloader reserves the first 256 bytes)
@@ -20,7 +20,7 @@ Information block:
 All sections may be used by the program
 ```
 
-All writes and reads to the bootloader section (0x08000000-0x08000FFF,
+All writes and reads to the bootloader section (0x08000000-0x08001FFF,
 0x08080000-0x080800FF) will be ignored and generate an appropriate status
 report.
 
