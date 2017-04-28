@@ -31,7 +31,10 @@ int main(void)
 
     bootloader_init();
 
-    while (1) { }
+    while (1)
+    {
+        bootloader_tick();
+    }
 
     return 0;
 }

@@ -57,7 +57,7 @@ def find_device(cls=Device):
     for i in info:
         if i['manufacturer_string'] == cls.MANUFACTURER and\
                 i['product_string'] == cls.PRODUCT:
-            return Device(i['path'])
+            return cls(i['path'])
     return None
 
 
