@@ -65,8 +65,9 @@ device status. These reports have the following format:
 Byte 0-3: First four bytes of the last command received or 0x00000000
 Byte 4: Status flags
 Byte 5-7: N/A
-Byte 8-11: CRC32 of the page report to follow, if applicable
-Byte 12-63: N/A
+Byte 8-11: CRC32 of the lower page report to follow or just processed, if applicable
+Byte 12-15: CRC32 of the upper page report to follow or just processed, if applicable
+Byte 16-63: N/A
 ```
 
 The status flag byte may be interpreted as follows:
@@ -85,13 +86,15 @@ times:
 The reset command has the following format:
 
 ```
-Byte 0-63: 0xFF
+Byte 0-63: 0x00
 ```
+
+Upon receipt of the command, the device will generate a status report
 
 ### Programming the Flash
 
-Programming the flash requires 2 reports to be sent: A write/erase command a
-page OUT report.
+Programming the flash requires 3 reports to be sent: A write/erase command a
+two half-page OUT reports.
 
 The write command has the following format:
 
@@ -102,15 +105,16 @@ Byte 4: Destination address bits 7-0 (bits 6-0 are ignored)
 Byte 5: Destination address bits 15-8
 Byte 6: Destination address bits 23-16
 Byte 7: Destination address bits 31-24
-Byte 8-11: CRC32 of the 16 32-bit words from the page command to follow, LSB first
-Byte 5-63: N/A
+Byte 8-11: CRC32 of the 16 32-bit words from the lower page command to follow, LSB first
+Byte 12-15: CRC32 of the 16 32-bit words from the upper page command to follow, LSB first
+Byte 16-63: N/A
 ```
 
 Upon receipt of this command, the device will enter programming mode and
 initiate an erase of the referenced block. A status report will be generated
 once the erase has been completed.
 
-The page command has the following format:
+The half-page command has the following format:
 
 ```
 Byte 0-63: 16 32-bit words to program
@@ -118,9 +122,14 @@ Byte 0-63: 16 32-bit words to program
 
 Upon receipt of this command, the device will proceed to program the 16 words
 starting at the destination address. In the event that less than a page needs
-to be written, the remaining bytes should be filled with 0xFF. When programming
-has been completed, a status report will be generated and the device returns
-to the reset state, being ready to accept the next command.
+to be written, the remaining bytes should be filled with 0x00. When programming
+has been completed, a status report will be generated and the device is ready to
+receive the next page. Upon receipt of the final, upper page command, another
+status report is generated and the device returns to the reset state.
+
+Status commands during the programming phase will contain either a valid CRC32
+for any section programmed, or zeros if the section has not been programmed. If
+any error flags are set, then the device has returned to the reset state.
 
 ### Reading the Flash
 
@@ -139,9 +148,9 @@ Byte 7: Source address bits 31-24
 Byte 8-63: N/A
 ```
 
-Upon receipt of this command, the device will generate an IN report containing
-the contents of the page. A status report will immediately follow and the
-device returns to the reset state, being ready to accept the next command.
+Upon receipt of this command, the device will generate two IN reports containing
+the contents of the page. A status report will immediately follow and the device
+returns to the reset state, being ready to accept the next command.
 
 ### Exiting Bootloader Mode
 

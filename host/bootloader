@@ -9,7 +9,11 @@ def main():
     if dev is None:
         sys.exit('No device found')
     with dev:
-        print(dev.bootloader_command(bootloader.ResetCommand()))
+        dev.reset()
+        with bootloader.IntelHexLoader('../firmware/bin/wristwatch.hex') as l:
+            pages = bootloader.ProgramPager(l)
+            for p in pages:
+                dev.program(p)
 
 if __name__ == '__main__':
     main()
