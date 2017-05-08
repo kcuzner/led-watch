@@ -19,7 +19,7 @@
 static uint32_t _EEPROM bootloader_status;
 static void _EEPROM *bootloader_prog_start;
 
-typedef enum { ERR_NONE = 0, ERR_FSM = 1 << 0, ERR_COMMAND = 1 << 1, ERR_BAD_ADDR = 1 << 2, ERR_BAD_CRC32 = 1 << 3, ERR_WRITE = 1 << 4, ERR_SHORT = 1 << 5 } BootloaderError;
+typedef enum { ERR_NONE = 0, ERR_FSM = 1 << 0, ERR_COMMAND = 1 << 1, ERR_BAD_ADDR = 1 << 2, ERR_BAD_CRC32 = 1 << 3, ERR_WRITE = 1 << 4, ERR_SHORT = 1 << 5, ERR_VERIFY = 1 << 6 } BootloaderError;
 
 #define CMD_RESET 0x00000000
 #define CMD_PROG  0x00000080
@@ -219,6 +219,16 @@ static BootloaderState bootloader_fsm_program(bool upper, BootloaderEvent ev)
     {
         error_flags = ERR_WRITE;
         goto error;
+    }
+
+    //verify the page
+    for (i = 0; i < 16; i++)
+    {
+        if (address[i] != out_report.buffer[i])
+        {
+            error_flags = ERR_VERIFY;
+            goto error;
+        }
     }
 
     GPIOB->BSRR = GPIO_BSRR_BR_7;

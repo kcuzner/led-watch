@@ -2,7 +2,7 @@
 
 from device import bootloader
 
-import sys
+import sys, time
 
 def main():
     dev = bootloader.find_device()
@@ -10,10 +10,21 @@ def main():
         sys.exit('No device found')
     with dev:
         dev.reset()
-        with bootloader.IntelHexLoader('../firmware/bin/wristwatch.hex') as l:
-            pages = bootloader.ProgramPager(l)
-            for p in pages:
+        with bootloader.IntelHexLoader(sys.argv[1]) as l:
+            print('Programming {} to attached device'.format(sys.argv[1]))
+            pages = list(bootloader.ProgramPager(l))
+            length = float(len(pages))
+            start = time.perf_counter()
+            for i, p in enumerate(pages):
                 dev.program(p)
+                sys.stdout.write('\rProgram/Verify: {:.1f}% '.format(((float(i)/length) * 100)))
+                sys.stdout.flush()
+            end = time.perf_counter()
+            sys.stdout.write('\rProgram/Verify: 100% \r\n')
+            sys.stdout.flush()
+            speed = (length * 128) / (end-start) / 1024
+            print('Programmed and verified {:.0f} pages in {:.2f} seconds ({:.2f} KB/s)'.format(length, end-start, speed))
+
 
 if __name__ == '__main__':
     main()

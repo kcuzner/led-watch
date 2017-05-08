@@ -84,7 +84,7 @@ static const USB_DATA_ALIGN uint8_t cfg_descriptor[] = {
         0x81, //bEndpointAddress (endpoint 1 IN)
         0x03, //bmAttributes, interrupt endpoint
         USB_HID_ENDPOINT_SIZE, 0x00, //wMaxPacketSize,
-        10, //bInterval (10 frames)
+        1, //bInterval (10 frames)
         /* INTERFACE 0, ENDPOINT 1 END */
         /* INTERFACE 0, ENDPOINT 2 BEGIN */
         7, //bLength
@@ -92,7 +92,7 @@ static const USB_DATA_ALIGN uint8_t cfg_descriptor[] = {
         0x02, //bEndpointAddress (endpoint 2 OUT)
         0x03, //bmAttributes, interrupt endpoint
         USB_HID_ENDPOINT_SIZE, 0x00, //wMaxPacketSize
-        10, //bInterval (10 frames)
+        1, //bInterval (10 frames)
         /* INTERFACE 0, ENDPOINT 2 END */
     /* INTERFACE 0 END */
 };
