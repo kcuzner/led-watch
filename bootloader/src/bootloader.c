@@ -19,7 +19,7 @@
 static uint32_t _EEPROM bootloader_status;
 static void _EEPROM *bootloader_prog_start;
 
-typedef enum { ERR_NONE = 0, ERR_FSM = 1 << 0, ERR_COMMAND = 1 << 1, ERR_BAD_ADDR = 1 << 2, ERR_BAD_CRC32 = 1 << 3, ERR_WRITE = 1 << 4 } BootloaderError;
+typedef enum { ERR_NONE = 0, ERR_FSM = 1 << 0, ERR_COMMAND = 1 << 1, ERR_BAD_ADDR = 1 << 2, ERR_BAD_CRC32 = 1 << 3, ERR_WRITE = 1 << 4, ERR_SHORT = 1 << 5 } BootloaderError;
 
 #define CMD_RESET 0x00000000
 #define CMD_PROG  0x00000080
@@ -37,7 +37,7 @@ static union {
     };
 } in_report;
 
-static union {
+union {
     uint32_t buffer[16];
     struct {
         uint32_t command;
@@ -53,7 +53,7 @@ static const USBTransferData out_report_data = { &out_report, sizeof(out_report)
 _Static_assert(sizeof(in_report) == 64, "Bootloader IN report is improperly sized. Fix this!");
 _Static_assert(sizeof(out_report) == 64, "Bootloader OUT report is improperly sized. Fix this!");
 
-typedef enum { EV_ANY, EV_CONFIGURED, EV_HID_OUT, EV_HID_IN } BootloaderEvent;
+typedef enum { EV_ANY, EV_CONFIGURED, EV_HID_OUT, EV_HID_IN, EV_HID_OUT_SHORT } BootloaderEvent;
 typedef enum { ST_ANY, ST_RESET, ST_STATUS, ST_LPROG, ST_UPROG, ST_LREAD, ST_UREAD } BootloaderState;
 
 typedef BootloaderState (*BootloaderFsmFn)(BootloaderEvent);
@@ -196,19 +196,20 @@ static BootloaderState bootloader_fsm_program(bool upper, BootloaderEvent ev)
     crc32 = upper ? bootloader_state.crc32_upper : bootloader_state.crc32_lower;
 
     //check the CRC32 (to avoid unexpected programming events)
-    CRC->CR = CRC_CR_RESET;
+    CRC->CR |= CRC_CR_RESET;
+    volatile uint8_t *dr = &CRC->DR;
     for (i = 0; i < 16; i++)
     {
         CRC->DR = out_report.buffer[i];
     }
-    computed_crc32 = CRC->DR;
-    if (crc32 != CRC->DR)
+    computed_crc32 = ~CRC->DR; //invert result for zlib
+    if (upper)
+        in_report.crc32_upper = computed_crc32;
+    else
+        in_report.crc32_lower = computed_crc32;
+    if (crc32 != computed_crc32)
     {
         error_flags = ERR_BAD_CRC32;
-        if (upper)
-            in_report.crc32_upper = computed_crc32;
-        else
-            in_report.crc32_lower = computed_crc32;
         goto error;
     }
 
@@ -222,10 +223,6 @@ static BootloaderState bootloader_fsm_program(bool upper, BootloaderEvent ev)
 
     GPIOB->BSRR = GPIO_BSRR_BR_7;
     in_report.flags = ERR_NONE;
-    if (upper)
-        in_report.crc32_upper = crc32;
-    else
-        in_report.crc32_lower = crc32;
     return bootloader_send_status(upper ? ST_RESET : ST_UPROG);
 
 error:
@@ -249,6 +246,13 @@ static BootloaderState bootloader_fsm_uprog(BootloaderEvent ev)
     return bootloader_fsm_program(true, ev);
 }
 
+static BootloaderState bootloader_fsm_short(BootloaderEvent ev)
+{
+    memset(in_report.buffer, 0, sizeof(in_report));
+    in_report.flags = ERR_SHORT;
+    return bootloader_send_status(ST_RESET);
+}
+
 static BootloaderState bootloader_fsm_error(BootloaderEvent ev)
 {
     memset(in_report.buffer, 0, sizeof(in_report));
@@ -262,6 +266,7 @@ static const BootloaderFsmEntry fsm[] = {
     { ST_STATUS, EV_HID_IN, &bootloader_fsm_status },
     { ST_LPROG, EV_HID_OUT, &bootloader_fsm_lprog },
     { ST_UPROG, EV_HID_OUT, &bootloader_fsm_uprog },
+    { ST_ANY, EV_HID_OUT_SHORT, &bootloader_fsm_short },
     { ST_ANY, EV_ANY, &bootloader_fsm_error }
 };
 #define FSM_SIZE sizeof(fsm)/(sizeof(BootloaderFsmEntry))
@@ -276,6 +281,10 @@ void bootloader_init(void)
     GPIOB->MODER &= ~GPIO_MODER_MODE7_1;
     GPIOA->BSRR = GPIO_BSRR_BS_5;
     GPIOB->BSRR = GPIO_BSRR_BS_7;
+
+    //zlib configuration: Reverse 32-bit in, reverse out, default polynomial and init value
+    //Note that the result will need to be inverted
+    CRC->CR = CRC_CR_REV_IN_0 | CRC_CR_REV_IN_1 | CRC_CR_REV_OUT;
 
     if (bootloader_status == BOOTLOADER_STATUS_OK)
     {
@@ -316,8 +325,16 @@ void hook_usb_hid_in_report_sent(const USBTransferData *report)
     bootloader_tick(EV_HID_IN);
 }
 
+uint32_t last_length;
 void hook_usb_hid_out_report_received(const USBTransferData *report)
 {
-    bootloader_tick(EV_HID_OUT);
+    if (report->len == 64)
+    {
+        bootloader_tick(EV_HID_OUT);
+    }
+    else
+    {
+        bootloader_tick(EV_HID_OUT_SHORT);
+    }
 }
 

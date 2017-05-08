@@ -4,7 +4,7 @@ wristwatch
 """
 
 import device.wristwatch as wristwatch
-import struct, binascii
+import struct, zlib
 
 class InvalidFileException(Exception):
     pass
@@ -17,14 +17,16 @@ class BootloaderError(Exception):
         message = ''
         if flags & 0x1:
             message += 'Internal Error;'
-        elif flags & 0x2:
+        if flags & 0x2:
             message += 'Invalid Command;'
-        elif flags & 0x4:
+        if flags & 0x4:
             message += 'Invalid Address;'
-        elif flags & 0x8:
+        if flags & 0x8:
             message += 'Invalid CRC32;'
-        elif flags & 0x10:
-            messsage += 'Write Failed;'
+        if flags & 0x10:
+            message += 'Write Failed;'
+        if flags & 0x20:
+            message += 'Short OUT report length;'
         super(Exception, self).__init__(message)
 
 class ProgramBlock(object):
@@ -41,7 +43,7 @@ class ProgramBlock(object):
         return ProgramBlock(address, data)
 
     def crc32(self):
-        return binascii.crc32(self.data, 0xFFFFFFFF)
+        return zlib.crc32(self.data)
 
     def pack(self):
         """
@@ -200,15 +202,15 @@ class Bootloader(wristwatch.Device):
             raise BootloaderError(status.flags)
         status = self.bootloader_command(lower_block)
         if status.flags:
-            print(str(page))
-            print(status.crc32_lower, status.crc32_upper)
-            print(lower_block.crc32(), upper_block.crc32())
+            print(str(page), [hex(i) for i in lower_block.pack()])
+            print(hex(status.crc32_lower), hex(status.crc32_upper))
+            print(hex(lower_block.crc32()), hex(upper_block.crc32()))
             raise BootloaderError(status.flags)
         status = self.bootloader_command(upper_block)
         if status.flags:
             print(str(page))
-            print(status.crc32_lower, status.crc32_upper)
-            print(lower_block.crc32(), upper_block.crc32())
+            print(hex(status.crc32_lower), hex(status.crc32_upper))
+            print(hex(lower_block.crc32()), hex(upper_block.crc32()))
             raise BootloaderError(status.flags)
 
 

@@ -76,6 +76,11 @@ The status flag byte may be interpreted as follows:
 --- | --- | --- | --- | --- | --- | --- | ---
 Command Received | Command OK | Command Status | Command Error | 0 | 0 | 0 | Page Report to follow
 
+### CRC32 Implementation
+
+The CRC32 is implemented using the hardware on the STM32. The host software will
+use the `zlib` implementation of CRC32.
+
 ### Resetting the programming state machine
 
 When the host program starts, a state machine reset command should be sent to

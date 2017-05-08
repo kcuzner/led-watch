@@ -46,7 +46,7 @@ class Device(hid.device):
         self.write_command(cmd)
 
     def write_command(self, command):
-        data = command.pack()
+        data = b'\x00' + command.pack() #prepend a zero since we don't use REPORT_ID
         res = self.write(data)
         if res < 0:
             raise ValueError(self.error())
