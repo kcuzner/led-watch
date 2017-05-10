@@ -11,6 +11,7 @@ BINDIR = bin
 OBJDIR = obj
 INCDIR = include
 COMDIR = ../common
+HOSTDIR = ../host
 
 # Project target
 CPU = cortex-m0plus
@@ -31,9 +32,6 @@ GCFLAGS += $(INCLUDE)
 LDFLAGS += -T$(LSCRIPT) -mthumb -mcpu=$(CPU) --specs=nosys.specs --specs=nano.specs -Wl,-Map,$(BINDIR)/$(PROJECT).map -Wl,--gc-sections
 ASFLAGS += -mcpu=$(CPU)
 
-# Flashing
-OCDFLAGS = -f openocd/openocd.cfg
-
 # Tools
 CC = arm-none-eabi-gcc
 AS = arm-none-eabi-as
@@ -44,6 +42,7 @@ SIZE = arm-none-eabi-size --format=SysV
 OBJDUMP = arm-none-eabi-objdump
 GDB = arm-none-eabi-gdb
 OCD = openocd
+FLASH = $(HOSTDIR)/bootloader
 
 RM = rm -rf
 
@@ -55,16 +54,14 @@ OBJ += $(addprefix $(OBJDIR)/,$(notdir $(ASM:.s=.o)))
 
 all:: $(BINDIR)/$(PROJECT).bin $(BINDIR)/$(PROJECT).hex
 
-Build: $(BINDIR)/$(PROJECT).bin
+install: $(BINDIR)/$(PROJECT).hex
+	$(FLASH) $<
 
-install: $(BINDIR)/$(PROJECT).bin $(BINDIR)/openocd.pid
-	cat openocd/flash.cfg | nc localhost 4444
+#gdb: $(BINDIR)/$(PROJECT).elf $(BINDIR)/openocd.pid
+#	$(GDB) -ex "target remote localhost:3333" $(BINDIR)/$(PROJECT).elf
 
-gdb: $(BINDIR)/$(PROJECT).elf $(BINDIR)/openocd.pid
-	$(GDB) -ex "target remote localhost:3333" $(BINDIR)/$(PROJECT).elf
-
-stop:
-	echo shutdown | nc localhost 4444
+#stop:
+#	echo shutdown | nc localhost 4444
 
 macros:
 	$(CC) $(GCFLAGS) -dM -E - < /dev/null
@@ -80,8 +77,8 @@ size:
 
 # Debug
 
-$(BINDIR)/openocd.pid:
-	openocd/run-openocd-server.sh $(OCD) $@
+#$(BINDIR)/openocd.pid:
+#	openocd/run-openocd-server.sh $(OCD) $@
 
 # Compilation
 
