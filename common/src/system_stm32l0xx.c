@@ -145,6 +145,8 @@
   * @{
   */
 
+extern uint32_t _flash_start;
+
 /**
   * @brief  Setup the microcontroller system.
   * @param  None
@@ -177,7 +179,7 @@ void SystemInit (void)
 #ifdef VECT_TAB_SRAM
   SCB->VTOR = SRAM_BASE | VECT_TAB_OFFSET; /* Vector Table Relocation in Internal SRAM */
 #else
-  SCB->VTOR = FLASH_BASE | VECT_TAB_OFFSET; /* Vector Table Relocation in Internal FLASH */
+  SCB->VTOR = (uint32_t)(&_flash_start) | VECT_TAB_OFFSET; /* Vector Table Relocation in Internal FLASH */
 #endif
 }
 

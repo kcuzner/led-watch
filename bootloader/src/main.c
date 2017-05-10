@@ -22,6 +22,8 @@ static volatile uint8_t segment = 0;
 
 int main(void)
 {
+    bootloader_init();
+
     SystemCoreClockUpdate();
 
     usb_init();
@@ -29,7 +31,7 @@ int main(void)
     osc_request_hsi16();
     usb_enable();
 
-    bootloader_init();
+    bootloader_run();
 
     while (1) { }
 

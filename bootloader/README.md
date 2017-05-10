@@ -164,13 +164,20 @@ To exit bootloader mode, a report with the following format should be sent:
 ```
 Byte 0: 0xC3
 Byte 1-3: 0x00
-Byte 4-7: Vector table offset in user flash
+Byte 4-7: VTOR value for the user program
 Byte 8-63: N/A
 ```
 
-Upon receipt of this command, the device will send a status report and perform
-a USB reset after the host has read the report. The newly written program will
-then be executed.
+The VTOR value should be the address at which the user program's interrupt
+vector table resides. The first two words of the table are used to derive the
+initial stack pointer and the location to jump to in order to initiate the user
+program (reset vector).
+
+Upon receipt of this command, the device will write the VTOR value to persistent
+EEPROM and reset the device. If the VTOR value passed is invalid, or the device
+is unable to write its EEPROM, it will send a status report detailing the
+failure. Otherwise, it will initiate a device soft reset and the user program
+will start on every power-on or low-power reset thereafter.
 
 **This command must not be sent until the entire program has been written to
 the flash.** In the event that the device stops programming before receiving

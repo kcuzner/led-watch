@@ -14,10 +14,30 @@
 #include <stdbool.h>
 #include <string.h>
 
-#define BOOTLOADER_STATUS_OK 0x3C65A95A
+/**
+ * Mask for RCC_CSR defining which bits may trigger an entry into bootloader mode:
+ * - Any watchdog reset
+ * - Any soft reset
+ * - A pin reset (aka manual reset)
+ * - A firewall reset
+ */
+#define BOOTLOADER_RCC_CSR_ENTRY_MASK (RCC_CSR_WWDGRSTF | RCC_CSR_IWDGRSTF | RCC_CSR_SFTRSTF | RCC_CSR_PINRSTF | RCC_CSR_FWRSTF)
 
-static uint32_t _EEPROM bootloader_status;
-static void _EEPROM *bootloader_prog_start;
+/**
+ * Magic code value to make the bootloader ignore any of the entry bits set in
+ * RCC_CSR and skip to the user program anyway, if a valid program start value
+ * has been programmed.
+ */
+#define BOOTLOADER_MAGIC_SKIP 0x3C65A95A
+
+
+static _EEPROM struct {
+    uint32_t magic_code;
+    union {
+        uint32_t *user_vtor;
+        uint32_t user_vtor_value;
+    };
+} bootloader_persistent_state;
 
 typedef enum { ERR_NONE = 0, ERR_FSM = 1 << 0, ERR_COMMAND = 1 << 1, ERR_BAD_ADDR = 1 << 2, ERR_BAD_CRC32 = 1 << 3, ERR_WRITE = 1 << 4, ERR_SHORT = 1 << 5, ERR_VERIFY = 1 << 6 } BootloaderError;
 
@@ -101,6 +121,12 @@ static BootloaderState bootloader_enter_prog(void)
     bootloader_state.crc32_lower = out_report.crc32_lower;
     bootloader_state.crc32_upper = out_report.crc32_upper;
 
+    //if needed, erase the previous entry point
+    if (bootloader_persistent_state.user_vtor)
+    {
+        nvm_eeprom_write_w(&bootloader_persistent_state.user_vtor_value, 0);
+    }
+
     memset(in_report.buffer, 0, sizeof(in_report));
     in_report.last_command = CMD_PROG;
 
@@ -131,6 +157,58 @@ static BootloaderState bootloader_enter_read(void)
     return bootloader_send_status(ST_LREAD);
 }
 
+/**
+ * Performs the bootloader exit sequence
+ */
+static BootloaderState bootloader_exit(void)
+{
+    BootloaderError error_flags = ERR_NONE;
+
+    memset(in_report.buffer, 0, sizeof(in_report));
+    in_report.last_command = CMD_EXIT;
+    //ensure we have somewhere to start the program
+    if (!out_report.address)
+    {
+        error_flags = ERR_BAD_ADDR;
+        goto error;
+    }
+
+    //write the passed address
+    uint32_t address = (uint32_t)out_report.address;
+    if ((address < FLASH_LOWER_BOUND) || (address > FLASH_UPPER_BOUND))
+    {
+        error_flags = ERR_BAD_ADDR;
+        goto error;
+    }
+    if (!nvm_eeprom_write_w(&bootloader_persistent_state.user_vtor_value, address))
+    {
+        error_flags = ERR_WRITE;
+        goto error;
+    }
+
+    //at this point, if a reset occurs we will still enter bootloader mode
+
+    //write the magic bootloader-skip value so we can perform a reset
+    if (!nvm_eeprom_write_w(&bootloader_persistent_state.magic_code, BOOTLOADER_MAGIC_SKIP))
+    {
+        nvm_eeprom_write_w(&bootloader_persistent_state.user_vtor_value, 0);
+        error_flags = ERR_WRITE;
+        goto error;
+    }
+
+    //at this point, if a reset occurs we will not enter bootloader mode. We have entered the danger zone.
+
+    //perform the system reset
+    NVIC_SystemReset();
+
+    //if we somehow don't reset, return the bootloader to the reset state
+    return ST_RESET;
+
+error:
+    in_report.flags = error_flags;
+    return bootloader_send_status(ST_RESET);
+}
+
 static BootloaderState bootloader_fsm_configured(BootloaderEvent ev)
 {
     usb_hid_receive(&out_report_data);
@@ -155,6 +233,10 @@ static BootloaderState bootloader_fsm_reset(BootloaderEvent ev)
         {
             bootloader_state.address = out_report.address;
             return bootloader_enter_read();
+        }
+        else if (out_report.command == CMD_EXIT)
+        {
+            return bootloader_exit();
         }
         else
         {
@@ -185,7 +267,7 @@ static BootloaderState bootloader_fsm_program(bool upper, BootloaderEvent ev)
 {
     uint32_t i, crc32, computed_crc32;
     uint32_t *address;
-    BootloaderError error_flags;
+    BootloaderError error_flags = ERR_NONE;
 
     if (ev != EV_HID_OUT)
     {
@@ -283,8 +365,30 @@ static const BootloaderFsmEntry fsm[] = {
 
 void bootloader_init(void)
 {
-    //reset_csr = RCC->CSR;
+    //if the prog_start field is set and there are no entry bits set in the CSR (or the magic code is programmed appropriate), start the user program
+    if (bootloader_persistent_state.user_vtor &&
+            (!(RCC->CSR & BOOTLOADER_RCC_CSR_ENTRY_MASK) || bootloader_persistent_state.magic_code == BOOTLOADER_MAGIC_SKIP))
+    {
+        if (bootloader_persistent_state.magic_code)
+            nvm_eeprom_write_w(&bootloader_persistent_state.magic_code, 0);
+        __disable_irq();
+        uint32_t sp = bootloader_persistent_state.user_vtor[0];
+        uint32_t pc = bootloader_persistent_state.user_vtor[1];
+        SCB->VTOR = bootloader_persistent_state.user_vtor_value;
+        __asm__ __volatile__("mov sp,%0\n\t"
+                "bx %1\n\t"
+                : /* no output */
+                : "r" (sp), "r" (pc)
+                : "sp");
+        while (1) { }
+    }
+}
 
+void bootloader_run(void)
+{
+    RCC->CSR |= RCC_CSR_RMVF;
+
+    //Enable clocks for the bootloader
     RCC->IOPENR |= RCC_IOPENR_IOPAEN | RCC_IOPENR_IOPBEN;
     RCC->AHBENR |= RCC_AHBENR_CRCEN;
     GPIOA->MODER &= ~GPIO_MODER_MODE5_1;
@@ -295,18 +399,12 @@ void bootloader_init(void)
     //zlib configuration: Reverse 32-bit in, reverse out, default polynomial and init value
     //Note that the result will need to be inverted
     CRC->CR = CRC_CR_REV_IN_0 | CRC_CR_REV_IN_1 | CRC_CR_REV_OUT;
-
-    if (bootloader_status == BOOTLOADER_STATUS_OK)
-    {
-        RCC->CSR |= RCC_CSR_RMVF;
-        nvm_eeprom_write_w(&bootloader_status, 0);
-    }
-    else
-    {
-        nvm_eeprom_write_w(&bootloader_status, BOOTLOADER_STATUS_OK);
-    }
 }
 
+/**
+ * Handles bootloader state changes initiated by external events, such as
+ * receiving HID events
+ */
 static void bootloader_tick(BootloaderEvent ev)
 {
     static BootloaderState state = ST_RESET;

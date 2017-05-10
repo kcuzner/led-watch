@@ -25,6 +25,11 @@ class SetTimeCommand(Command):
         parts = bytes([int(s) for s in time.strftime('%y,%m,%d,%H,%M,%S', timestamp).split(',')])
         super().__init__(SetTimeCommand.COMMAND, parts)
 
+class EnterBootloaderCommand(Command):
+    COMMAND = 2
+    def __init__(self):
+        super().__init__(EnterBootloaderCommand.COMMAND, b'')
+
 class Device(hid.device):
     MANUFACTURER='kevincuzner.com'
     PRODUCT='LED Wristwatch'
@@ -43,6 +48,10 @@ class Device(hid.device):
         Sets the watch time to the current time
         """
         cmd = SetTimeCommand(time.localtime())
+        self.write_command(cmd)
+
+    def enter_bootloader(self):
+        cmd = EnterBootloaderCommand()
         self.write_command(cmd)
 
     def write_command(self, command):

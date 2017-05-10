@@ -1,14 +1,28 @@
 #!/usr/bin/env python3
 
-from device import bootloader
+from device import bootloader, wristwatch
 
 import sys, time
 
+def open_bootloader():
+    """
+    Finds a bootloader device or places any found wristwatch devices into
+    bootloader mode. Returns once a bootloader is found.
+    """
+    while True:
+        bootdev = bootloader.find_device()
+        if bootdev is None:
+            dev = wristwatch.find_device()
+            if dev is None:
+                continue
+            with dev:
+                print('Found wristwatch: Entering bootloader mode')
+                dev.enter_bootloader()
+        else:
+            return bootdev
+
 def main():
-    dev = bootloader.find_device()
-    if dev is None:
-        sys.exit('No device found')
-    with dev:
+    with open_bootloader() as dev:
         dev.reset()
         with bootloader.IntelHexLoader(sys.argv[1]) as l:
             print('Programming {} to attached device'.format(sys.argv[1]))
@@ -24,6 +38,8 @@ def main():
             sys.stdout.flush()
             speed = (length * 128) / (end-start) / 1024
             print('Programmed and verified {:.0f} pages in {:.2f} seconds ({:.2f} KB/s)'.format(length, end-start, speed))
+        if not dev.exit(0x08002000):
+            sys.exit('Failed to exit bootloader mode')
 
 
 if __name__ == '__main__':

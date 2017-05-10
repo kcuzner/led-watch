@@ -87,6 +87,7 @@ SECTIONS
     /* General code */
     .text :
     {
+        _flash_start = .;
         . = ALIGN(4);
         /* At beginning of flash is:
          *

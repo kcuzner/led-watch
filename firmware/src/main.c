@@ -46,6 +46,8 @@ int main(void)
     TIM2->CR1 = TIM_CR1_CEN;
     NVIC_EnableIRQ(TIM2_IRQn);*/
 
+    __enable_irq();
+
     power_main();
 
     return 0;
@@ -122,6 +124,10 @@ void hook_usb_hid_out_report_received(const USBTransferData *transfer)
         case 1:
             buzzer_trigger_beep();
             rtc_set(report.data[0], report.data[1], report.data[2], report.data[3], report.data[4], report.data[5]);
+            break;
+        case 2:
+            //entering bootloader mode with a simple soft reset
+            NVIC_SystemReset();
             break;
         default:
             break;

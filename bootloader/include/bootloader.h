@@ -15,5 +15,11 @@
  */
 void bootloader_init(void);
 
+/**
+ * Runs the bootloader component
+ */
+
+void bootloader_run(void);
+
 #endif //_BOOTLOADER_H_
 

@@ -161,6 +161,12 @@ class ProgramStartCommand(wristwatch.Command):
         data = struct.pack('<III', lower.address, lower.crc32(), upper.crc32())
         super().__init__(ProgramStartCommand.COMMAND, data)
 
+class BootloaderExitCommand(wristwatch.Command):
+    COMMAND = 0x000000C3
+    def __init__(self, vtor):
+        data = struct.pack('<I', vtor)
+        super().__init__(BootloaderExitCommand.COMMAND, data)
+
 class BootloaderStatus(object):
     def __init__(self, data):
         unpacked = struct.unpack('<IIII48s', bytes(data))
@@ -212,6 +218,15 @@ class Bootloader(wristwatch.Device):
             print(hex(status.crc32_lower), hex(status.crc32_upper))
             print(hex(lower_block.crc32()), hex(upper_block.crc32()))
             raise BootloaderError(status.flags)
+
+    def exit(self, vtor):
+        cmd = BootloaderExitCommand(vtor)
+        try:
+            self.bootloader_command(cmd)
+        except OSError as ex:
+            return True
+        else:
+            return False
 
 
 def find_device(cls=Bootloader):
