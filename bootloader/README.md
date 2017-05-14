@@ -3,6 +3,35 @@
 The bootloader provides a mechanism for reprogramming the system without using
 SWD beyond the first initial flashing of this image.
 
+## Build instructions
+
+Prerequisites:
+
+ - arm-none-eabi-gcc
+ - arm-none-eabi-binutils
+ - python3
+ - A watch programmed with the bootloader
+
+To build:
+
+ 1. Run `make` in this directory.
+
+To flash the device:
+
+ 1. Connect the STLink to the device. Ensure your user has permissions to access
+    it.
+ 2. Run `make install` in this directory.
+
+To debug the device:
+
+ 1. Connect the STLink to the device. Ensure your user has permissions to access
+    it.
+ 2. Run `make gdb` in this directory.
+
+To gracefully halt the openocd process started during install or debug:
+
+ 1. Run `make stop` in this directory.
+
 ## Program Format
 
 This bootloader lives in the first 8KB of program flash and reserves the first
@@ -63,18 +92,15 @@ device status. These reports have the following format:
 
 ```
 Byte 0-3: First four bytes of the last command received or 0x00000000
-Byte 4: Status flags
-Byte 5-7: N/A
+Byte 4-7: Status flags
 Byte 8-11: CRC32 of the lower page report to follow or just processed, if applicable
 Byte 12-15: CRC32 of the upper page report to follow or just processed, if applicable
 Byte 16-63: N/A
 ```
 
-The status flag byte may be interpreted as follows:
-
-7 | 6 | 5 | 4 | 3 | 2 | 1 | 0
---- | --- | --- | --- | --- | --- | --- | ---
-Command Received | Command OK | Command Status | Command Error | 0 | 0 | 0 | Page Report to follow
+For an interpretation of the status flags, please see the `BootloaderError` enum
+defined in `src/bootloader.c`. In general, these flags will only be set on
+error and a `0` in the flags value can be interpreted as command success.
 
 ### CRC32 Implementation
 
@@ -95,6 +121,23 @@ Byte 0-63: 0x00
 ```
 
 Upon receipt of the command, the device will generate a status report
+
+### Exiting Bootloader Mode Before Programming
+
+If the bootloader was started, but no programming operations have occurred and
+the device was previously programmed, the user program can be started by issuing
+the following command:
+
+```
+Byte 0: 0x3E
+Byte 1-3: 0x00
+Byte 4-63: N/A
+```
+
+Upon receipt of this command, the device will immediately reset and enter the
+user program, if one has already been programmed and no new programming commands
+have been received. Otherwise, a status report will be generated with an
+appropriate error flag.
 
 ### Programming the Flash
 
@@ -157,7 +200,7 @@ Upon receipt of this command, the device will generate two IN reports containing
 the contents of the page. A status report will immediately follow and the device
 returns to the reset state, being ready to accept the next command.
 
-### Exiting Bootloader Mode
+### Exiting Bootloader Mode After Programming
 
 To exit bootloader mode, a report with the following format should be sent:
 

@@ -167,6 +167,12 @@ class BootloaderExitCommand(wristwatch.Command):
         data = struct.pack('<I', vtor)
         super().__init__(BootloaderExitCommand.COMMAND, data)
 
+class BootloaderAbortCommand(wristwatch.Command):
+    COMMAND = 0x0000003E
+    def __init__(self):
+        data = b''
+        super().__init__(BootloaderAbortCommand.COMMAND, data)
+
 class BootloaderStatus(object):
     def __init__(self, data):
         unpacked = struct.unpack('<IIII48s', bytes(data))
@@ -221,6 +227,16 @@ class Bootloader(wristwatch.Device):
 
     def exit(self, vtor):
         cmd = BootloaderExitCommand(vtor)
+        try:
+            self.bootloader_command(cmd)
+        except OSError as ex:
+            return True
+        else:
+            return False
+
+    def abort(self):
+        cmd = BootloaderAbortCommand()
+        result = None
         try:
             self.bootloader_command(cmd)
         except OSError as ex:

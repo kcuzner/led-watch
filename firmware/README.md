@@ -20,7 +20,9 @@ Prerequisites:
 
  - arm-none-eabi-gcc
  - arm-none-eabi-binutils
- - openocd
+ - python3
+ - [python-hidapi](https://pypi.python.org/pypi/hidapi)
+ - A wristwatch programmed with the bootloader
 
 To build:
 
@@ -28,17 +30,17 @@ To build:
 
 To flash the device:
 
- 1. Connect the STLink to the device. Ensure your user has permissions to access
-    it.
- 2. Run `make install` in this directory.
+ 1. Connect the device to the host computer over USB, ensuring the user has
+    permissions to access it. The device must have been previously flashed with
+    the bootloader found in `../bootloader`
+ 2. Run `make install` in this directory. If the previously installed firmware
+    does not enumerate as a valid LED Wristwatch device, reset the wristwatch by
+    grounding the reset pin exposed through the programming header.
 
 To debug the device:
 
  1. Connect the STLink to the device. Ensure your user has permissions to access
     it.
- 2. Run `make gdb` in this directory.
-
-To gracefully halt the openocd process started during install or debug:
-
- 1. Run `make stop` in this directory.
+ 2. Change to the `../bootloader` directory.
+ 2. Run `make gdb` in the bootloader directory
 

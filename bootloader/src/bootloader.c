@@ -45,6 +45,7 @@ typedef enum { ERR_NONE = 0, ERR_FSM = 1 << 0, ERR_COMMAND = 1 << 1, ERR_BAD_ADD
 #define CMD_PROG  0x00000080
 #define CMD_READ  0x00000040
 #define CMD_EXIT  0x000000C3
+#define CMD_ABORT 0x0000003E
 
 static union {
     uint32_t buffer[16];
@@ -90,6 +91,31 @@ static volatile struct {
     uint32_t crc32_upper;
     BootloaderState next_state; //used when sending a status report
 } bootloader_state;
+
+/**
+ * Performs the sequence which will reset the device into the user program. Note
+ * that if the EEPROM write performed during this function fails, it will erase
+ * the user_vector_value to prevent booting into a bad program.
+ */
+static bool bootloader_reset_into_user_prog(void)
+{
+    //at this point, if a reset occurs we will still enter bootloader mode
+
+    //write the magic bootloader-skip value so we can perform a reset
+    if (!nvm_eeprom_write_w(&bootloader_persistent_state.magic_code, BOOTLOADER_MAGIC_SKIP))
+    {
+        nvm_eeprom_write_w(&bootloader_persistent_state.user_vtor_value, 0);
+        return false;
+    }
+
+    //at this point, if a reset occurs we will not enter bootloader mode. We have entered the danger zone.
+
+    //perform the system reset
+    NVIC_SystemReset();
+
+    //this shouldn't happen, but whatever
+    return true;
+}
 
 /**
  * Sends a status report, starting an IN-OUT sequence
@@ -186,20 +212,39 @@ static BootloaderState bootloader_exit(void)
         goto error;
     }
 
-    //at this point, if a reset occurs we will still enter bootloader mode
-
-    //write the magic bootloader-skip value so we can perform a reset
-    if (!nvm_eeprom_write_w(&bootloader_persistent_state.magic_code, BOOTLOADER_MAGIC_SKIP))
+    //perform the system reset
+    if (!bootloader_reset_into_user_prog())
     {
-        nvm_eeprom_write_w(&bootloader_persistent_state.user_vtor_value, 0);
         error_flags = ERR_WRITE;
         goto error;
     }
 
-    //at this point, if a reset occurs we will not enter bootloader mode. We have entered the danger zone.
+    //if we somehow don't reset, return the bootloader to the reset state
+    return ST_RESET;
+
+error:
+    in_report.flags = error_flags;
+    return bootloader_send_status(ST_RESET);
+}
+
+static BootloaderState bootloader_abort(void)
+{
+    BootloaderError error_flags = ERR_NONE;
+    memset(in_report.buffer, 0, sizeof(in_report));
+    in_report.last_command = CMD_ABORT;
+
+    if (!bootloader_persistent_state.user_vtor_value)
+    {
+        error_flags = ERR_BAD_ADDR;
+        goto error;
+    }
 
     //perform the system reset
-    NVIC_SystemReset();
+    if (!bootloader_reset_into_user_prog())
+    {
+        error_flags = ERR_WRITE;
+        goto error;
+    }
 
     //if we somehow don't reset, return the bootloader to the reset state
     return ST_RESET;
@@ -237,6 +282,10 @@ static BootloaderState bootloader_fsm_reset(BootloaderEvent ev)
         else if (out_report.command == CMD_EXIT)
         {
             return bootloader_exit();
+        }
+        else if (out_report.command == CMD_ABORT)
+        {
+            return bootloader_abort();
         }
         else
         {
