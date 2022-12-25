@@ -775,7 +775,7 @@ static const USBControlStateEntry usb_control_fsm[] = {
  *
  * token: Token type that has been completed and triggered the call to this function
  */
-static void usb_handle_endp0(USBToken token)
+static __attribute__((optimize("O0"))) void usb_handle_endp0(USBToken token)
 {
     static USBControlState state = USB_ST_SETUP;
 
